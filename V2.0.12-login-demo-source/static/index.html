@@ -141,6 +141,7 @@ body{margin:0;background:linear-gradient(180deg,#e8f0f7 0%,var(--bg) 180px);colo
 .maturity-table,.maturity-table th,.maturity-table td,.maturity-table textarea,.maturity-table select,.maturity-table button,.maturity-table small,.maturity-table .tag,.maturity-table .muted,.maturity-table .good,.maturity-table .bad{font-size:12px;line-height:1.45}.maturity-table th{font-weight:600}.maturity-table td{font-weight:400}.maturity-table .dimension-group td,.maturity-table .dimension-group button{font-size:12px;font-weight:700}
 .maturity-table tbody tr.cap-row{cursor:pointer}.maturity-table tbody tr.cap-row.selected td{background:#edf5ff!important}.maturity-table tbody tr.cap-row.selected td:first-child{box-shadow:inset 3px 0 0 var(--blue)}.row-rate{white-space:nowrap;font-weight:700;color:#1857a6}.row-rate.empty{color:var(--muted);font-weight:400}
 .maturity-table th.editable-header{cursor:text}.maturity-table th.header-editing{background:#fff!important;outline:2px solid var(--blue);outline-offset:-3px;box-shadow:inset 0 0 0 1px #fff}.raw-header-input{display:block;width:100%;min-width:72px;border:0;background:transparent;color:var(--ink);font:inherit;font-weight:600;text-align:center;outline:0;padding:2px 4px}
+.biz-locked{color:#98a4b3;cursor:not-allowed;background:transparent}
 @media(max-width:760px){.relation-options{grid-template-columns:1fr}.config-toolbar{align-items:stretch}.config-search{max-width:none;width:100%}}
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid,.grid.wide,.analysis-grid{grid-template-columns:1fr}.compare-toolbar{grid-template-columns:1fr}}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.side{display:none}.main{padding:18px}.kpis,.rawfilters,.editgrid,.column-label-grid{grid-template-columns:1fr}}
@@ -221,7 +222,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 <div class="layout">
   <aside class="side">
     <div class="brand"><span>TM</span>测试成熟度中心</div>
-    <div class="side-version">当前版本 <b>V2.0.12d</b></div>
+    <div class="side-version">当前版本 <b>V2.0.12d2</b></div>
     <div id="userBox" style="margin:0 10px 14px;padding:8px 10px;border:1px solid #315574;border-radius:8px;background:#1d3a56;color:#cfe0f2;font-size:12px;display:none">
       <div id="userLine">—</div>
       <div style="display:flex;gap:8px;margin-top:6px"><button id="loginBtn" onclick="showLoginGate()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">登录</button><button id="userMgrBtn" onclick="openUserMgr()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">角色密码管理</button><button id="logoutBtn" onclick="doLogout()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#3b556e;color:#dbe7f4;font:inherit;font-size:11.5px;cursor:pointer">退出</button></div>
@@ -368,9 +369,10 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 </div>
 
 <div class="modal" id="logModal" onclick="if(event.target===this)closeLogs()">
-  <div class="modalbox" style="max-width:900px">
-    <div class="modalhead"><div><h2>修改记录</h2><div class="muted">记录修改时间与该行修改后的全部字段</div></div><button class="close" onclick="closeLogs()">关闭</button></div>
-    <div class="logbox" id="logList"></div>
+  <div class="modalbox" style="max-width:980px">
+    <div class="modalhead"><div><h2>修改记录</h2><div class="muted">字段级修改明细：修改时间 · 角色 · 位置 · 字段 · 修改前 → 修改后</div></div><div style="display:flex;gap:8px;align-items:center"><button id="auditClearBtn" class="btn" style="display:none" onclick="clearAuditLogs()">清空记录</button><button class="close" onclick="closeLogs()">关闭</button></div></div>
+    <div class="logbox" id="auditList"></div>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px solid #e4ecf4"><div class="muted" style="font-size:11.5px;margin-bottom:6px">操作摘要（历史手工记录）</div><div class="logbox" id="logList" style="max-height:180px"></div></div>
   </div>
 </div>
 
@@ -516,7 +518,8 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <table class="version-table">
           <thead><tr><th>版本号</th><th>发布日期</th><th>变更摘要</th></tr></thead>
           <tbody>
-            <tr><td>V2.0.12d <span class="version-current">当前</span></td><td>2026-08-21</td><td>临时 demo：登录交互调整——①打开即可浏览看板，进入「能力成熟度达成情况」或「组织关系配置」时才要求登录；②能力Owner/业务不再配置个人账号，改为选择角色+输入角色密码登录；③登录页移除全部默认密码提示。管理员仍为用户名+密码，可在「角色密码管理」中修改各密码。</td></tr>
+            <tr><td>V2.0.12d2 <span class="version-current">当前</span></td><td>2026-08-21</td><td>demo 第二轮：①业务角色下能力属性（含 2026/2027 目标、描述、表头）置灰只读 ②越权提示改「业务方无权限修改能力相关数据」③能力Owner 扩权可修改达成/预期 ④新增字段级修改记录（时间/角色/位置/字段/前后值，全员可看，仅管理员可清空）。</td></tr>
+            <tr><td>V2.0.12d</td><td>2026-08-21</td><td>临时 demo：登录交互调整——①打开即可浏览看板，进入「能力成熟度达成情况」或「组织关系配置」时才要求登录；②能力Owner/业务不再配置个人账号，改为选择角色+输入角色密码登录；③登录页移除全部默认密码提示。管理员仍为用户名+密码，可在「角色密码管理」中修改各密码。</td></tr>
             <tr><td>V2.0.12</td><td>2026-08-21</td><td>结构增强：①科组新增 9月/12月预期达成（与实际达成互不影响、不参与统计，Excel 同步三列）②三级权限（管理员全权 / 能力Owner 仅能力属性 / 业务 仅达成与预期；登录、用户管理、服务端字段级校验）③业务线 G 雷达轴标签显示领域得分、总分移出雷达图。含 V2.0.11 全部内容。（本版内容曾以 V3.0 编号交付，按主人指令回归 V2.0.12；初始密码见随包说明）</td></tr>
             <tr><td>V2.0.11</td><td>2026-08-20</td><td>评估维度缺口分布数据样式统一：涉及领域改为彩色标签且一个领域一行，涉及科组数量/未交付能力数改为标签式（绿无/黄少/红多），与达成单元格风格一致；下穿与排序保留。</td></tr>
             <tr><td>V2.0.10</td><td>2026-08-20</td><td>达成单元格改为展示态/编辑态：默认显示当前状态（1·已达成/0·未达成/—），点击进入编辑，选择或点击页面其他位置自动保存退出（Esc 取消）；底层 achieved 数据与统计口径不变。</td></tr>
@@ -1415,7 +1418,7 @@ function clearAllConfig(){
 
 function rawHeaderLabel(key,fallback){return rawColumnLabels[key]??fallback}
 function rawHeaderCell(key,fallback,attributes=''){return`<th ${attributes} class="editable-header" data-label-key="${esc(key)}" title="双击修改展示标题">${esc(rawHeaderLabel(key,fallback))}</th>`}
-function enableRawHeaderEditing(){const head=$('rawHead');head.ondblclick=event=>{const cell=event.target.closest('th[data-label-key]');if(cell&&head.contains(cell))startRawHeaderEdit(event,cell,cell.dataset.labelKey)}}
+function enableRawHeaderEditing(){const head=$('rawHead');head.ondblclick=event=>{if(currentUser&&currentUser.role==='biz')return;const cell=event.target.closest('th[data-label-key]');if(cell&&head.contains(cell))startRawHeaderEdit(event,cell,cell.dataset.labelKey)}}
 function startRawHeaderEdit(event,element,key){event.preventDefault();event.stopPropagation();if(activeHeaderEdit){if(activeHeaderEdit.element===element)return;finishRawHeaderEdit(true)}const original=element.textContent.trim(),input=document.createElement('input');input.type='text';input.className='raw-header-input';input.value=original;input.setAttribute('aria-label','编辑列表头');activeHeaderEdit={element,key,original,input};element.classList.add('header-editing');element.replaceChildren(input);input.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();finishRawHeaderEdit(true)}else if(e.key==='Escape'){e.preventDefault();finishRawHeaderEdit(false)}};input.onblur=()=>finishRawHeaderEdit(true);rawHeaderOutsideHandler=e=>{if(activeHeaderEdit&&!activeHeaderEdit.element.contains(e.target))finishRawHeaderEdit(true)};document.addEventListener('pointerdown',rawHeaderOutsideHandler,true);input.focus();input.select()}
 function finishRawHeaderEdit(save=true){if(!activeHeaderEdit)return;const{element,key,original,input}=activeHeaderEdit,value=input.value.trim(),display=save?(value||original):original;activeHeaderEdit=null;if(rawHeaderOutsideHandler){document.removeEventListener('pointerdown',rawHeaderOutsideHandler,true);rawHeaderOutsideHandler=null}input.onkeydown=null;input.onblur=null;rawColumnLabels[key]=display;element.classList.remove('header-editing');element.textContent=display;if(save&&display!==original)rawHeaderLayoutDirty=true;persist();requestAnimationFrame(()=>{if(rawHeaderLayoutDirty&&!activeHeaderEdit&&$('rawView').classList.contains('show')){rawHeaderLayoutDirty=false;renderRaw()}})}
 function syncRawScroll(source){if(activeHeaderEdit)finishRawHeaderEdit(true);if(rawScrollLock)return;rawScrollLock=true;const top=$('rawTopScroll'),table=$('rawTableWrap');if(source==='top')table.scrollLeft=top.scrollLeft;else top.scrollLeft=table.scrollLeft;requestAnimationFrame(()=>rawScrollLock=false)}
@@ -1474,16 +1477,16 @@ function rawGroupAppliesToTeam(group,team){return rawTeamDomains(team).includes(
 function rawTeamRangeRate(team,groups){const scope=groups.filter(g=>rawGroupAppliesToTeam(g,team)),done=scope.filter(g=>g.items.some(x=>x.team===team&&achieved(x))).length;return{done,total:scope.length,rate:pct(done,scope.length),domains:rawTeamDomains(team)}}
 function rawCapabilityRangeRate(group){const teams=configuredExcelLayout().teams,done=teams.filter(team=>group.items.some(x=>x.team===team&&achieved(x))).length;return{done,total:teams.length,rate:pct(done,teams.length)}}
 function selectRawCapability(key){rawSelectedCapabilityKey=key;document.querySelectorAll('#rawRows tr.cap-row').forEach(row=>row.classList.toggle('selected',row.dataset.capKey===key))}
-function editSelectedRaw(){const role=currentUser?currentUser.role:'biz';if(role!=='admin'&&role!=='owner'){alert('当前角色（业务）无权编辑能力项');return}if(!rawSelectedCapabilityKey){alert('请先选择一条能力项');return}const row=data.find(x=>rawCapabilityKey(x)===rawSelectedCapabilityKey);if(!row){alert('选中的能力项已不存在');rawSelectedCapabilityKey=null;renderRaw();return}editRaw(data.indexOf(row))}
+function editSelectedRaw(){const role=currentUser?currentUser.role:'biz';if(role!=='admin'&&role!=='owner'){alert('业务方无权限修改能力相关数据');return}if(!rawSelectedCapabilityKey){alert('请先选择一条能力项');return}const row=data.find(x=>rawCapabilityKey(x)===rawSelectedCapabilityKey);if(!row){alert('选中的能力项已不存在');rawSelectedCapabilityKey=null;renderRaw();return}editRaw(data.indexOf(row))}
 function rawYearData(x,year){if(x.yearData?.[year])return x.yearData[year];return year==='2026年'?{level:x.level||'',stage:x.stage||'',digital:x.digital||''}:{level:'',stage:'',digital:''}}
-function rawYearSelect(group,year,field,options){const value=rawYearData(group.items[0],year)[field]||'',encoded=encodeURIComponent(group.key);return `<select aria-label="${year}${field}" onchange="setRawGroupYear(decodeURIComponent('${encoded}'),'${year}','${field}',this.value)">${['',...options].map(v=>`<option value="${esc(v)}" ${value===v?'selected':''}>${esc(v||'未设置')}</option>`).join('')}</select>`}
+function rawYearSelect(group,year,field,options){const value=rawYearData(group.items[0],year)[field]||'';if(currentUser&&currentUser.role==='biz'){return `<span class="biz-locked" title="业务方无权限修改能力相关数据">${esc(value||'—')}</span>`}const encoded=encodeURIComponent(group.key);return `<select aria-label="${year}${field}" onchange="setRawGroupYear(decodeURIComponent('${encoded}'),'${year}','${field}',this.value)">${['',...options].map(v=>`<option value="${esc(v)}" ${value===v?'selected':''}>${esc(v||'未设置')}</option>`).join('')}</select>`}
 function setRawGroupYear(key,year,field,value){const items=data.filter(x=>rawCapabilityKey(x)===key);items.forEach(x=>{x.yearData=x.yearData||{};x.yearData[year]={...rawYearData(x,year),[field]:value};if(year==='2026年')x[field]=value});changeLogs.unshift({time:new Date().toISOString().replace('T',' ').slice(0,19),action:`编辑 ${year}目标`,changes:[`${field} → ${value||'未设置'}`],target:items[0]?`${items[0].domain} / ${items[0].sub}`:key});persist();buildFilters();render();renderRaw()}
 function updateRawGroupText(key,field,value){const items=data.filter(x=>rawCapabilityKey(x)===key),before=items[0]?.[field]||'';items.forEach(x=>x[field]=value.trim());if(before!==value.trim())changeLogs.unshift({time:new Date().toISOString().replace('T',' ').slice(0,19),action:'编辑能力建设内容描述',changes:[`描述已更新`],target:items[0]?`${items[0].domain} / ${items[0].sub}`:key});persist();render()}
 
 let rawCellEditing=null;
 function startRawCellEdit(key,team,field='achieved'){
   const role=currentUser?currentUser.role:'biz';
-  if(role!=='admin'&&role!=='biz'){alert('当前角色（能力Owner）无权修改达成/预期，仅可编辑能力项属性');return}
+  if(role!=='admin'&&role!=='biz'&&role!=='owner'){alert('当前角色无权限修改达成/预期');return}
   if(rawCellEditing)commitRawCellEdit(true);
   rawCellEditing={key,team,field};renderRaw();
   const sel=$('rawCellSel');
@@ -1572,7 +1575,7 @@ function renderRaw(){
     const stat0=v0===1?'<span class="cell-stat done" title="点击编辑">1 · 已达成</span>':v0===0?'<span class="cell-stat todo" title="点击编辑">0 · 未达成</span>':'<span class="cell-stat none" title="点击设置">—</span>';
     return `<td class="team-cell"><span onclick="startRawCellEdit(decodeURIComponent('${encoded}'),decodeURIComponent('${encodeURIComponent(team)}'),'achieved')">${stat0}</span></td><td class="team-cell"><span class="muted" title="先设置达成后可填预期">—</span></td><td class="team-cell"><span class="muted" title="先设置达成后可填预期">—</span></td>`}).join('');
     const rowRate=rawCapabilityRangeRate(g),rateText=rowRate.total?`${rowRate.done}/${rowRate.total} = ${rowRate.rate}%`:'— / 未配置';
-    html.push(`<tr class="cap-row ${rawSelectedCapabilityKey===g.key?'selected':''}" data-cap-key="${esc(g.key)}" onclick="selectRawCapability(decodeURIComponent('${encoded}'))"><td>${esc(x.domain)}</td><td>${esc(x.owner)}</td><td>${esc(x.dimension)}</td><td><b>${esc(x.sub)}</b></td><td><textarea onchange="updateRawGroupText(decodeURIComponent('${encoded}'),'description',this.value)">${esc(x.description||'')}</textarea></td>${years}<td>${tagStatus(deliveredN===g.items.length?'已交付':'未交付')}<br><span class="muted">${deliveredN}/${g.items.length}</span></td><td>${tagRisk(riskN?'是':'否')}<br><span class="muted">${riskN} 项</span></td><td>${esc(due)}</td><td><span class="row-rate ${rowRate.total?'':'empty'}">${rateText}</span></td>${teamCells}</tr>`)
+    html.push(`<tr class="cap-row ${rawSelectedCapabilityKey===g.key?'selected':''}" data-cap-key="${esc(g.key)}" onclick="selectRawCapability(decodeURIComponent('${encoded}'))"><td>${esc(x.domain)}</td><td>${esc(x.owner)}</td><td>${esc(x.dimension)}</td><td><b>${esc(x.sub)}</b></td><td>${currentUser&&currentUser.role==='biz'?`<span class="biz-locked" style="display:block;padding:6px 4px" title="业务方无权限修改能力相关数据">${esc(x.description||'—')}</span>`:`<textarea onchange="updateRawGroupText(decodeURIComponent('${encoded}'),'description',this.value)">${esc(x.description||'')}</textarea>`}</td>${years}<td>${tagStatus(deliveredN===g.items.length?'已交付':'未交付')}<br><span class="muted">${deliveredN}/${g.items.length}</span></td><td>${tagRisk(riskN?'是':'否')}<br><span class="muted">${riskN} 项</span></td><td>${esc(due)}</td><td><span class="row-rate ${rowRate.total?'':'empty'}">${rateText}</span></td>${teamCells}</tr>`)
   });
   $('rawRows').innerHTML=html.length?html.join(''):`<tr><td colspan="${totalCols}" class="muted" style="text-align:center">无匹配数据</td></tr>`;
   $('rawPageText').textContent=`第 ${rawPage}/${pages} 页 · ${groups.length} 项能力主项`;
@@ -1638,12 +1641,25 @@ function pushLog(action,before,after){
   changeLogs.unshift({time:new Date().toISOString().replace('T',' ').slice(0,19),action,changes,target:`${after.domain||''} / ${after.sub||after.owner||''}`});
   persist();
 }
-function openLogs(){
+async function openLogs(){
+  const clearBtn=$('auditClearBtn');if(clearBtn)clearBtn.style.display=(currentUser&&currentUser.role==='admin')?'':'none';
+  const box=$('auditList');box.innerHTML='<div class="logitem muted">加载中…</div>';
+  try{
+    const res=await fetch('/api/audit-logs',{cache:'no-store'});const out=await res.json();
+    const logs=out.logs||[];
+    box.innerHTML=logs.length?logs.map(l=>`<div class="logitem"><b>${esc(l.time)}</b> · ${esc(l.role)} · ${esc(l.operator)}<br><span class="muted">${esc(l.target)}</span> · <b>${esc(l.field)}</b>：${esc(l.oldValue)} → <b>${esc(l.newValue)}</b></div>`).join(''):'<div class="logitem muted">暂无修改记录</div>';
+  }catch(e){box.innerHTML='<div class="logitem muted">修改记录加载失败，请稍后重试</div>'}
   $('logList').innerHTML=changeLogs.length?changeLogs.map(l=>{
     const lines=(l.changes||[]).map(c=>`· ${esc(c)}`).join('<br>');
     return `<div class="logitem"><b>${esc(l.time)}</b> · ${esc(l.action)}${l.target?` · ${esc(l.target)}`:''}<br>${lines||'<span class="muted">无列变更</span>'}</div>`;
-  }).join(''):'<div class="logitem muted">暂无修改记录</div>';
+  }).join(''):'<div class="logitem muted">暂无</div>';
   $('logModal').classList.add('show');
+}
+async function clearAuditLogs(){
+  if(!confirm('确认清空全部修改记录？此操作不可恢复（仅管理员可执行）。'))return;
+  const res=await fetch('/api/audit-logs',{method:'DELETE'});const out=await res.json().catch(()=>({}));
+  if(!res.ok){alert(out.error||'清空失败');return}
+  openLogs();
 }
 function closeLogs(){$('logModal').classList.remove('show')}
 
@@ -1839,7 +1855,7 @@ async function bootOnlineApp(){
     applyRoleVisibility();
     await loadPersist();ensureConfig();loadComparisonSelections();renderComparisonDomainOptions();setComparisonScopeMode(comparisonScopeMode);buildFilters();render();serverReady=true;
     const initialParams=new URLSearchParams(location.search),view=initialParams.get('view');
-    if(view==='config')ensureAuthThen(()=>openConfig(initialParams.get('tab')||'teams'));else if(view==='dictionary')openDictionary();else if(view==='versions')openVersionHistory()  }catch(error){document.body.innerHTML=`<main style="max-width:720px;margin:15vh auto;padding:32px;font-family:Arial,sans-serif"><h1 style="font-size:24px">V2.0.12d 服务连接失败</h1><p>${esc(error.message)}</p><p>请确认 start.bat 窗口仍在运行，然后刷新页面。</p></main>`}}
+    if(view==='config')ensureAuthThen(()=>openConfig(initialParams.get('tab')||'teams'));else if(view==='dictionary')openDictionary();else if(view==='versions')openVersionHistory()  }catch(error){document.body.innerHTML=`<main style="max-width:720px;margin:15vh auto;padding:32px;font-family:Arial,sans-serif"><h1 style="font-size:24px">V2.0.12d2 服务连接失败</h1><p>${esc(error.message)}</p><p>请确认 start.bat 窗口仍在运行，然后刷新页面。</p></main>`}}
 bootOnlineApp();
 document.addEventListener('pointerdown',event=>{const scopePicker=$('scopeComparePicker'),domainPicker=$('scopeDomainPicker');if(scopePicker?.open&&!scopePicker.contains(event.target)){discardComparisonDraft();closeComparisonPicker('scopeComparePicker');renderComparisonScopeOptions()}if(domainPicker?.open&&!domainPicker.contains(event.target)){comparisonDomainDraftSelection=null;closeComparisonPicker('scopeDomainPicker');renderComparisonDomainOptions()}},true);
 </script>

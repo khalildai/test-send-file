@@ -76,6 +76,16 @@ def init_db() -> None:
                 role TEXT NOT NULL CHECK(role IN ('admin','owner','biz')),
                 display_name TEXT
             );
+            CREATE TABLE IF NOT EXISTS audit_logs (
+                seq INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts TEXT NOT NULL,
+                operator TEXT NOT NULL,
+                role TEXT NOT NULL,
+                target TEXT NOT NULL,
+                field TEXT NOT NULL,
+                old_value TEXT,
+                new_value TEXT
+            );
             INSERT OR IGNORE INTO app_meta(key, value) VALUES ('revision', '0');
             INSERT OR IGNORE INTO app_meta(key, value) VALUES ('initialized', '0');
             """)
@@ -228,7 +238,7 @@ def replace_state(db: sqlite3.Connection, payload: dict, new_revision: int) -> N
 # ---------- 权限 ----------
 ROLE_FIELD_PERMS = {
     "admin": None,          # 全部
-    "owner": "capability",  # 仅能力属性
+    "owner": None,          # demo 扩权：能力属性 + 达成/预期均可改（2026-08-21 主人指令）
     "biz": "achievement",   # 仅达成/预期
 }
 CAPABILITY_FIELDS = {"domain", "owner", "dimension", "sub", "description", "delivered", "due", "level", "stage", "digital"}
@@ -254,7 +264,7 @@ def require_login():
 
 def enforce_field_perms(old_rows: list, new_rows: list):
     role = session.get("role")
-    if role == "admin" or role not in ROLE_FIELD_PERMS:
+    if role == "admin" or ROLE_FIELD_PERMS.get(role) is None:
         return
     allowed = CAPABILITY_FIELDS if role == "owner" else ACHIEVEMENT_FIELDS
     old_map = {str(r.get("id")): r for r in old_rows}
@@ -278,7 +288,8 @@ def enforce_field_perms(old_rows: list, new_rows: list):
             new_v = r.get(f)
             old_v = (prev or {}).get(f)
             if new_v != old_v:
-                raise PermissionError(f"当前角色无权修改字段：{f}")
+                msg = "业务方无权限修改能力相关数据" if role == "biz" else "当前角色无权限修改该内容"
+                raise PermissionError(msg)
 
 
 @app.after_request
@@ -384,13 +395,93 @@ def health():
     with connect() as db:
         revision = current_revision(db)
         user = current_user(db)
-    return jsonify({"ok": True, "version": "V2.0.12d", "revision": revision, "user": user})
+    return jsonify({"ok": True, "version": "V2.0.12d2", "revision": revision, "user": user})
 
 
 @app.get("/api/state")
 def get_state():
     with connect() as db:
         return jsonify(load_state(db))
+
+
+AUDIT_FIELD_LABELS = {
+    "domain": "领域", "owner": "能力Owner", "dimension": "评估维度", "sub": "细分能力",
+    "description": "能力建设内容描述", "delivered": "是否已交付", "due": "预计交付日期",
+    "team": "科组", "dept": "三级部门", "level": "年度等级", "stage": "年度目标",
+    "digital": "数字化验收", "achieved": "达成情况", "expectedSep": "9月预期达成",
+    "expectedDec": "12月预期达成", "riskOverride": "风险手工修正", "yearData": "年度数据",
+    "configLabels": "列名/标签配置",
+}
+AUDIT_IGNORE_FIELDS = {"id"}
+
+
+def _audit_value(v):
+    if v is None or v == "":
+        return "(空)"
+    if isinstance(v, bool):
+        return "是" if v else "否"
+    if isinstance(v, dict):
+        return json.dumps(v, ensure_ascii=False, sort_keys=True)
+    return str(v)
+
+
+def _row_target(row: dict) -> str:
+    parts = [row.get("domain") or "", row.get("sub") or ""]
+    target = " / ".join(p for p in parts if p)
+    if row.get("team"):
+        target = f"{target} · {row['team']}" if target else str(row["team"])
+    return target or "(未命名)"
+
+
+def _row_key(row: dict):
+    return (
+        str(row.get("domain") or ""), str(row.get("owner") or ""), str(row.get("dimension") or ""),
+        str(row.get("sub") or ""), str(row.get("team") or ""),
+    )
+
+
+def compute_audit_entries(old_rows: list, new_rows: list, old_config: dict, new_config: dict) -> list:
+    """字段级 diff：返回待写入 audit_logs 的 tuple 列表（ts/operator/role 由调用方填充）。"""
+    entries = []
+    old_by_key = {}
+    for r in old_rows:
+        old_by_key[_row_key(r)] = r
+    new_keys = set()
+    for r in new_rows:
+        key = _row_key(r)
+        new_keys.add(key)
+        prev = old_by_key.get(key)
+        if prev is None:
+            entries.append((_row_target(r), "新增记录", "(无)", _audit_value("新增")))
+            continue
+        for f in (set(prev.keys()) | set(r.keys())) - AUDIT_IGNORE_FIELDS:
+            old_v, new_v = prev.get(f), r.get(f)
+            if old_v != new_v:
+                entries.append((_row_target(r), AUDIT_FIELD_LABELS.get(f, f), _audit_value(old_v), _audit_value(new_v)))
+    for key, r in old_by_key.items():
+        if key not in new_keys:
+            entries.append((_row_target(r), "删除记录", _audit_value("删除"), "(无)"))
+    # 组织关系配置 diff（摘要级）
+    def _config_snapshot(config: dict) -> dict:
+        snap = {}
+        for kind, key in (("科组", "teams"), ("部门", "departments"), ("业务线", "businesses")):
+            rows = config.get(key) or []
+            snap[kind] = {str(x.get("name")): sorted(str(t) for t in (x.get("teamIds") or [])) for x in rows}
+        return snap
+    old_snap, new_snap = _config_snapshot(old_config or {}), _config_snapshot(new_config or {})
+    for kind in ("科组", "部门", "业务线"):
+        old_names, new_names = set(old_snap.get(kind, {})), set(new_snap.get(kind, {}))
+        for name in sorted(new_names - old_names):
+            entries.append((f"组织关系配置 · {kind}", f"新增{kind}", "(无)", name))
+        for name in sorted(old_names - new_names):
+            entries.append((f"组织关系配置 · {kind}", f"删除{kind}", name, "(无)"))
+        for name in sorted(old_names & new_names):
+            if old_snap[kind][name] != new_snap[kind][name]:
+                o, n = old_snap[kind][name], new_snap[kind][name]
+                added = ",".join(sorted(set(n) - set(o))) or "无"
+                removed = ",".join(sorted(set(o) - set(n))) or "无"
+                entries.append((f"组织关系配置 · {kind} · {name}", "关联科组变化", f"移除: {removed}", f"新增: {added}"))
+    return entries
 
 
 @app.put("/api/state")
@@ -423,10 +514,52 @@ def put_state():
             if int(expected) != actual:
                 db.rollback()
                 return jsonify({"error": "数据已被其他用户更新，请刷新后重试", "revision": actual}), 409
+            old_rows = [json.loads(r[0]) for r in db.execute("SELECT payload FROM capabilities ORDER BY rowid")]
+            # 组织关系快照（部门/业务线含关联科组；科组仅名单）
+            old_config = {"teams": [], "departments": [], "businesses": []}
+            old_config["departments"] = [dict(name=n, teamIds=json.loads(rel or "[]")) for n, rel in db.execute(
+                "SELECT o.name, (SELECT json_group_array(rt.team_id) FROM org_team_relations rt WHERE rt.org_id=o.id) FROM org_units o WHERE o.kind='department'")]
+            old_config["businesses"] = [dict(name=n, teamIds=json.loads(rel or "[]")) for n, rel in db.execute(
+                "SELECT o.name, (SELECT json_group_array(rt.team_id) FROM org_team_relations rt WHERE rt.org_id=o.id) FROM org_units o WHERE o.kind='business'")]
+            old_config["teams"] = [dict(name=n, teamIds=[]) for (n,) in db.execute("SELECT name FROM teams")]
             new_revision = actual + 1
+            audit_entries = compute_audit_entries(old_rows, payload.get("data", []), old_config, payload.get("configData", {}))
             replace_state(db, payload, new_revision)
+            if audit_entries:
+                import datetime as _dt
+                ts = _dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                db.executemany(
+                    "INSERT INTO audit_logs(ts, operator, role, target, field, old_value, new_value) VALUES (?,?,?,?,?,?,?)",
+                    [(ts, user.get("displayName") or user["username"], user["role"], t, f, o, n) for (t, f, o, n) in audit_entries],
+                )
             db.commit()
     return jsonify({"ok": True, "revision": new_revision})
+
+
+@app.get("/api/audit-logs")
+def get_audit_logs():
+    with connect() as db:
+        rows = db.execute(
+            "SELECT seq, ts, operator, role, target, field, old_value, new_value FROM audit_logs ORDER BY seq DESC LIMIT 500"
+        ).fetchall()
+    role_label = {"admin": "管理员", "owner": "能力Owner", "biz": "业务"}
+    return jsonify({"logs": [
+        {"seq": r["seq"], "time": r["ts"], "operator": r["operator"], "role": role_label.get(r["role"], r["role"]),
+         "target": r["target"], "field": r["field"], "oldValue": r["old_value"], "newValue": r["new_value"]}
+        for r in rows
+    ]})
+
+
+@app.delete("/api/audit-logs")
+def clear_audit_logs():
+    with connect() as db:
+        user = current_user(db)
+    if not user or user["role"] != "admin":
+        return jsonify({"error": "仅管理员可清空修改记录"}), 403
+    with connect() as db:
+        db.execute("DELETE FROM audit_logs")
+        db.commit()
+    return jsonify({"ok": True})
 
 
 init_db()

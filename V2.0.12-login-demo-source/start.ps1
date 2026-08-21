@@ -8,7 +8,7 @@ function Write-Step([string]$Message) {
     Add-Content -LiteralPath $logPath -Value $line -Encoding UTF8
 }
 
-Set-Content -LiteralPath $logPath -Value "V2.0.12d startup log - $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -Encoding UTF8
+Set-Content -LiteralPath $logPath -Value "V2.0.12d2 startup log - $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -Encoding UTF8
 $env:PYTHONUTF8 = '1'
 $env:MATURITY_PORT = '5000'
 
@@ -55,7 +55,7 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Offline dependency installation failed. Check startup.log.' }
     }
 
-    Write-Step '[3/3] Starting V2.0.12d service...'
+    Write-Step '[3/3] Starting V2.0.12d2 service...'
     Write-Host "Local URL: http://127.0.0.1:$env:MATURITY_PORT"
     Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue |
         Where-Object { $_.IPAddress -notlike '127.*' -and $_.IPAddress -notlike '169.254.*' } |

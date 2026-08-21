@@ -6,7 +6,7 @@
 | V2.0.10-source/ | V2.0.10 | c7e981b7827fabcbbc1e429f5d8ff7dd82a21fe17ac393e2871857e99af4fd23 | 达成单元格展示态/编辑态（点击编辑、失焦保存） |
 | V2.0.11-source/ | V2.0.11 | e1dc8e7f8247eb1535da6d92be0a663be67b78f1f734ffea1f0fc20e142d4d56 | 缺口分布标签样式统一（领域一行一个等） |
 | V2.0.12-source/ | V2.0.12 | 852e27b98d2746b7ca75fb6c186f79b04c58c53b9fcb592f6f99dd0a9fb1cbc8 | 结构增强：9/12月预期字段+三级权限+G雷达修正（含V2.0.11 全部）【当前开发基线】 |
-| V2.0.12-login-demo-source/ | V2.0.12d（demo） | 5657696cf575e0cd13d830cd03393ecfcf34a2de2cb8c78bd72b5f0c1381318a | 登录交互临时 demo：打开即浏览、进达成情况/组织配置才登录、owner/biz 角色密码登录、登录页无密码提示【待主人确认，未合入正式版】 |
+| V2.0.12-login-demo-source/ | V2.0.12d2（demo 第二轮） | 43a2248afa04e397e5f79d6ccfe965ca71bd694e5106eb01d049440f0572e3c4 | 登录交互 demo 第二轮：打开即浏览/按需登录/角色密码登录基础上，①业务视角能力属性置灰只读 ②越权提示改友好文案 ③能力Owner 可改达成/预期 ④字段级修改记录（全员可看、仅 admin 可清空）【待主人确认，未合入正式版】 |
 | V3.0-source/ | V3.0（已改号） | ab70e88713e2df7036c8ed84d3adac79501fe812181c49a9abc4d876f9334c7a | 内容=V2.0.12，按主人指令回归 V2.0.x 编号，此目录保留作历史封存 |
 
 - 各目录即完整源码（Flask+静态+SQLite+Windows离线依赖包），数据在 data/maturity.db。
