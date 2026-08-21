@@ -5,9 +5,10 @@
 | V2.0.9-source/ | V2.0.9 | f585d228ae20af1a0711b7c9d21744131c4ee315bdd039215c5dcf9fd5835812 | 全科组达成可编辑+弹窗删字段；缺口分布列表化+三字段下穿 |
 | V2.0.10-source/ | V2.0.10 | c7e981b7827fabcbbc1e429f5d8ff7dd82a21fe17ac393e2871857e99af4fd23 | 达成单元格展示态/编辑态（点击编辑、失焦保存） |
 | V2.0.11-source/ | V2.0.11 | e1dc8e7f8247eb1535da6d92be0a663be67b78f1f734ffea1f0fc20e142d4d56 | 缺口分布标签样式统一（领域一行一个等） |
-| V3.0-source/ | V3.0 | ab70e88713e2df7036c8ed84d3adac79501fe812181c49a9abc4d876f9334c7a | 9/12月预期字段+三级权限+G雷达修正（含V2.0.11）【已封存】 |
+| V2.0.12-source/ | V2.0.12 | 852e27b98d2746b7ca75fb6c186f79b04c58c53b9fcb592f6f99dd0a9fb1cbc8 | 结构增强：9/12月预期字段+三级权限+G雷达修正（含V2.0.11 全部）【当前开发基线】 |
+| V3.0-source/ | V3.0（已改号） | ab70e88713e2df7036c8ed84d3adac79501fe812181c49a9abc4d876f9334c7a | 内容=V2.0.12，按主人指令回归 V2.0.x 编号，此目录保留作历史封存 |
 
 - 各目录即完整源码（Flask+静态+SQLite+Windows离线依赖包），数据在 data/maturity.db。
 - Windows 启动：CPython 3.10-3.13 → 双击 start.bat → http://127.0.0.1:5000。
-- V2.0.9/10/11 登录无密码；V3.0 起 admin/123qweasd。
+- V2.0.9/10/11 登录无密码；V2.0.12（原 V3.0）起 admin/123qweasd。
 - zip 为同内容交付包（测试能力成熟度-V3.0-*.zip 在根目录；V2.0.9-11 zip 未入仓，源码目录为准）。
