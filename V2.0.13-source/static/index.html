@@ -427,9 +427,6 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
           <button data-d="normal" class="on" onclick="setRawDensity('normal')">标准</button>
           <button data-d="loose" onclick="setRawDensity('loose')">宽松</button>
         </span>
-        <select id="rawPer" onchange="rawPer=Number(this.value);rawPage=1;renderRaw()">
-          <option value="10">每页 10 组</option><option value="20">每页 20 组</option><option value="50">每页 50 组</option>
-        </select>
         <button class="btn" onclick="clearRawFilters()">清空全部筛选</button>
         <span class="raw-count-chip" id="rawCountChip"></span>
       </div>
@@ -445,6 +442,11 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
       <div class="pager">
         <button class="btn" id="rawPrev" onclick="rawPage--;renderRaw()">上一页</button>
         <span class="muted" id="rawPageText"></span>
+        <label class="muted" for="rawPer">每页
+          <select id="rawPer" onchange="rawPer=Number(this.value);rawPage=1;renderRaw()">
+            <option value="20">20 组</option><option value="50">50 组</option><option value="100">100 组</option><option value="150">150 组</option>
+          </select>
+        </label>
         <button class="btn" id="rawNext" onclick="rawPage++;renderRaw()">下一页</button>
       </div>
     </section>
@@ -592,7 +594,7 @@ let asOf=TODAY, rawPage=1, editingIndex=null, changeLogs=[],configData=null,conf
 const CAPABILITY_DOMAINS=['软件','硬件','机械','EMC','合规','环境可靠性'];
 const RAW_LABEL_DEFAULTS={domain:'领域',owner:'Owner',dimension:'评估维度',sub:'细分能力',description:'能力建设内容描述',year2026:'2026 年目标',year2027:'2027 年目标',level:'所属等级',stage:'能力目标',digital:'数字化验收',delivered:'交付',risk:'风险',due:'预计交付',attainment:'达成率'};
 let rawCollapsedDimensions=new Set(),rawColumnLabels={...RAW_LABEL_DEFAULTS},rawScrollLock=false,rawSelectedCapabilityKey=null,activeHeaderEdit=null,rawHeaderOutsideHandler=null,rawHeaderLayoutDirty=false;
-let homeRefreshTimer=null,importStatusTimer=null,radarActiveDomain=null,radarView='domain',dimOverviewSort={key:'score',dir:'desc'},radarUserCollapsed=true,radarLastUnavailable=false;let rawFilters={},rawDensity='normal',rawPer=10;
+let homeRefreshTimer=null,importStatusTimer=null,radarActiveDomain=null,radarView='domain',dimOverviewSort={key:'score',dir:'desc'},radarUserCollapsed=true,radarLastUnavailable=false;let rawFilters={},rawDensity='normal',rawPer=20;
 function triggerFilePicker(id){const input=$(id);if(!input)return;input.value='';
   try{input.click();if(id==='excel'||id==='configExcel')showImportStatus('info','请选择 Excel 文件',id==='excel'?'在弹出的文件选择框中选中 .xlsx / .xls 文件后开始导入':'在弹出的文件选择框中选中组织关系 Excel 文件后开始导入')}catch(error){showImportStatus('error','无法打开文件选择框',String(error?.message||error))}
 }
@@ -1646,7 +1648,7 @@ function renderRaw(){
   const roots=groups.map(group=>group.items[0]),rates=groups.map(group=>{const rate=rawCapabilityRangeRate(group);return rate.total?`${rate.done}/${rate.total} = ${rate.rate}%`:'— / 未配置'}),fixedWidths=[rawMeasuredWidth([rawHeaderLabel('domain',RAW_LABEL_DEFAULTS.domain),...roots.map(x=>x.domain)],90,150),rawMeasuredWidth([rawHeaderLabel('owner',RAW_LABEL_DEFAULTS.owner),...roots.map(x=>x.owner)],100,170),rawMeasuredWidth([rawHeaderLabel('dimension',RAW_LABEL_DEFAULTS.dimension),...roots.map(x=>x.dimension)],110,180),rawMeasuredWidth([rawHeaderLabel('sub',RAW_LABEL_DEFAULTS.sub),...roots.map(x=>x.sub)],140,220),rawMeasuredWidth([rawHeaderLabel('description',RAW_LABEL_DEFAULTS.description),...roots.map(x=>x.description)],180,280)],tailWidths=[rawMeasuredWidth([rawHeaderLabel('delivered',RAW_LABEL_DEFAULTS.delivered),'已交付','未交付'],100,130),rawMeasuredWidth([rawHeaderLabel('risk',RAW_LABEL_DEFAULTS.risk),'是','否'],80,110),rawMeasuredWidth([rawHeaderLabel('due',RAW_LABEL_DEFAULTS.due),...roots.map(x=>x.due)],120,150),rawMeasuredWidth([rawHeaderLabel('attainment',RAW_LABEL_DEFAULTS.attainment),...rates],120,170)],colWidths=[...fixedWidths,...tailWidths,...layout.teams.map(()=>60)];
   const rawStyle=$('rawView').style;rawStyle.setProperty('--raw-c1',`${fixedWidths[0]}px`);rawStyle.setProperty('--raw-c2',`${fixedWidths[1]}px`);rawStyle.setProperty('--raw-c3',`${fixedWidths[2]}px`);rawStyle.setProperty('--raw-c4',`${fixedWidths[3]}px`);rawStyle.setProperty('--raw-l2',`${fixedWidths[0]}px`);rawStyle.setProperty('--raw-l3',`${fixedWidths[0]+fixedWidths[1]}px`);rawStyle.setProperty('--raw-l4',`${fixedWidths[0]+fixedWidths[1]+fixedWidths[2]}px`);
   $('rawCols').innerHTML=colWidths.map(width=>`<col style="width:${width}px">`).join('');$('rawTable').style.width=`${colWidths.reduce((sum,width)=>sum+width,0)}px`;
-  $('rawHead').innerHTML=`<tr>${['domain','owner','dimension','sub','description'].map(key=>rawHeaderCell(key,RAW_LABEL_DEFAULTS[key],'rowspan="2"')).join('')}${['delivered','risk','due','attainment'].map(key=>rawHeaderCell(key,RAW_LABEL_DEFAULTS[key],'rowspan="2"')).join('')}${layout.segments.map(x=>rawHeaderCell(`department:${x.name}`,x.name,`colspan="${x.teams.length}" data-org-level="department" data-team-count="${x.teams.length}"`)).join('')}</tr><tr>${layout.segments.flatMap(segment=>segment.teams.map((team,index)=>`<th class="" data-org-level="team" data-group-start="${index===0}" title="部门：${esc(segment.name)} / 科组：${esc(team)}" style="font-size:11px">${esc(team)}</th>`)).join('')}</tr>${rawFilterRow(totalCols,layout)}`;
+  $('rawHead').innerHTML=`<tr>${['domain','owner','dimension','sub','description'].map(key=>rawHeaderCell(key,RAW_LABEL_DEFAULTS[key],'rowspan="2"')).join('')}${['delivered','risk','due','attainment'].map(key=>rawHeaderCell(key,RAW_LABEL_DEFAULTS[key],'rowspan="2"')).join('')}${layout.segments.map(x=>rawHeaderCell(`department:${x.name}`,x.name,`colspan="${x.teams.length}" data-org-level="department" data-team-count="${x.teams.length}"`)).join('')}</tr><tr>${layout.segments.flatMap(segment=>segment.teams.map((team,index)=>`<th class="" data-org-level="team" data-group-start="${index===0}" title="部门：${esc(segment.name)} / 科组：${esc(team)}" style="font-size:11px">${esc(team)}</th>`)).join('')}</tr>`;
   enableRawHeaderEditing();let lastDimension='';const html=[];view.forEach(g=>{
     const x=g.items[0],collapsed=rawCollapsedDimensions.has(x.dimension);if(x.dimension!==lastDimension){lastDimension=x.dimension;html.push(`<tr class="dimension-group"><td colspan="${totalCols}"><button onclick="toggleRawDimension(decodeURIComponent('${encodeURIComponent(x.dimension)}'))">${collapsed?'▶':'▼'} ${esc(x.dimension)}</button> <span class="muted">${groups.filter(y=>y.items[0].dimension===x.dimension).length} 项</span></td></tr>`)}if(collapsed)return;
     const deliveredN=g.items.filter(delivered).length,riskN=g.items.filter(y=>riskOf(y)==='是').length,due=unique(g.items.map(y=>y.due)).sort()[0]||'—',encoded=encodeURIComponent(g.key);
