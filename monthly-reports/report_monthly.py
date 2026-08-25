@@ -90,6 +90,19 @@ for name, items in team_payloads.items():
         team_rows.append((rate, name, total, delivered))
 team_rows.sort(reverse=True)
 
+domain_org_rows = defaultdict(list)
+for org_id, (kind, name) in units.items():
+    if kind not in ("department", "business"):
+        continue
+    linked = [teams[t] for t in relations.get(org_id, []) if t in teams]
+    for domain in sorted({x.get("domain", "未分类") for x in payloads if x.get("team") in linked}):
+        items = [x for x in payloads if x.get("team") in linked and x.get("domain", "未分类") == domain]
+        rate, total, delivered = score(items)
+        if total:
+            domain_org_rows[domain].append((rate, name, total, delivered))
+for domain in domain_org_rows:
+    domain_org_rows[domain].sort(reverse=True)
+
 styles = getSampleStyleSheet()
 styles.add(ParagraphStyle(name="CJKTitle", parent=styles["Title"], fontName="ReportCJK", fontSize=22, leading=28, textColor=NAVY, alignment=TA_LEFT, spaceAfter=8))
 styles.add(ParagraphStyle(name="CJKH2", parent=styles["Heading2"], fontName="ReportCJK", fontSize=14, leading=18, textColor=NAVY, spaceBefore=8, spaceAfter=8))
@@ -183,7 +196,42 @@ gt.setStyle(TableStyle([
 story.append(gt)
 
 story.append(PageBreak())
-story.append(P("三、科组明细与月度行动建议", "CJKH2"))
+story.append(P("三、六大领域下的业务组织排名", "CJKH2"))
+story.append(P("以下排名按各业务组织在该领域关联能力项的当前达成率计算；空白组织表示当前快照没有该领域能力项，不纳入比较。", "CJKSmall"))
+for domain in [x[0] for x in domain_rows]:
+    story.append(Spacer(1, 2 * mm)); story.append(P(f"{domain}领域", "CJKH2"))
+    rows = [[P("排名 / 业务组织", "CJKCellWhite"), P("能力项", "CJKCellWhite"), P("已达成", "CJKCellWhite"), P("领域得分", "CJKCellWhite"), P("判断", "CJKCellWhite")]]
+    for i, (rate, name, total, delivered) in enumerate(domain_org_rows.get(domain, [])[:8], 1):
+        judgement = "优势" if i == 1 and rate >= 80 else "重点改进" if rate < 50 else "跟踪"
+        rows.append([P(f"{i}. {name}", "CJKCell"), P(total, "CJKCell"), P(delivered, "CJKCell"), P(f"{rate:.1f}%", "CJKCell"), P(judgement, "CJKCell")])
+    table = Table(rows, colWidths=[76 * mm, 24 * mm, 24 * mm, 28 * mm, 24 * mm], repeatRows=1)
+    table.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, 0), NAVY), ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F8FAFC")]), ("GRID", (0, 0), (-1, -1), 0.35, colors.HexColor("#D0D5DD")), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"), ("LEFTPADDING", (0, 0), (-1, -1), 5), ("RIGHTPADDING", (0, 0), (-1, -1), 5), ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
+    story.append(table)
+
+story.append(PageBreak())
+story.append(P("四、各业务优势/劣势与改进计划", "CJKH2"))
+story.append(P("优势取各业务组织领域达成率最高项，劣势取最低项；改进优先级综合领域达成率、未达成能力数量和能力等级缺口。", "CJKSmall"))
+insight_rows = [[P("业务组织", "CJKCellWhite"), P("优势能力", "CJKCellWhite"), P("劣势能力", "CJKCellWhite"), P("优先改进计划", "CJKCellWhite")]]
+for _, name, _, _, _ in org_rows:
+    org_domains = []
+    linked = [teams[t] for oid, ts in relations.items() if oid in units and units[oid][1] == name for t in ts if t in teams]
+    for domain, vals in domain_org_rows.items():
+        match = next((x for x in vals if x[1] == name), None)
+        if match: org_domains.append((match[0], domain, match[2]-match[3]))
+    if not org_domains: continue
+    best = max(org_domains); worst = min(org_domains)
+    plan = f"优先补齐{worst[1]}领域 {worst[2]} 项未达成能力，确认责任人和验收日期"
+    insight_rows.append([P(name, "CJKCell"), P(f"{best[1]}（{best[0]:.1f}%）", "CJKCell"), P(f"{worst[1]}（{worst[0]:.1f}%）", "CJKCell"), P(plan, "CJKCell")])
+it = Table(insight_rows, colWidths=[43 * mm, 40 * mm, 40 * mm, 53 * mm], repeatRows=1)
+it.setStyle(TableStyle([("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#7A271A")), ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.HexColor("#FFF7F5"), colors.white]), ("GRID", (0, 0), (-1, -1), .35, colors.HexColor("#F0B8AD")), ("VALIGN", (0, 0), (-1, -1), "TOP"), ("LEFTPADDING", (0, 0), (-1, -1), 5), ("RIGHTPADDING", (0, 0), (-1, -1), 5), ("TOPPADDING", (0, 0), (-1, -1), 5), ("BOTTOMPADDING", (0, 0), (-1, -1), 5)]))
+story.append(it)
+story.append(Spacer(1, 5 * mm))
+story.append(P("改进计划建议", "CJKH2"))
+for text in ["本月：各业务确认劣势领域的未达成能力、责任人、预计完成日期和验收证据。", "下月：对本月快照重算领域排名，复核优势是否保持、劣势是否收敛，并记录新增/遗留项。", "持续：当连续两个月低于 50% 时升级为重点改进项；当领域达成率达到 80% 后转入经验复用和风险监测。"]:
+    story.append(P(text, "CJKBody")); story.append(Spacer(1, 2 * mm))
+
+story.append(PageBreak())
+story.append(P("五、科组明细与行动跟踪", "CJKH2"))
 team_data = [[P("科组", "CJKCellWhite"), P("能力项", "CJKCellWhite"), P("已达成", "CJKCellWhite"), P("交付率", "CJKCellWhite"), P("建议", "CJKCellWhite")]]
 for rate, name, total, delivered in team_rows[:18]:
     advice = "优先补齐未达成项" if rate < 50 else "保持交付节奏" if rate < 80 else "总结可复制做法"

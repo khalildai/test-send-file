@@ -1,4 +1,7 @@
 import os
+import json
+import sqlite3
+from collections import defaultdict
 from datetime import date
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
@@ -11,6 +14,29 @@ from reportlab.platypus import Paragraph, Spacer, Table, TableStyle, PageBreak, 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "monthly-reports", "pdf", "能力成熟度-月报-V2-业界对标版.pdf")
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
+DB = os.path.join(ROOT, "github-test-send-file", "V2.0.13-source", "data", "maturity.db")
+if not os.path.exists(DB):
+    DB = os.path.join(ROOT, "V2.0.13-source", "data", "maturity.db")
+conn = sqlite3.connect(DB)
+units = {r[0]: (r[1], r[2]) for r in conn.execute("select id,kind,name from org_units")}
+teams = {r[0]: r[1] for r in conn.execute("select id,name from teams")}
+rels = defaultdict(list)
+for org_id, team_id in conn.execute("select org_id,team_id from org_team_relations"):
+    rels[org_id].append(team_id)
+items = [json.loads(r[0]) for r in conn.execute("select payload from capabilities")]
+conn.close()
+domain_org = defaultdict(list)
+for org_id, (kind, org_name) in units.items():
+    if kind not in ("department", "business"):
+        continue
+    linked = {teams[t] for t in rels.get(org_id, []) if t in teams}
+    for domain in sorted({x.get("domain", "未分类") for x in items if x.get("team") in linked}):
+        subset = [x for x in items if x.get("team") in linked and x.get("domain", "未分类") == domain]
+        if subset:
+            done = sum(x.get("achieved") in (1, True, "1") for x in subset)
+            domain_org[domain].append((done / len(subset) * 100, org_name, len(subset) - done))
+for domain in domain_org:
+    domain_org[domain].sort(reverse=True)
 font = next((p for p in ["/System/Library/Fonts/Supplemental/Songti.ttc", "/System/Library/Fonts/STHeiti Medium.ttc", "/Library/Fonts/Arial Unicode.ttf"] if os.path.exists(p)), None)
 if not font:
     raise RuntimeError("No CJK font")
@@ -75,5 +101,21 @@ story.append(ct); story.append(Spacer(1, 7*mm)); story.append(P("外部来源链
 for url in ["https://www.fxbaogao.com/detail/5041640", "https://cdn.prod.website-files.com/6111eecb5937a432dabc3df4/6657352001fb47dee6bedf14_AI落地研发的最后一公里暨DevData24核心数据发布.pdf", "https://support.huawei.com/enterprise/tr/doc/EDOC1100370571?currentPartNo=k002&togo=content"]:
     story.append(P(url, "S")); story.append(Spacer(1, 1.5*mm))
 story.append(Spacer(1, 4*mm)); story.append(P("本版数据原则：外部来源只用于解释指标和提供对标框架；任何未能从公开原文核验的数值均不纳入计算。", "S"))
+story.append(PageBreak()); story.append(P("五、业务组织优势/劣势与外部参照", "H"))
+story.append(P("本页的业务得分来自 V2.0.13 当前快照，仅用于展示内部组织洞察；外部来源只提供指标定义和行业参照，不替代内部事实。", "S"))
+ins = [[P("领域", "CW"), P("业务组织排名", "CW"), P("优势/劣势", "CW"), P("外部参照与改进建议", "CW")]]
+for domain in sorted(domain_org):
+    ranked = domain_org[domain]
+    if not ranked: continue
+    top = ranked[0]; bottom = ranked[-1]
+    rank_text = "；".join(f"{i+1}. {name} {rate:.1f}%" for i, (rate, name, _) in enumerate(ranked[:5]))
+    gap = f"优势：{top[1]}；劣势：{bottom[1]}（未达成 {bottom[2]} 项）"
+    advice = "先补齐内部短板，再接入同口径测试执行率/质量数据；CodeArts 文档可作为测试质量字段定义参照。"
+    ins.append([P(domain, "C"), P(rank_text, "C"), P(gap, "C"), P(advice, "C")])
+it = Table(ins, colWidths=[25*mm, 48*mm, 48*mm, 51*mm], repeatRows=1)
+it.setStyle(TableStyle([("BACKGROUND", (0,0),(-1,0), BLUE), ("ROWBACKGROUNDS", (0,1),(-1,-1), [colors.white, colors.HexColor("#F8FAFC")]), ("GRID", (0,0),(-1,-1), .35, colors.HexColor("#D0D5DD")), ("VALIGN", (0,0),(-1,-1), "TOP"), ("LEFTPADDING", (0,0),(-1,-1), 5), ("RIGHTPADDING", (0,0),(-1,-1), 5), ("TOPPADDING", (0,0),(-1,-1), 5), ("BOTTOMPADDING", (0,0),(-1,-1), 5)]))
+story.append(it); story.append(Spacer(1, 5*mm)); story.append(P("外部版行动优先级", "H"))
+for text in ["第一优先：围绕每个领域最低排名组织，确认未达成能力、责任人、预计完成日期和验收证据。", "第二优先：建立月度快照后再计算内部环比；不要用行业报告的总体数据替代本企业趋势。", "第三优先：补接测试用例执行率、缺陷质量等外部参照所需数据，并记录来源、年份、样本范围和可比性。"]:
+    story.append(P(text, "B")); story.append(Spacer(1, 1.5*mm))
 doc.build(story, onFirstPage=hf, onLaterPages=hf)
 print(OUT)
