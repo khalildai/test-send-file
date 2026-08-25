@@ -14,10 +14,11 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle,
 )
+from reportlab.graphics.shapes import Drawing, Rect, String, Line, Circle, Polygon, Wedge
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-DB = os.path.join(ROOT, "V2.0.13-source", "data", "maturity.db")
-OUT = os.path.join(ROOT, "monthly-reports", "pdf", "能力成熟度-月报-当前快照.pdf")
+DB = os.path.join(ROOT, "github-test-send-file", "V2.0.13-source", "data", "maturity.db")
+OUT = os.path.join(ROOT, "output", "pdf", "能力成熟度-月报-当前快照.pdf")
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 
 font_candidates = [
@@ -127,6 +128,54 @@ def header_footer(canvas, doc):
 def kpi(label, value, note):
     return [P(label, "CJKSmall"), P(value, "CJKTitle"), P(note, "CJKSmall")]
 
+def bar_chart(title, labels, values, width=480, height=175, color=BLUE):
+    d = Drawing(width, height)
+    d.add(String(0, height - 14, title, fontName="ReportCJK", fontSize=10, fillColor=NAVY))
+    left, bottom, chart_w, chart_h = 58, 28, width - 70, height - 54
+    maxv = max(max(values or [1]), 1)
+    d.add(Line(left, bottom, left, bottom + chart_h, strokeColor=colors.HexColor("#98A2B3")))
+    d.add(Line(left, bottom, left + chart_w, bottom, strokeColor=colors.HexColor("#98A2B3")))
+    for i, (label, value) in enumerate(zip(labels, values)):
+        x = left + (i + 0.5) * chart_w / max(len(labels), 1)
+        h = chart_h * value / maxv
+        d.add(Rect(x - 13, bottom, 26, h, fillColor=color, strokeColor=None))
+        d.add(String(x, bottom - 12, str(label)[:6], textAnchor="middle", fontName="ReportCJK", fontSize=7, fillColor=colors.HexColor("#344054")))
+        d.add(String(x, bottom + h + 3, f"{value:.0f}%", textAnchor="middle", fontName="ReportCJK", fontSize=7, fillColor=NAVY))
+    return d
+
+def radar_chart(title, labels, values, width=240, height=175, color=BLUE):
+    d = Drawing(width, height)
+    d.add(String(0, height - 14, title, fontName="ReportCJK", fontSize=10, fillColor=NAVY))
+    cx, cy, radius = width / 2, height / 2 - 4, min(width, height) / 2 - 28
+    n = max(len(labels), 1)
+    def point(i, r):
+        import math
+        a = math.pi / 2 + 2 * math.pi * i / n
+        return cx + r * math.cos(a), cy + r * math.sin(a)
+    for level in (0.25, 0.5, 0.75, 1.0):
+        pts = [coord for i in range(n) for coord in point(i, radius * level)]
+        d.add(Polygon(pts, fillColor=None, strokeColor=colors.HexColor("#D0D5DD"), strokeWidth=.5))
+    for i, label in enumerate(labels):
+        x, y = point(i, radius)
+        d.add(Line(cx, cy, x, y, strokeColor=colors.HexColor("#D0D5DD"), strokeWidth=.5))
+        lx, ly = point(i, radius + 12)
+        d.add(String(lx, ly, str(label)[:5], textAnchor="middle", fontName="ReportCJK", fontSize=7, fillColor=colors.HexColor("#344054")))
+    pts = [coord for i, value in enumerate(values) for coord in point(i, radius * max(0, min(value, 100)) / 100)]
+    d.add(Polygon(pts, fillColor=colors.Color(0.08, 0.37, 0.93, alpha=.28), strokeColor=color, strokeWidth=1.5))
+    return d
+
+def donut_chart(title, achieved, total, width=240, height=175):
+    d = Drawing(width, height)
+    d.add(String(0, height - 14, title, fontName="ReportCJK", fontSize=10, fillColor=NAVY))
+    cx, cy, r = width / 2, height / 2 - 3, 42
+    ratio = achieved / total if total else 0
+    d.add(Wedge(cx, cy, r, 0, 360 * ratio, fillColor=GREEN, strokeColor=colors.white))
+    d.add(Wedge(cx, cy, r, 360 * ratio, 360, fillColor=colors.HexColor("#FDE2E0"), strokeColor=colors.white))
+    d.add(Circle(cx, cy, 23, fillColor=colors.white, strokeColor=None))
+    d.add(String(cx, cy - 4, f"{ratio * 100:.0f}%", textAnchor="middle", fontName="ReportCJK", fontSize=12, fillColor=NAVY))
+    d.add(String(cx, 24, f"已达成 {achieved} / {total}", textAnchor="middle", fontName="ReportCJK", fontSize=8, fillColor=colors.HexColor("#344054")))
+    return d
+
 doc = SimpleDocTemplate(OUT, pagesize=A4, rightMargin=18 * mm, leftMargin=18 * mm, topMargin=16 * mm, bottomMargin=20 * mm)
 story = []
 story.append(P("测试能力成熟度月报", "CJKTitle"))
@@ -150,6 +199,16 @@ kt.setStyle(TableStyle([
 ]))
 story.append(kt)
 story.append(Spacer(1, 7 * mm))
+
+domain_rates = [v[1] / v[0] * 100 if v[0] else 0 for _, v in domain_rows]
+radar = radar_chart("六大领域成熟度雷达（当前快照）", [d for d, _ in domain_rows], domain_rates)
+bars = bar_chart("各领域达成率（目标：年度 3.0 分对应成熟度提升）", [d for d, _ in domain_rows], domain_rates, width=420)
+donut = donut_chart("能力项达成构成", sum(int(x.get("achieved") in (1, True, "1")) for x in payloads), len(payloads))
+story.append(Table([[bars, radar]], colWidths=[118 * mm, 56 * mm], style=TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"), ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0)])))
+story.append(donut)
+story.append(Spacer(1, 4 * mm))
+story.append(P("图表说明：柱形图和雷达图展示六大领域当前达成率，饼图展示能力项已达成与未达成构成；年度目标为 3.0 分，历史趋势待后续月度快照接入。", "CJKSmall"))
+story.append(Spacer(1, 5 * mm))
 
 story.append(P("一、业务组织当前能力排名", "CJKH2"))
 org_data = [[P("排名 / 组织", "CJKCellWhite"), P("关联科组", "CJKCellWhite"), P("能力项", "CJKCellWhite"), P("已达成", "CJKCellWhite"), P("交付率", "CJKCellWhite")]]
