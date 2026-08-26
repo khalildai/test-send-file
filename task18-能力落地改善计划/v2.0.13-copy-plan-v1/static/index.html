@@ -71,11 +71,11 @@ body{margin:0;background:linear-gradient(180deg,#e8f0f7 0%,var(--bg) 180px);colo
 .value{font-size:26px;font-weight:700;margin:6px 0 2px}
 .kpi .label{display:flex;align-items:center;justify-content:space-between;gap:8px}.kpi-help{display:inline-grid;place-items:center;width:18px;height:18px;flex:0 0 18px;padding:0;border:1px solid #aebdd0;border-radius:50%;background:#fff;color:#526984;font-size:11px;font-weight:700;cursor:help}.kpi-fraction{color:var(--muted);font-size:12px}
 .forecast-month{max-width:82px;padding:4px 6px;border:1px solid #b9c7d8;border-radius:5px;background:#fff;color:#243a52;font-size:12px}
-.maturity-table .team-cell select{width:96px;min-width:96px}.maturity-table .team-cell{min-width:112px}
-#rawView .maturity-table col:nth-child(n+10){width:112px!important}
+.maturity-table .team-cell select{width:150px;min-width:150px}.maturity-table .team-cell{min-width:160px}
+#rawView .maturity-table col:nth-child(n+10){width:160px!important}
 #rawView #rawRows tr.cap-row>td.editing-cell{overflow:visible!important;position:relative;z-index:20;background:#fff!important}
-#rawView #rawRows tr.cap-row>td.editing-cell .cell-plan-editor{position:relative;z-index:30;width:108px}
-.cell-plan-editor{display:grid;gap:4px;min-width:112px}.cell-plan-editor select{width:100%;font-size:11px}.cell-plan-actions{display:flex;justify-content:center;gap:4px}.cell-plan-actions button{padding:2px 6px;border:1px solid #b9c7d8;border-radius:4px;background:#fff;color:#29435f;font-size:10px;cursor:pointer}.cell-plan-note{display:block;margin-top:3px;color:#64778d;font-size:10px;line-height:1.25}
+#rawView #rawRows tr.cap-row>td.editing-cell .cell-plan-editor{position:relative;z-index:30;width:160px}
+.cell-plan-editor{display:grid;gap:4px;min-width:160px}.cell-plan-editor select{width:100%;font-size:11px}.cell-plan-actions{display:flex;justify-content:center;gap:4px}.cell-plan-actions button{padding:2px 6px;border:1px solid #b9c7d8;border-radius:4px;background:#fff;color:#29435f;font-size:10px;cursor:pointer}.cell-plan-note{display:block;margin-top:3px;color:#64778d;font-size:10px;line-height:1.25;white-space:nowrap}
 .good{color:var(--green);font-size:12px}.warn{color:#b87600;font-size:12px}.bad{color:var(--red);font-size:12px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 .grid.wide{grid-template-columns:1.15fr .85fr}
@@ -1683,7 +1683,7 @@ function renderRaw(){
         const cur=v===null?'':String(v),month=Number(row?.plannedMonth)||0;
         return `<td class="team-cell editing-cell"><div class="cell-plan-editor"><select id="rawCellStatus" aria-label="${esc(team)}${label}" onchange="updateRawCellPlanState()"><option value="" ${cur===''?'selected':''}>未选择</option><option value="1" ${v===1?'selected':''}>1-已达成</option><option value="0" ${v===0?'selected':''}>0-未达成</option></select><select id="rawCellPlan" aria-label="${esc(team)}预计落地月份" onchange="commitRawCellEdit(true)"><option value="">未设置预计月份</option>${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${month===i+1?'selected':''}>预计 ${i+1} 月</option>`).join('')}</select><div class="cell-plan-actions"><button type="button" onclick="event.stopPropagation();commitRawCellEdit(true)">保存</button><button type="button" onclick="event.stopPropagation();commitRawCellEdit(false)">取消</button></div></div></td>`;
       }
-      const plan=v===0?(row?.plannedMonth?`<small class="cell-plan-note">预计 ${Number(row.plannedMonth)} 月</small>`:'<small class="cell-plan-note">未标记预计月份</small>'):'';
+      const plan=v===0?(row?.plannedMonth?`<small class="cell-plan-note">预计 ${Number(row.plannedMonth)} 月</small>`:'<small class="cell-plan-note">预计月份未设置</small>'):'';
       const stat=v===1?'<span class="cell-stat done" title="点击编辑">1-已达成</span>':v===0?'<span class="cell-stat todo" title="点击编辑">0-未达成</span>':'<span class="cell-stat none" title="点击设置">—</span>';
       return `<td class="team-cell"><span onclick="startRawCellEdit(decodeURIComponent('${encoded}'),decodeURIComponent('${encodeURIComponent(team)}'),'${field}')">${stat}${plan}</span></td>`;
     };
