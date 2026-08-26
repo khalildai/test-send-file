@@ -298,6 +298,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
       <div class="card kpi" onclick="showDrill('gap')"><div class="label"><span>年底目标缺口</span><button class="kpi-help" title="分母为当前能力范围内的全部唯一能力项；分子为没有任何一个科组达成的唯一能力项。" aria-label="查看年底目标缺口定义" onclick="event.stopPropagation()">?</button></div><div class="value" id="gap">—</div><div class="kpi-fraction" id="gapNote">—</div></div>
       <div class="card kpi" onclick="showDrill('risk')"><div class="label"><span>风险能力项</span><button class="kpi-help" title="唯一能力项满足未交付，或预计交付日晚于 2026-11-30 任一条件即计入风险；同时满足两条仍只计一次。" aria-label="查看风险能力项定义" onclick="event.stopPropagation()">?</button></div><div class="value" id="riskNo">—</div><div class="kpi-fraction" id="riskNote">—</div></div>
     </section>
+    <section class="card" id="trendSection"><div class="section-head"><div><h2>年度成熟度趋势</h2><div class="hint">实际得分与按预计交付月份累计计算的全年预测得分</div></div><div style="display:flex;gap:8px;align-items:center"><select id="trendMode" onchange="trendMode=this.value;trendEntity='';renderTrend()"><option value="team">按科组</option><option value="department">按部门</option><option value="business">按业务线</option></select><select id="trendEntity" onchange="trendEntity=this.value;renderTrend()"></select></div></div><canvas id="maturityTrend" width="1200" height="320" style="display:block;width:100%;height:auto"></canvas><div class="legend"><span>蓝色：当前实际得分</span><span>金色：预计得分</span></div></section>
 
     <section class="card metric-module" id="metricOverviewSection">
       <div class="metric-module-head"><div><h2>组织能力概览</h2><div class="hint">直接展示当前得分、相对水平、最突出优势与最优先短板；点击得分逐级下钻</div></div><div class="metric-module-actions"><div class="metric-tabs" id="metricTabs"><button class="on" data-mode="team">按科组</button><button data-mode="department">按部门</button><button data-mode="business">按业务线</button></div><select class="metric-domain-select" id="metricOverviewDomain" aria-label="组织能力概览领域"><option value="all">全部六大领域</option></select></div></div>
@@ -656,6 +657,7 @@ function autoRisk(x){return (!delivered(x) && x.due && x.due<TODAY)?'是':'否'}
 function riskOf(x){return x.riskOverride ?? autoRisk(x)}
 let insightLock=false, insightTexts=[], tipEdits={dept:{},team:{}};
 let forecastMonth=Math.min(12,Math.max(1,new Date().getMonth()+1));
+let trendMode='team',trendEntity='';
 let serverRevision=0,serverSaveQueue=Promise.resolve(),serverConflictShown=false,serverReady=false;
 function sharedStatePayload(){return{data,changeLogs,asOf,insightLock,insightTexts,tipEdits,configData,rawColumnLabels,comparison:{mode:comparisonScopeMode,selections:comparisonSelections,domains:comparisonDomainSelection}}}
 function applySharedState(s){if(s?.data?.length)data=s.data;if(Array.isArray(s?.changeLogs))changeLogs=s.changeLogs;if(s?.asOf)asOf=s.asOf;insightLock=!!s?.insightLock;insightTexts=s?.insightTexts||[];tipEdits=s?.tipEdits||{dept:{},team:{}};if(s?.configData?.teams)configData=s.configData;if(s?.rawColumnLabels)rawColumnLabels={...RAW_LABEL_DEFAULTS,...s.rawColumnLabels};if(s?.comparison)applyComparisonState(s.comparison);serverRevision=Number(s?.revision)||0}
@@ -1190,6 +1192,7 @@ function renderDimensionOverview(kind,teamNames,scopedBase){
   drawRadarCenter('dimensionOverviewRadar',`${avg===null?'—':avg.toFixed(2)} / 3.0`,`${label}总体均分（科组 ${rows.length} 个）`);
 }
 function sortDimOverview(key){if(dimOverviewSort.key===key)dimOverviewSort.dir*=-1;else dimOverviewSort={key,dir:key==='name'?1:-1};render()}
+function renderTrend(){const mode=$('trendMode'),select=$('trendEntity'),canvas=$('maturityTrend');if(!mode||!select||!canvas)return;mode.value=trendMode;const entities=metricEntities(trendMode);if(!trendEntity||!entities.some(x=>x.name===trendEntity))trendEntity=entities[0]?.name||'';select.innerHTML=entities.map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join('');select.value=trendEntity;const entity=entities.find(x=>x.name===trendEntity),teams=entity?metricEntityTeams(trendMode,entity):[],target=scoringTargetItems(),actual=maturityScoreForTeams(teams,target).score,forecast=Array.from({length:12},(_,i)=>maturityScoreForTeams(teams,target,null,item=>achieved(item)||(!achieved(item)&&Number(item.plannedMonth)>=1&&Number(item.plannedMonth)<=i+1)).score),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height;ctx.clearRect(0,0,W,H);ctx.strokeStyle='#d9e2ec';ctx.lineWidth=1;ctx.font='12px sans-serif';for(let i=0;i<=4;i++){const y=H-34-(H-60)*i/4;ctx.beginPath();ctx.moveTo(48,y);ctx.lineTo(W-24,y);ctx.stroke();ctx.fillStyle='#65788c';ctx.fillText(i.toFixed(0),20,y+4)}const line=(vals,color,dash)=>{ctx.strokeStyle=color;ctx.setLineDash(dash||[]);ctx.lineWidth=2;ctx.beginPath();vals.forEach((v,i)=>{const x=54+(W-90)*i/11,y=v===null?H-34-(H-60)*0/4:H-34-(H-60)*Math.min(4,Math.max(0,v))/4;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();ctx.setLineDash([])};line(Array(12).fill(actual),'#2f6fad');line(forecast,'#c58a19',[7,5]);forecast.forEach((v,i)=>{ctx.fillStyle='#c58a19';ctx.fillText(`${i+1}月`,48+(W-90)*i/11,H-12)});ctx.fillStyle='#2f6fad';ctx.fillText(`${trendEntity||'当前范围'} 实际 ${actual===null?'—':actual.toFixed(2)}`,54,18);ctx.fillStyle='#c58a19';ctx.fillText('预计得分随计划月份累计',250,18)}
 
 function render(){
   const a=subset(), total=a.length;
@@ -1228,6 +1231,7 @@ function render(){
   const forecastScore=forecastResult.score;
   $('forecastScore').textContent=forecastScore===null?'—':forecastScore.toFixed(2);
   $('forecastNote').textContent=forecastScore===null?`${forecastMonth}月暂无可评分领域`:`${forecastMonth}月预测 · 较当前 ${score===null?'—':`${forecastScore>=score?'+':''}${(forecastScore-score).toFixed(2)}`}`;
+  renderTrend();
   $('formula').innerHTML=maturityScoreFormula(scoreResult);
   $('levelBars').innerHTML=levels.map(l=>bar(l,lr[l].rate,l==='2级'?'amber':l==='4级'?'green':'')).join('');
 
