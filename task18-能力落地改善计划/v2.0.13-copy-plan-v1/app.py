@@ -436,7 +436,7 @@ def enforce_field_perms(old_rows: list, new_rows: list):
 
 @app.after_request
 def add_headers(response):
-    response.headers["Cache-Control"] = "no-store" if request.path.startswith("/api/") else "no-cache"
+    response.headers["Cache-Control"] = "no-store"
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
