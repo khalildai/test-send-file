@@ -8,6 +8,10 @@ OUT = Path(__file__).resolve().parent / 'v2.0.14'
 OUT.mkdir(exist_ok=True)
 with sqlite3.connect(DB) as db:
     rows = [json.loads(r[0]) for r in db.execute('select payload from capabilities order by rowid')]
+    team_ids = dict(db.execute('select name, id from teams').fetchall())
+    business_teams = {}
+    for oid, kind, name in db.execute("select id, kind, name from org_units where kind='business'"):
+        business_teams[name] = {team for org, team in db.execute('select org_id, team_id from org_team_relations') if org == oid}
 
 def esc(v):
     return str(v or '').replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace('"','&quot;')
@@ -22,11 +26,18 @@ def group(key):
     for name in sorted({x.get(key) for x in rows if x.get(key)}):
         items=[x for x in rows if x.get(key)==name]; out.append({'name':name,'score':score(items),'rate':rate(items),'n':len(items)})
     return out
+def business_group():
+    out=[]
+    for name, ids in sorted(business_teams.items()):
+        items=[x for x in rows if team_ids.get(x.get('team')) in ids]
+        out.append({'name':name,'score':score(items),'rate':rate(items),'n':len(items)})
+    return out
 domains=[]
 for name in sorted({x.get('domain') for x in rows if x.get('domain')}):
     items=[x for x in rows if x.get('domain')==name]; domains.append({'name':name,'score':score(items),'rate':rate(items),'n':len(items)})
 overall={'score':score(rows),'rate':rate(rows),'n':len(rows),'done':sum(int(x.get('achieved') or 0) for x in rows)}
-payload=json.dumps({'rows':rows,'overall':overall,'domains':domains,'depts':group('dept'),'business':group('business')},ensure_ascii=False).replace('</','<\\/')
+business = business_group()
+payload=json.dumps({'rows':rows,'overall':overall,'domains':domains,'depts':group('dept'),'business':business},ensure_ascii=False).replace('</','<\\/')
 chart_html = ''.join(f'<div class="chart-row"><span>{esc(x["name"])}</span><i style="width:{min(100,(x["score"] or 0)/3*100):.0f}%"></i><b>{x["score"] if x["score"] is not None else "—"}</b></div>' for x in domains)
 pie_style = f'background:conic-gradient(#287a8d 0 {overall["rate"]}%, #e5ebf0 {overall["rate"]}% 100%)'
 def table_rows(items, label):
@@ -36,7 +47,7 @@ def table_rows(items, label):
         result.append(f'<tr><td>{esc(x["name"])}</td><td class="score">{x["score"] if x["score"] is not None else "—"}</td><td>{x["rate"]}%</td><td>{x["n"]}</td><td>{gap}</td><td>按{label}短板制定 / 待制定</td></tr>')
     return ''.join(result)
 dept_rows = table_rows(group('dept'), '部门')
-business_rows = table_rows(group('business'), '业务')
+business_rows = table_rows(business, '业务')
 html=f'''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>测试能力成熟度月报 V2.0.14</title>
 <style>body{{margin:0;background:#eef2f6;color:#1d2b3a;font:14px Arial,"Microsoft YaHei",sans-serif}}main{{max-width:1180px;margin:auto;padding:24px}}header{{background:#173b63;color:white;padding:28px 32px;border-radius:8px}}h1{{margin:0 0 8px;font-size:28px}}h2{{color:#173b63;margin:26px 0 10px}}.muted{{color:#647488;font-size:12px}}.grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}}.card,.panel{{background:#fff;border:1px solid #d7e0e8;border-radius:6px;padding:16px}}.card b{{display:block;color:#173b63;font-size:25px;margin-top:4px}}.bar{{height:10px;background:#e5ebf0;border-radius:2px;overflow:hidden;margin-top:7px}}.bar i{{display:block;height:100%;background:#287a8d}}table{{width:100%;border-collapse:collapse;background:#fff}}th,td{{padding:9px;border-bottom:1px solid #e4e9ee;text-align:left}}th{{background:#f1f5f8;color:#44576a;font-size:12px}}.score{{font-weight:700;color:#173b63}}.two{{display:grid;grid-template-columns:1fr 1fr;gap:12px}}.tag{{display:inline-block;padding:3px 7px;background:#eef5f7;border:1px solid #c8dfe3;border-radius:3px;margin:2px;font-size:12px}}.chart-row{{display:grid;grid-template-columns:110px 1fr 45px;align-items:center;gap:8px;margin:8px 0}}.chart-row i{{display:block;height:16px;background:#287a8d;border-radius:2px}}.pie{{width:130px;height:130px;border-radius:50%;margin:12px auto;{pie_style}}}.legend{{text-align:center;color:#647488;font-size:12px}}.trend-empty{{padding:28px;text-align:center;border:1px dashed #b7c4d0;color:#647488;background:#f8fafb}}@media(max-width:720px){{main{{padding:12px}}.grid,.two{{grid-template-columns:1fr 1fr}}h1{{font-size:22px}}}}@media print{{body{{background:#fff}}main{{padding:0}}header,.panel,.card{{box-shadow:none}}}}</style>
 <main><header><h1>测试能力成熟度月报</h1><div>V2.0.14 独立快照 · 截止 {date.today().isoformat()}</div><p>数据源：V2.0.14 独立数据库；本报告只读生成，不修改正式业务版本。</p></header>
