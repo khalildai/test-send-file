@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>徐一民 - 测试经理 / 测试能力建设负责人</title>
+  <style>
+    :root{
+      --paper:#fff;--canvas:#edf0f2;--ink:#20262d;--muted:#626c76;
+      --line:#d7dce0;--line-dark:#aeb7bf;--accent:#a52d31;--accent-soft:#f6e9e9;
+      --navy:#263746;--success:#27754d;--warning:#9a6700;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--canvas);color:var(--ink);font-family:"Arial Unicode MS","Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif;letter-spacing:0}
+    button{font:inherit;letter-spacing:0;cursor:pointer}
+    .toolbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:58px;padding:10px 20px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 3px 10px rgba(25,35,45,.07)}
+    .toolbar-title{display:flex;align-items:center;gap:10px;min-width:0}
+    .toolbar-mark{display:grid;place-items:center;width:30px;height:30px;background:var(--navy);color:#fff;font-size:13px;font-weight:800;border-radius:4px;flex:0 0 auto}
+    .toolbar-title b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .save-state{display:inline-flex;align-items:center;gap:6px;color:var(--success);font-size:11px;white-space:nowrap}
+    .save-state::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+    .save-state.dirty{color:var(--warning)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .action{min-height:36px;padding:7px 13px;border:1px solid var(--line-dark);border-radius:4px;background:#fff;color:var(--navy);font-size:12px;font-weight:700}
+    .action.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+    .workspace{padding:24px 12px 40px}
+    .sheet{width:210mm;min-height:297mm;margin:0 auto 22px;padding:16mm 16mm 14mm;background:var(--paper);box-shadow:0 10px 28px rgba(25,35,45,.12);outline:none;overflow:hidden}
+    .sheet:focus{box-shadow:0 0 0 2px rgba(165,45,49,.18),0 10px 28px rgba(25,35,45,.12)}
+    .resume-header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;padding-bottom:13px;border-bottom:2px solid var(--navy)}
+    .name{margin:0 0 4px;font-family:"Arial Unicode MS","Microsoft YaHei",sans-serif;font-size:31px;line-height:1.15;color:var(--navy);font-weight:800}
+    .target{font-size:14px;color:var(--accent);font-weight:800}
+    .contact{display:grid;gap:4px;text-align:right;color:#485560;font-size:10.5px;line-height:1.5}
+    .contact strong{color:var(--ink)}
+    .section{margin-top:15px}
+    .section-title{display:flex;align-items:center;gap:9px;margin:0 0 8px;color:var(--navy);font-size:14px;line-height:1.3;font-weight:800}
+    .section-title::before{content:"";width:4px;height:16px;background:var(--accent);flex:0 0 auto}
+    .summary{margin:0;padding:11px 13px;background:#f5f7f8;border-left:3px solid var(--accent);font-size:10.5px;line-height:1.7;text-align:justify}
+    .skills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+    .skill{min-height:38px;padding:8px 10px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-size:10px;line-height:1.55}
+    .skill b{display:block;color:var(--accent);font-size:9px;margin-bottom:1px}
+    .entry{margin-top:11px}
+    .entry:first-of-type{margin-top:0}
+    .entry-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:baseline;margin-bottom:4px}
+    .entry-title{font-size:11px;line-height:1.45;font-weight:800;color:var(--navy)}
+    .entry-title .company{color:var(--ink)}
+    .date{color:var(--accent);font-size:9.5px;font-weight:800;white-space:nowrap}
+    ul{margin:0;padding-left:16px}
+    li{margin:2px 0;font-size:9.5px;line-height:1.53;text-align:justify}
+    li::marker{color:var(--accent)}
+    .page-label{display:flex;justify-content:space-between;align-items:center;margin:-3px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line);color:var(--muted);font-size:9px}
+    .project{margin:0 0 13px;padding-left:12px;border-left:2px solid var(--line-dark)}
+    .project:last-child{margin-bottom:0}
+    .project-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-bottom:4px;align-items:baseline}
+    .project-title{font-size:11px;font-weight:800;color:var(--navy)}
+    .project-role{display:block;margin-top:1px;color:var(--accent);font-size:9px;font-weight:700}
+    .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .edu-item{padding:10px 11px;border:1px solid var(--line)}
+    .edu-item b{display:block;color:var(--navy);font-size:10.5px;margin-bottom:4px}
+    .edu-item span{display:block;color:var(--muted);font-size:9.5px;line-height:1.55}
+    .awards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 12px}
+    .award{display:grid;grid-template-columns:42px minmax(0,1fr);gap:8px;align-items:center;padding:7px 9px;background:#f5f7f8;border-left:3px solid var(--accent)}
+    .award time{color:var(--accent);font-size:10px;font-weight:800}
+    .award span{font-size:9.5px;font-weight:700}
+    .footer-line{margin-top:14px;padding-top:8px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:#7b848d;font-size:8.5px}
+    .toast{position:fixed;right:20px;bottom:20px;z-index:60;max-width:min(420px,calc(100vw - 32px));padding:11px 14px;border-radius:4px;background:var(--navy);color:#fff;font-size:12px;box-shadow:0 10px 24px rgba(25,35,45,.22);opacity:0;transform:translateY(10px);transition:.18s ease;pointer-events:none}
+    .toast.show{opacity:1;transform:translateY(0)}
+    [contenteditable="true"] *:hover{outline:1px dashed rgba(165,45,49,.22);outline-offset:2px}
+    [contenteditable="true"] *:focus{outline:2px solid rgba(165,45,49,.28);outline-offset:2px}
+    @media(max-width:860px){
+      .toolbar{align-items:flex-start;padding:10px 12px}.toolbar-title{padding-top:3px}.save-state{display:none}.actions{gap:6px}.action{min-height:34px;padding:6px 9px}.workspace{padding:12px 0 24px}.sheet{width:100%;min-height:0;margin:0 0 12px;padding:18px 14px;box-shadow:none}.resume-header{grid-template-columns:1fr;gap:10px;align-items:start}.contact{text-align:left}.skills,.edu-grid,.awards{grid-template-columns:1fr}.entry-head,.project-head{grid-template-columns:1fr}.date{white-space:normal}.name{font-size:28px}
+    }
+    @media(max-width:520px){
+      .toolbar{position:static;display:grid}.toolbar-title b{font-size:13px}.actions{display:grid;grid-template-columns:repeat(3,1fr)}.action{width:100%;font-size:11px}.sheet{padding:16px 12px}.summary{padding:10px}.page-label{margin-top:0}
+    }
+    @page{size:A4;margin:0}
+    @media print{
+      html,body{background:#fff}.toolbar,.toast{display:none!important}.workspace{padding:0}.sheet{width:210mm;height:297mm;min-height:297mm;margin:0;padding:16mm 16mm 14mm;box-shadow:none;page-break-after:always;break-after:page;overflow:hidden}.sheet:last-child{page-break-after:auto;break-after:auto}[contenteditable="true"] *:hover,[contenteditable="true"] *:focus{outline:none}.entry-head,.project-head,.section-title,.edu-item,.award{break-inside:avoid}.footer-line{position:relative}
+    }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="toolbar-title">
+      <span class="toolbar-mark">CV</span>
+      <b>徐一民·可编辑简历</b>
+      <span class="save-state" id="saveState">已读取本地版本</span>
+    </div>
+    <div class="actions">
+      <button class="action primary" id="saveButton" type="button">保存修改</button>
+      <button class="action" id="resetButton" type="button">恢复初稿</button>
+      <button class="action" id="printButton" type="button">打印 / PDF</button>
+    </div>
+  </header>
+
+  <main class="workspace" id="resumePages">
+    <article class="sheet" contenteditable="true" spellcheck="true" data-page="1">
+      <header class="resume-header">
+        <div>
+          <h1 class="name">徐一民</h1>
+          <div class="target">目标岗位：测试经理 / 测试能力建设负责人</div>
+        </div>
+        <div class="contact">
+          <span><strong>手机</strong>　18729597958</span>
+          <span><strong>邮箱</strong>　1213760756@qq.com</span>
+          <span><strong>期望工作地</strong>　苏州优先</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2 class="section-title">职业概况</h2>
+        <p class="summary">7 年工业控制测试经验，曾管理 15 人以上测试团队，负责工控产品软硬件测试与产品交付；现任测试效能高级工程师，负责研发测试数字化建设，覆盖全研发 3000+ 人员，推动研发设计与测试活动数据化、线上化、可度量。</p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">核心能力</h2>
+        <div class="skills">
+          <div class="skill"><b>测试管理</b>测试管理与项目交付；测试策略、方案和质量评估。</div>
+          <div class="skill"><b>工业控制测试</b>工业控制产品软件、硬件单板、系统整机及现场试机测试。</div>
+          <div class="skill"><b>团队与体系</b>团队管理、人才培养及跨部门协同，测试体系与能力建设。</div>
+          <div class="skill"><b>研发测试数字化</b>缺陷管理、测试任务线上化、测试度量、能力成熟度与平台运营。</div>
+          <div class="skill"><b>测试 AI</b>测试 AI 工具设计与业务改造。</div>
+          <div class="skill"><b>复杂项目交付</b>多业务、多项目计划统筹，交付风险识别与质量闭环。</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">工作经历</h2>
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title"><span class="company">苏州汇川技术有限公司</span>｜测试架构与系统部 · 研发测试效能数字化 BP</div>
+            <div class="date">2025.05–至今</div>
+          </div>
+          <ul>
+            <li>深度参与研发缺陷库、测试任务在线执行平台的需求分析及业务/应用架构评审，主导测试度量、测试能力成熟度业务与应用架构设计。</li>
+            <li>首次统一公司研发缺陷数据标准与管理平台，推动全部测试业务实现测试任务及数据线上化管理。</li>
+            <li>平台覆盖 100% 研发组织、日均活跃人员 3000+，采用双周迭代模式，累计上线功能 100+ 项。</li>
+            <li>统筹约 10 人业务推广骨干团队，负责全研发功能推广、版本发布、业务赋能及各业务数字化人才培养。</li>
+            <li>平台上线后，缺陷流转效率提升 30%+、测试任务管理效率提升 50%+、核心指标自动采集率达 100%，测试周期、缺陷及任务度量数据实时获取。</li>
+            <li>建立指导书、发布宣贯、业务定制化改造、功能使用率监控及低效功能下线的持续运营机制，业务需求与平台缺陷 100% 记录并逐项闭环。</li>
+            <li>引入 AI 工具指导业务完成测试形态改造，首创在线测试度量与测试工程能力在线管理系统。</li>
+          </ul>
+        </div>
+
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title"><span class="company">苏州汇川技术有限公司</span>｜驱动产品测试部 · 测试组长</div>
+            <div class="date">2022–2025.05</div>
+          </div>
+          <ul>
+            <li>带领 15 人测试团队，支撑纺织专机、注塑机、工程机械、运动控制板卡 4 大业务及 100+ 项目的软件、硬件单板、系统整机及部分电机测试与交付。</li>
+            <li>统筹测试计划、人员配置、风险识别及交付质量，测试及时交付率 &gt;95%，缺陷逃逸率控制在 5% 以内。</li>
+            <li>建立关键岗位能力标准与培养机制，关键岗位合格率 100%；团队成员获研发级、中心级荣誉 6 人次以上。</li>
+            <li>主导公司产品试机流程建设、推广及培训赋能，获研发级流程建设金奖。</li>
+            <li>协同产品、市场拓展、服务与开发设计团队深入客户现场调研，将真实应用场景转化为测试用例和方案，持续完善质量体系。</li>
+            <li>发起工程机械载荷谱与工况开发专项，推动真实车辆工况分析在工程机械长稳耐久与效率测试中的应用。</li>
+          </ul>
+        </div>
+      </section>
+      <div class="footer-line"><span>徐一民｜测试经理 / 测试能力建设负责人</span><span>1 / 3</span></div>
+    </article>
+
+    <article class="sheet" contenteditable="true" spellcheck="true" data-page="2">
+      <div class="page-label"><strong>徐一民·工作与项目经历</strong><span>第 2 页</span></div>
+      <section class="section" style="margin-top:0">
+        <h2 class="section-title">工作经历（续）</h2>
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title"><span class="company">苏州汇川技术有限公司</span>｜驱动产品测试部 · 测试部门政委（兼任）</div>
+            <div class="date">2023–2025.05</div>
+          </div>
+          <ul>
+            <li>服务 90+ 人部门团队，策划并落地团建活动 10+ 次、新员工培训讲座 5+ 次及中心级年会 1 次。</li>
+            <li>主导部门文化墙、季度及年度及时激励、新员工职业规划与辅导等团队文化建设，定期组织茶话会和体育健身活动。</li>
+          </ul>
+        </div>
+        <div class="entry">
+          <div class="entry-head">
+            <div class="entry-title"><span class="company">苏州汇川技术有限公司</span>｜驱动产品测试部 · 测试项目经理</div>
+            <div class="date">2019.11–2024</div>
+          </div>
+          <ul>
+            <li>负责纺织专机、运动控制板卡等产品的测试需求调研、测试策略与方案设计、用例编写、测试执行、质量评估及客户现场试机跟踪。</li>
+            <li>深入客户一线调研真实应用场景，补充场景化测试需求，扩充测试用例库与方案库。</li>
+            <li>累计发现缺陷 1000+，覆盖软件功能、性能、硬件单板、系统整机及白盒测试。</li>
+            <li>独立完成组内软件功能、性能、硬件单板及整机白盒测试能力建设。</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">代表项目经历</h2>
+        <div class="project">
+          <div class="project-head">
+            <div><div class="project-title">纺织织造行业专机项目集</div><span class="project-role">项目测试经理</span></div>
+            <div class="date">2019–2025.05</div>
+          </div>
+          <ul>
+            <li>负责喷水、喷气、剑杆织机的软件、硬件、系统整机及客户现场试机全流程测试，覆盖标准与扩展配置共 10+ 机型。</li>
+            <li>参与前期需求与客户应用场景调研，将真实织造工艺场景转化为测试方案，沉淀场景用例 200+ 条。</li>
+            <li>建立织造行业测试场景管理规范与织造试机测试标准，推动测试覆盖真实应用场景和整机质量评估。</li>
+          </ul>
+        </div>
+        <div class="project">
+          <div class="project-head">
+            <div><div class="project-title">运动控制板卡项目集</div><span class="project-role">项目测试经理 / 测试系统工程师</span></div>
+            <div class="date">2023–2025.05</div>
+          </div>
+          <ul>
+            <li>面向 EtherCAT 总线及最高 64 轴运动控制场景，主导完成板卡基础 API、同步性能及分选机、裁切机等真实机型应用场景测试设计。</li>
+            <li>设计 C# 测试 Demo，支撑基础 API 验证与场景化测试；交付 2 套多轴同步性能测试平台、汇川板卡故障矩阵及测试 Demo 编码规范。</li>
+            <li>从 0 建立组织级运动控制板卡测试能力与岗位能力标准，培养板卡测试人员 6 人以上。</li>
+          </ul>
+        </div>
+      </section>
+      <div class="footer-line"><span>徐一民｜工作与项目经历</span><span>2 / 3</span></div>
+    </article>
+
+    <article class="sheet" contenteditable="true" spellcheck="true" data-page="3">
+      <div class="page-label"><strong>徐一民·项目、教育与荣誉</strong><span>第 3 页</span></div>
+      <section class="section" style="margin-top:0">
+        <h2 class="section-title">代表项目经历（续）</h2>
+        <div class="project">
+          <div class="project-head">
+            <div><div class="project-title">工程机械纯电多合一项目集</div><span class="project-role">项目测试经理</span></div>
+            <div class="date">2024–2025.05</div>
+          </div>
+          <ul>
+            <li>统筹电动矿卡、装载车、叉车等产品的软件、硬件、系统及整车测试计划与 20+ 人员调度，年均支撑 60+ 项目、重点版本项目 6 个；测试及时交付率 &gt;95%，缺陷逃逸率 &lt;5%。</li>
+            <li>采集客户矿场燃油车辆真实运行数据，采用聚类、主成分分析等方法提取典型载荷谱。</li>
+            <li>将分析结果用于长稳耐久和整车效率测试设计，联合仿真团队向客户交付整车高效运行区间参数，支撑实车耐久磨合与产品规格优化。</li>
+          </ul>
+        </div>
+
+        <div class="project">
+          <div class="project-head">
+            <div><div class="project-title">研发测试数字化项目集</div><span class="project-role">测试数字化 BP</span></div>
+            <div class="date">2025.05–至今</div>
+          </div>
+          <ul>
+            <li>参与研发缺陷库、测试任务在线执行平台的需求分析及业务/应用架构评审，主导测试度量、测试能力成熟度的业务与应用架构设计。</li>
+            <li>推动平台覆盖 100% 研发组织、日均活跃人员 3000+，双周迭代累计上线功能 100+ 项；统筹约 10 人业务推广骨干团队。</li>
+            <li>统一研发缺陷数据标准与管理平台，缺陷流转效率提升 30%+、测试任务管理效率提升 50%+、核心指标自动采集率 100%，测试周期、缺陷及任务度量数据实时获取。</li>
+            <li>建立新功能指导、版本宣贯、定制化改造、使用率监控及低效功能下线的运营闭环，业务需求与平台缺陷 100% 记录并逐项闭环。</li>
+            <li>独立引入 AI 工具完成测试度量与测试能力成熟度线上管理，可视化业务能力短板与改进方向，并指导一线测试业务完成能力建设与业务形态改造。</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">教育背景</h2>
+        <div class="edu-grid">
+          <div class="edu-item"><b>中国运载火箭技术研究院</b><span>仪器科学与技术｜硕士</span><span>2016–2019</span></div>
+          <div class="edu-item"><b>西北工业大学</b><span>电气工程及其自动化｜本科</span><span>2012–2016</span></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">荣誉奖项</h2>
+        <div class="awards">
+          <div class="award"><time>2025</time><span>公司级测试数字化变革团队奖</span></div>
+          <div class="award"><time>2024</time><span>研发测试能力建设优秀团队</span></div>
+          <div class="award"><time>2022</time><span>研发级流程建设金奖</span></div>
+          <div class="award"><time>2021</time><span>测试体系优秀员工</span></div>
+        </div>
+      </section>
+      <div class="footer-line"><span>徐一民｜测试管理·能力建设·研发测试数字化</span><span>3 / 3</span></div>
+    </article>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+    const STORAGE_KEY = 'resume-xuyimin-editable-v1';
+    const pages = [...document.querySelectorAll('.sheet')];
+    const initialPages = pages.map(page => page.innerHTML);
+    const saveState = document.getElementById('saveState');
+    const toast = document.getElementById('toast');
+    let dirty = false;
+    let toastTimer = null;
+
+    function showToast(message){
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+    function setState(isDirty, message){
+      dirty = isDirty;
+      saveState.classList.toggle('dirty', isDirty);
+      saveState.textContent = message;
+    }
+    function save(){
+      const payload = {schemaVersion:1,savedAt:new Date().toISOString(),pages:pages.map(page => page.innerHTML)};
+      try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        setState(false, `已保存 ${new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})}`);
+        showToast('简历修改已保存到当前浏览器');
+      }catch(error){
+        setState(true, '保存失败');
+        showToast('保存失败，请检查浏览器本地存储权限');
+      }
+    }
+    function restore(){
+      try{
+        const payload = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        if(!payload || payload.schemaVersion !== 1 || !Array.isArray(payload.pages) || payload.pages.length !== pages.length) return;
+        payload.pages.forEach((html,index) => pages[index].innerHTML = html);
+        setState(false, '已读取本地保存版本');
+      }catch(error){
+        localStorage.removeItem(STORAGE_KEY);
+        showToast('本地保存内容异常，已使用初始简历');
+      }
+    }
+    function reset(){
+      if(!confirm('恢复初稿将清除当前浏览器中的所有编辑内容，是否继续？')) return;
+      initialPages.forEach((html,index) => pages[index].innerHTML = html);
+      localStorage.removeItem(STORAGE_KEY);
+      setState(false, '已恢复初稿');
+      showToast('已恢复初始简历内容');
+    }
+    function lockPrintContent(){pages.forEach(page => page.setAttribute('contenteditable','false'))}
+    function unlockPrintContent(){pages.forEach(page => page.setAttribute('contenteditable','true'))}
+    function printResume(){
+      lockPrintContent();
+      window.addEventListener('afterprint',unlockPrintContent,{once:true});
+      window.print();
+      window.setTimeout(unlockPrintContent,1500);
+    }
+    pages.forEach(page => {
+      page.addEventListener('input', () => setState(true, '有未保存修改'));
+      page.addEventListener('paste', event => {
+        event.preventDefault();
+        const text = event.clipboardData.getData('text/plain');
+        document.execCommand('insertText', false, text);
+      });
+    });
+    document.getElementById('saveButton').addEventListener('click', save);
+    document.getElementById('resetButton').addEventListener('click', reset);
+    document.getElementById('printButton').addEventListener('click',printResume);
+    window.addEventListener('beforeprint',lockPrintContent);
+    window.addEventListener('afterprint',unlockPrintContent);
+    window.addEventListener('beforeunload', event => {
+      if(!dirty) return;
+      event.preventDefault();
+      event.returnValue = '';
+    });
+    restore();
+  </script>
+</body>
+</html>
