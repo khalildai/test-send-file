@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>V2.0.14 - 本月未达成项文字记录 Demo</title>
+  <style>
+    :root{
+      --bg:#f4f6f8;--panel:#fff;--line:#d9e1e8;--line-strong:#c2ced9;
+      --text:#203246;--muted:#65778a;--blue:#1769aa;--blue-soft:#eaf3fa;
+      --green:#16794a;--green-soft:#e9f6ef;--amber:#9a6300;--amber-soft:#fff5dd;
+      --red:#b42318;--red-soft:#fff0ee;--shadow:0 6px 18px rgba(30,50,70,.06);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;letter-spacing:0}
+    button,input,select,textarea{font:inherit;letter-spacing:0}
+    button{cursor:pointer}
+    .app{min-height:100vh;display:grid;grid-template-columns:220px minmax(0,1fr)}
+    .sidebar{background:#24394f;color:#e8eef4;padding:18px 14px;display:flex;flex-direction:column;gap:20px}
+    .brand{display:flex;align-items:center;gap:10px;padding:2px 8px 16px;border-bottom:1px solid rgba(255,255,255,.13)}
+    .brand-mark{width:30px;height:30px;display:grid;place-items:center;background:#fff;color:#24394f;font-weight:800;border-radius:4px}
+    .brand b{font-size:15px;line-height:1.35}
+    .nav{display:grid;gap:4px}
+    .nav-item{display:flex;align-items:center;gap:10px;min-height:40px;padding:9px 11px;border-radius:4px;color:#cdd8e2;font-size:13px}
+    .nav-item.on{background:#1769aa;color:#fff;font-weight:700}
+    .nav-dot{width:8px;height:8px;border:1px solid currentColor;border-radius:50%;flex:0 0 auto}
+    .sidebar-meta{margin-top:auto;padding:12px 8px 2px;color:#aebdcc;font-size:11px;line-height:1.7}
+    .main{min-width:0}
+    .topbar{height:58px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+    .crumb{font-size:12px;color:var(--muted)}
+    .version{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+    .version::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}
+    main{max-width:1500px;margin:0 auto;padding:22px 24px 38px}
+    .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
+    h1{margin:0 0 5px;font-size:24px;line-height:1.3}
+    .subtitle{font-size:12px;color:var(--muted)}
+    .toolbar{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+    .field{display:grid;gap:5px}
+    .field label{font-size:11px;color:var(--muted)}
+    select,.btn{min-height:36px;border:1px solid var(--line-strong);border-radius:4px;background:#fff;color:var(--text);padding:7px 10px}
+    select{min-width:150px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:12px}
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;min-width:96px}
+    .btn.ghost{background:#fff;color:var(--muted)}
+    .btn:disabled{cursor:not-allowed;opacity:.5}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+    .stat{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:15px 16px;box-shadow:var(--shadow)}
+    .stat-label{font-size:12px;color:var(--muted);margin-bottom:8px}
+    .stat-value{font-size:28px;font-weight:800;line-height:1}
+    .stat-unit{font-size:12px;color:var(--muted);font-weight:500;margin-left:4px}
+    .stat-accent{color:var(--red)}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);overflow:hidden}
+    .card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+    .card-head h2{margin:0;font-size:16px}
+    .save-state{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:11px;white-space:nowrap}
+    .save-dot{width:7px;height:7px;border-radius:50%;background:#9cabb9}
+    .save-state.saved{color:var(--green)}
+    .save-state.saved .save-dot{background:var(--green)}
+    .save-state.dirty{color:var(--amber)}
+    .save-state.dirty .save-dot{background:#d48a00}
+    .table-wrap{overflow:auto;max-height:calc(100vh - 330px);min-height:320px}
+    table{width:100%;border-collapse:separate;border-spacing:0;min-width:1120px}
+    th{position:sticky;top:0;z-index:3;background:#f1f4f7;color:#43576b;font-size:12px;text-align:left;font-weight:700;padding:11px 10px;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+    td{font-size:12px;line-height:1.5;padding:10px;border-bottom:1px solid var(--line);vertical-align:top;background:#fff}
+    tbody tr:hover td{background:#fbfcfd}
+    .department-row td{position:sticky;top:39px;z-index:2;background:#e9eef3!important;color:#354b60;font-weight:800;border-top:1px solid var(--line-strong);padding:8px 10px}
+    .department-count{display:inline-block;margin-left:8px;color:var(--muted);font-weight:500;font-size:11px}
+    .team-cell{width:170px;font-weight:700;color:#334b61}
+    .capability-cell{min-width:220px}
+    .capability-cell b{display:block;margin-bottom:3px}
+    .meta{color:var(--muted);font-size:11px}
+    .tag{display:inline-flex;align-items:center;min-height:22px;padding:2px 7px;border-radius:3px;font-size:11px;font-weight:700;white-space:nowrap}
+    .tag.todo{background:var(--red-soft);color:var(--red)}
+    .tag.source{background:var(--amber-soft);color:var(--amber)}
+    .date-cell{min-width:128px;white-space:nowrap}
+    .note-cell{width:38%;min-width:360px;padding:8px 10px}
+    textarea{display:block;width:100%;min-height:74px;resize:vertical;border:1px solid var(--line-strong);border-radius:4px;background:#fff;padding:8px 10px;color:var(--text);font-size:12px;line-height:1.5}
+    textarea:focus{outline:2px solid rgba(23,105,170,.16);border-color:var(--blue)}
+    .empty{display:grid;place-items:center;min-height:320px;padding:30px;text-align:center;color:var(--muted)}
+    .empty strong{display:block;color:var(--text);font-size:15px;margin-bottom:6px}
+    .toast{position:fixed;right:22px;bottom:22px;z-index:20;max-width:min(420px,calc(100vw - 32px));background:#203246;color:#fff;border-radius:5px;padding:12px 15px;box-shadow:0 12px 28px rgba(20,40,60,.24);font-size:12px;line-height:1.5;opacity:0;transform:translateY(12px);pointer-events:none;transition:.18s ease}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .footer{display:flex;justify-content:space-between;gap:16px;padding:12px 2px;color:var(--muted);font-size:11px}
+    @media(max-width:980px){
+      .app{grid-template-columns:68px minmax(0,1fr)}.brand{justify-content:center;padding-inline:0}.brand b,.nav-item span,.sidebar-meta{display:none}.nav-item{justify-content:center}.topbar{padding:0 16px}main{padding:18px 16px 30px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.page-head{align-items:flex-start;flex-direction:column}.toolbar{width:100%}
+    }
+    @media(max-width:560px){
+      .app{display:block}.sidebar{display:none}.topbar{height:auto;min-height:52px;padding:10px 12px;gap:10px}.version{font-size:11px}main{padding:14px 10px 26px}h1{font-size:20px}.stats{grid-template-columns:1fr 1fr;gap:8px}.stat{padding:12px}.stat-value{font-size:24px}.toolbar{display:grid;grid-template-columns:1fr 1fr}.field{grid-column:1/-1}.field select{width:100%}.btn{width:100%}.card-head{align-items:flex-start;flex-direction:column}.table-wrap{max-height:none;overflow:visible}.table-wrap table,.table-wrap tbody{display:block;width:100%;min-width:0}.table-wrap thead{display:none}.table-wrap tr{display:grid;grid-template-columns:1fr 1fr}.table-wrap td{display:block;min-width:0;width:auto;padding:9px 10px}.table-wrap .department-row{display:block}.table-wrap .department-row td{position:static;width:100%}.table-wrap .team-cell,.table-wrap .capability-cell{min-height:68px}.table-wrap .note-cell{grid-column:1/-1;width:auto;min-width:0}.table-wrap textarea{min-height:88px}.footer{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">M</div><b>测试能力<br>成熟度看板</b></div>
+      <nav class="nav" aria-label="主导航">
+        <div class="nav-item"><i class="nav-dot"></i><span>首页总览</span></div>
+        <div class="nav-item"><i class="nav-dot"></i><span>能力达成情况</span></div>
+        <div class="nav-item on"><i class="nav-dot"></i><span>本月未达成记录</span></div>
+        <div class="nav-item"><i class="nav-dot"></i><span>组织关系配置</span></div>
+      </nav>
+      <div class="sidebar-meta">V2.0.14 独立 Demo<br>本地数据副本</div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="crumb">能力运营 / 本月未达成项</div>
+        <div class="version">V2.0.14 基线·独立预览</div>
+      </header>
+
+      <main>
+        <section class="page-head">
+          <div>
+            <h1>本月未达成项文字记录</h1>
+            <div class="subtitle" id="periodSubtitle">数据截至 2026-08-06</div>
+          </div>
+          <div class="toolbar">
+            <div class="field">
+              <label for="monthSelect">自然月</label>
+              <select id="monthSelect" aria-label="选择自然月"></select>
+            </div>
+            <button type="button" class="btn ghost" id="clearButton">清空本月记录</button>
+            <button type="button" class="btn primary" id="saveButton">保存全部</button>
+          </div>
+        </section>
+
+        <section class="stats" aria-label="本月概览">
+          <article class="stat"><div class="stat-label">未达成项</div><div class="stat-value stat-accent"><span id="itemCount">0</span><span class="stat-unit">项</span></div></article>
+          <article class="stat"><div class="stat-label">涉及部门</div><div class="stat-value"><span id="departmentCount">0</span><span class="stat-unit">个</span></div></article>
+          <article class="stat"><div class="stat-label">涉及科组</div><div class="stat-value"><span id="teamCount">0</span><span class="stat-unit">个</span></div></article>
+          <article class="stat"><div class="stat-label">已填写记录</div><div class="stat-value"><span id="recordedCount">0</span><span class="stat-unit">项</span></div></article>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <h2 id="tableTitle">本月未达成项</h2>
+            <div class="save-state saved" id="saveState"><i class="save-dot"></i><span>已读取本地记录</span></div>
+          </div>
+          <div class="table-wrap" id="tableWrap"></div>
+        </section>
+
+        <footer class="footer">
+          <span>基线：khalildai/test-send-file @ 271762b586c7002b060564f52f5de445aa870b18</span>
+          <span>记录保存于当前浏览器本地存储</span>
+        </footer>
+      </main>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const BASELINE = {
+      version: 'V2.0.14',
+      sourceCommit: '271762b586c7002b060564f52f5de445aa870b18',
+      asOf: '2026-08-06',
+      capabilities: [
+        {id:1,dept:'α实验室与控制测试部',team:'iFA软件测试组',domain:'软件',owner:'李楠',dimension:'测试设计',sub:'接口测试设计',achieved:1,due:'2026-06-20'},
+        {id:2,dept:'驱动产品测试部',team:'MCS测试组',domain:'软件',owner:'陈悦',dimension:'自动化测试',sub:'接口自动化覆盖',achieved:1,due:'2026-07-05'},
+        {id:3,dept:'智能机器人产品测试部',team:'机器人平台软件测试组',domain:'软件',owner:'陈悦',dimension:'测试用例',sub:'核心链路用例库',achieved:0,due:'2026-08-28'},
+        {id:4,dept:'硬件与EMC测试部',team:'伺服硬件测试组',domain:'硬件',owner:'张敏',dimension:'测试设计',sub:'单板测试方案设计',achieved:0,due:'2026-08-15'},
+        {id:5,dept:'硬件与EMC测试部',team:'控制制动硬件组',domain:'硬件',owner:'张敏',dimension:'测试方案',sub:'器件一致性测试设计',achieved:1,due:'2026-07-12'},
+        {id:6,dept:'硬件与EMC测试部',team:'变频硬件测试',domain:'硬件',owner:'王昊',dimension:'测试执行',sub:'板级回归测试',achieved:1,due:'2026-06-30'},
+        {id:7,dept:'机电传动产品测试部',team:'电机测试组',domain:'机械',owner:'周宁',dimension:'测试用例',sub:'环境应力用例库',achieved:0,due:'2026-06-30'},
+        {id:8,dept:'机电传动产品测试部',team:'减速机测试组',domain:'机械',owner:'周宁',dimension:'测试执行',sub:'跌落与振动测试',achieved:0,due:'2026-09-18'},
+        {id:9,dept:'硬件与EMC测试部',team:'EMC测试组',domain:'EMC',owner:'陈航',dimension:'测试执行',sub:'整机辐射测试',achieved:0,due:'2026-06-15'},
+        {id:10,dept:'硬件与EMC测试部',team:'EMC测试组',domain:'EMC',owner:'陈航',dimension:'测试方案',sub:'EMC预一致性方案',achieved:0,due:'2026-08-25'},
+        {id:11,dept:'产品合规与准入部',team:'安规',domain:'安规',owner:'赵晨',dimension:'测试方案',sub:'全球认证方案',achieved:1,due:'2026-07-15'},
+        {id:12,dept:'产品合规与准入部',team:'安规',domain:'安规',owner:'赵晨',dimension:'测试执行',sub:'认证证据链',achieved:0,due:'2026-09-30'},
+        {id:13,dept:'产品合规与准入部',team:'可靠性',domain:'可靠性',owner:'刘芳',dimension:'测试设计',sub:'硬件可靠性测试设计',achieved:0,due:'2026-06-01'},
+        {id:14,dept:'产品合规与准入部',team:'可靠性',domain:'可靠性',owner:'刘芳',dimension:'测试执行',sub:'寿命加速测试',achieved:0,due:'2026-09-15'},
+        {id:15,dept:'能源产品测试部',team:'大储测试组',domain:'可靠性',owner:'林浩',dimension:'自动化测试',sub:'可靠性数据自动采集',achieved:1,due:'2026-07-01'},
+        {id:16,dept:'α实验室与控制测试部',team:'OS测试组',domain:'软件',owner:'李楠',dimension:'测试方案',sub:'端到端测试方案',achieved:0,due:'2026-12-10'},
+        {id:17,dept:'电梯产品测试部',team:'电梯整机测试组',domain:'硬件',owner:'王昊',dimension:'自动化测试',sub:'硬件回归自动化',achieved:0,due:'2026-11-25'},
+        {id:18,dept:'机电传动产品测试部',team:'高速流体测试组',domain:'机械',owner:'周宁',dimension:'测试设计',sub:'结构可靠性测试设计',achieved:1,due:'2026-07-10'}
+      ]
+    };
+
+    const STORAGE_KEY = 'v2014-task20-monthly-gap-notes-v1';
+    const DEFAULT_MONTH = BASELINE.asOf.slice(0, 7);
+    let selectedMonth = DEFAULT_MONTH;
+    let savedNotes = readNotes();
+    let draftNotes = structuredCloneSafe(savedNotes);
+    let dirty = false;
+    let toastTimer = null;
+
+    const $ = id => document.getElementById(id);
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const monthLabel = value => {
+      const [year, month] = value.split('-');
+      return `${year} 年 ${Number(month)} 月`;
+    };
+    const plannedNaturalMonth = item => item.plannedMonth ? `${BASELINE.asOf.slice(0,4)}-${String(item.plannedMonth).padStart(2,'0')}` : String(item.due || '').slice(0,7);
+    const extractionSource = item => item.plannedMonth ? '计划月份' : '预计交付日';
+    const noteKey = item => `${selectedMonth}::${item.id}`;
+
+    function structuredCloneSafe(value){return JSON.parse(JSON.stringify(value || {}))}
+    function readNotes(){
+      try{
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        return parsed && parsed.schemaVersion === 1 && parsed.notes && typeof parsed.notes === 'object' ? parsed.notes : {};
+      }catch(error){return {}}
+    }
+    function monthItems(){
+      return BASELINE.capabilities
+        .filter(item => Number(item.achieved) === 0 && plannedNaturalMonth(item) === selectedMonth)
+        .sort((a,b) => a.dept.localeCompare(b.dept,'zh-CN') || a.team.localeCompare(b.team,'zh-CN') || a.sub.localeCompare(b.sub,'zh-CN'));
+    }
+    function monthOptions(){
+      const years = new Set(BASELINE.capabilities.map(item => String(item.due || '').slice(0,4)).filter(Boolean));
+      years.add(DEFAULT_MONTH.slice(0,4));
+      return [...years].sort().flatMap(year => Array.from({length:12},(_,index) => `${year}-${String(index+1).padStart(2,'0')}`));
+    }
+    function showToast(message){
+      const toast = $('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+    function setSaveState(state, text){
+      const el = $('saveState');
+      el.className = `save-state ${state}`;
+      el.querySelector('span').textContent = text;
+    }
+    function markDirty(){
+      dirty = true;
+      setSaveState('dirty','有未保存更改');
+      updateStats();
+    }
+    function updateStats(){
+      const items = monthItems();
+      $('itemCount').textContent = items.length;
+      $('departmentCount').textContent = new Set(items.map(item => item.dept)).size;
+      $('teamCount').textContent = new Set(items.map(item => item.team)).size;
+      $('recordedCount').textContent = items.filter(item => String(draftNotes[noteKey(item)] || '').trim()).length;
+    }
+    function renderMonthSelect(){
+      $('monthSelect').innerHTML = monthOptions().map(value => `<option value="${value}">${monthLabel(value)}</option>`).join('');
+      $('monthSelect').value = selectedMonth;
+    }
+    function renderTable(){
+      const items = monthItems();
+      $('periodSubtitle').textContent = `数据截至 ${BASELINE.asOf} · ${monthLabel(selectedMonth)}`;
+      $('tableTitle').textContent = `${monthLabel(selectedMonth)}未达成项`;
+      $('clearButton').disabled = !items.some(item => String(draftNotes[noteKey(item)] || '').trim());
+      if(!items.length){
+        $('tableWrap').innerHTML = `<div class="empty"><div><strong>当前自然月无未达成项</strong><span>${monthLabel(selectedMonth)}</span></div></div>`;
+        updateStats();
+        return;
+      }
+      const departments = new Map();
+      items.forEach(item => {
+        if(!departments.has(item.dept)) departments.set(item.dept, []);
+        departments.get(item.dept).push(item);
+      });
+      const rows = [...departments.entries()].map(([department, departmentItems]) => {
+        const teams = new Set(departmentItems.map(item => item.team)).size;
+        return `<tr class="department-row"><td colspan="6">${esc(department)}<span class="department-count">${teams} 个科组 · ${departmentItems.length} 项</span></td></tr>` +
+          departmentItems.map(item => `<tr data-item-id="${item.id}">
+            <td class="team-cell">${esc(item.team)}</td>
+            <td class="capability-cell"><b>${esc(item.sub)}</b><span class="meta">${esc(item.dimension)} · Owner ${esc(item.owner)}</span></td>
+            <td>${esc(item.domain)}</td>
+            <td><span class="tag todo">0 · 未达成</span></td>
+            <td class="date-cell">${esc(item.due || '—')}<br><span class="tag source" title="自然月提取依据">${extractionSource(item)}</span></td>
+            <td class="note-cell"><textarea data-note-id="${item.id}" maxlength="800" placeholder="输入本月进展、阻塞或下一步安排">${esc(draftNotes[noteKey(item)] || '')}</textarea></td>
+          </tr>`).join('');
+      }).join('');
+      $('tableWrap').innerHTML = `<table>
+        <thead><tr><th>科组</th><th>未达成能力项</th><th>领域</th><th>当前状态</th><th>自然月依据</th><th>文字记录</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+      document.querySelectorAll('textarea[data-note-id]').forEach(textarea => {
+        textarea.addEventListener('input', event => {
+          draftNotes[`${selectedMonth}::${event.target.dataset.noteId}`] = event.target.value;
+          markDirty();
+          $('clearButton').disabled = false;
+        });
+      });
+      updateStats();
+    }
+    function saveAll(){
+      const savedAt = new Date().toISOString();
+      try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({schemaVersion:1,sourceCommit:BASELINE.sourceCommit,savedAt,notes:draftNotes}));
+        savedNotes = structuredCloneSafe(draftNotes);
+        dirty = false;
+        setSaveState('saved',`已保存 · ${new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}`);
+        showToast(`已保存 ${monthLabel(selectedMonth)} 文字记录`);
+      }catch(error){
+        setSaveState('dirty','本地保存失败');
+        showToast('保存失败，请检查浏览器本地存储权限');
+      }
+    }
+    function clearCurrentMonth(){
+      const items = monthItems();
+      if(!items.length || !confirm(`清空 ${monthLabel(selectedMonth)} 的全部文字记录？`)) return;
+      items.forEach(item => delete draftNotes[noteKey(item)]);
+      markDirty();
+      renderTable();
+    }
+    function switchMonth(nextMonth){
+      if(dirty && !confirm('当前有未保存更改，切换自然月将丢弃这些更改。是否继续？')){
+        $('monthSelect').value = selectedMonth;
+        return;
+      }
+      draftNotes = structuredCloneSafe(savedNotes);
+      dirty = false;
+      selectedMonth = nextMonth;
+      setSaveState('saved','已读取本地记录');
+      renderTable();
+    }
+
+    $('saveButton').addEventListener('click', saveAll);
+    $('clearButton').addEventListener('click', clearCurrentMonth);
+    $('monthSelect').addEventListener('change', event => switchMonth(event.target.value));
+    window.addEventListener('beforeunload', event => {
+      if(!dirty) return;
+      event.preventDefault();
+      event.returnValue = '';
+    });
+    renderMonthSelect();
+    renderTable();
+  </script>
+</body>
+</html>

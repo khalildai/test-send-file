@@ -1,0 +1,130 @@
+{
+  "generatedAt": "2026-08-31T10:16:58.955Z",
+  "fileUrl": "file:///Users/daiqingyuan/.slock/agents/6225fc41-db78-4f93-ba26-33de9400c7ce/task20-v2014-monthly-gap-demo/V2.0.14-%E6%9C%AC%E6%9C%88%E6%9C%AA%E8%BE%BE%E6%88%90%E9%A1%B9%E6%96%87%E5%AD%97%E8%AE%B0%E5%BD%95-demo.html",
+  "sourceCommit": "271762b586c7002b060564f52f5de445aa870b18",
+  "results": [
+    {
+      "name": "direct file open",
+      "passed": true,
+      "detail": {
+        "protocol": "file:",
+        "title": "V2.0.14 - 本月未达成项文字记录 Demo",
+        "month": "2026-08",
+        "items": 3,
+        "departments": 2,
+        "teams": 3,
+        "departmentRows": 2,
+        "textareas": 3,
+        "bodyOverflow": false
+      }
+    },
+    {
+      "name": "August natural-month extraction",
+      "passed": true,
+      "detail": {
+        "protocol": "file:",
+        "title": "V2.0.14 - 本月未达成项文字记录 Demo",
+        "month": "2026-08",
+        "items": 3,
+        "departments": 2,
+        "teams": 3,
+        "departmentRows": 2,
+        "textareas": 3,
+        "bodyOverflow": false
+      }
+    },
+    {
+      "name": "department to team hierarchy",
+      "passed": true,
+      "detail": {
+        "protocol": "file:",
+        "title": "V2.0.14 - 本月未达成项文字记录 Demo",
+        "month": "2026-08",
+        "items": 3,
+        "departments": 2,
+        "teams": 3,
+        "departmentRows": 2,
+        "textareas": 3,
+        "bodyOverflow": false
+      }
+    },
+    {
+      "name": "right-side editable text boxes",
+      "passed": true,
+      "detail": {
+        "protocol": "file:",
+        "title": "V2.0.14 - 本月未达成项文字记录 Demo",
+        "month": "2026-08",
+        "items": 3,
+        "departments": 2,
+        "teams": 3,
+        "departmentRows": 2,
+        "textareas": 3,
+        "bodyOverflow": false
+      }
+    },
+    {
+      "name": "desktop viewport containment",
+      "passed": true,
+      "detail": {
+        "protocol": "file:",
+        "title": "V2.0.14 - 本月未达成项文字记录 Demo",
+        "month": "2026-08",
+        "items": 3,
+        "departments": 2,
+        "teams": 3,
+        "departmentRows": 2,
+        "textareas": 3,
+        "bodyOverflow": false
+      }
+    },
+    {
+      "name": "explicit local save",
+      "passed": true,
+      "detail": {
+        "schemaVersion": 1,
+        "sourceCommit": "271762b586c7002b060564f52f5de445aa870b18",
+        "savedAt": "2026-08-31T10:16:58.444Z",
+        "notes": {
+          "2026-08::3": "已完成阻塞分析，计划于本月末复核。"
+        }
+      }
+    },
+    {
+      "name": "refresh retains saved note",
+      "passed": true,
+      "detail": {
+        "value": "已完成阻塞分析，计划于本月末复核。",
+        "recorded": 1,
+        "saved": true
+      }
+    },
+    {
+      "name": "natural-month switch",
+      "passed": true,
+      "detail": {
+        "month": "2026-09",
+        "items": 3,
+        "departments": 2,
+        "teams": 3
+      }
+    },
+    {
+      "name": "mobile viewport containment",
+      "passed": true,
+      "detail": {
+        "width": 390,
+        "bodyOverflow": false,
+        "tableContained": true,
+        "controlsVisible": true,
+        "notesVisible": true
+      }
+    },
+    {
+      "name": "no browser errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "pageErrors": []
+}
