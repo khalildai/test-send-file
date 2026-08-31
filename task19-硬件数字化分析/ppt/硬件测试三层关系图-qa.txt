@@ -1,0 +1,6 @@
+SlideSize=960 x 540
+ShapeCount=40
+OverflowCount=0
+NodeOverlapCount=0
+Pptx=C:\Users\Bellaiiii\.slock\agents\0755fe77-450b-4777-8c5f-733ca81ab32e\output\硬件测试三层关系图.pptx
+Preview=C:\Users\Bellaiiii\.slock\agents\0755fe77-450b-4777-8c5f-733ca81ab32e\output\硬件测试三层关系图-preview.png
