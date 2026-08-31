@@ -1,0 +1,6 @@
+SlideSize=960 x 540
+ShapeCount=33
+OverflowCount=0
+NodeOverlapCount=0
+Pptx=C:\Users\Bellaiiii\.slock\agents\0755fe77-450b-4777-8c5f-733ca81ab32e\output\产品-特性-用例目录三层关系图.pptx
+Preview=C:\Users\Bellaiiii\.slock\agents\0755fe77-450b-4777-8c5f-733ca81ab32e\output\产品-特性-用例目录三层关系图-preview.png
