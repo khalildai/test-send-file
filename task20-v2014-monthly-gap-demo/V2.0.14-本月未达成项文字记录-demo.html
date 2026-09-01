@@ -43,6 +43,9 @@
     .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;min-width:96px}
     .btn.ghost{background:#fff;color:var(--muted)}
     .btn:disabled{cursor:not-allowed;opacity:.5}
+    .filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px;padding:13px 14px;background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow)}
+    .filters .field select{width:100%;min-width:0}
+    .filters-note{grid-column:1/-1;display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:11px;line-height:1.5}
     .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
     .stat{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:15px 16px;box-shadow:var(--shadow)}
     .stat-label{font-size:12px;color:var(--muted);margin-bottom:8px}
@@ -82,10 +85,10 @@
     .toast.show{opacity:1;transform:translateY(0)}
     .footer{display:flex;justify-content:space-between;gap:16px;padding:12px 2px;color:var(--muted);font-size:11px}
     @media(max-width:980px){
-      .app{grid-template-columns:68px minmax(0,1fr)}.brand{justify-content:center;padding-inline:0}.brand b,.nav-item span,.sidebar-meta{display:none}.nav-item{justify-content:center}.topbar{padding:0 16px}main{padding:18px 16px 30px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.page-head{align-items:flex-start;flex-direction:column}.toolbar{width:100%}
+      .app{grid-template-columns:68px minmax(0,1fr)}.brand{justify-content:center;padding-inline:0}.brand b,.nav-item span,.sidebar-meta{display:none}.nav-item{justify-content:center}.topbar{padding:0 16px}main{padding:18px 16px 30px}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.page-head{align-items:flex-start;flex-direction:column}.toolbar{width:100%}
     }
     @media(max-width:560px){
-      .app{display:block}.sidebar{display:none}.topbar{height:auto;min-height:52px;padding:10px 12px;gap:10px}.version{font-size:11px}main{padding:14px 10px 26px}h1{font-size:20px}.stats{grid-template-columns:1fr 1fr;gap:8px}.stat{padding:12px}.stat-value{font-size:24px}.toolbar{display:grid;grid-template-columns:1fr 1fr}.field{grid-column:1/-1}.field select{width:100%}.btn{width:100%}.card-head{align-items:flex-start;flex-direction:column}.table-wrap{max-height:none;overflow:visible}.table-wrap table,.table-wrap tbody{display:block;width:100%;min-width:0}.table-wrap thead{display:none}.table-wrap tr{display:grid;grid-template-columns:1fr 1fr}.table-wrap td{display:block;min-width:0;width:auto;padding:9px 10px}.table-wrap .department-row{display:block}.table-wrap .department-row td{position:static;width:100%}.table-wrap .team-cell,.table-wrap .capability-cell{min-height:68px}.table-wrap .note-cell{grid-column:1/-1;width:auto;min-width:0}.table-wrap textarea{min-height:88px}.footer{flex-direction:column}
+      .app{display:block}.sidebar{display:none}.topbar{height:auto;min-height:52px;padding:10px 12px;gap:10px}.version{font-size:11px}main{padding:14px 10px 26px}h1{font-size:20px}.filters{grid-template-columns:1fr;padding:12px}.filters-note{display:grid;gap:3px}.stats{grid-template-columns:1fr 1fr;gap:8px}.stat{padding:12px}.stat-value{font-size:24px}.toolbar{display:grid;grid-template-columns:1fr 1fr}.toolbar .field{grid-column:1/-1}.field select{width:100%}.btn{width:100%}.card-head{align-items:flex-start;flex-direction:column}.table-wrap{max-height:none;overflow:visible}.table-wrap table,.table-wrap tbody{display:block;width:100%;min-width:0}.table-wrap thead{display:none}.table-wrap tr{display:grid;grid-template-columns:1fr 1fr}.table-wrap td{display:block;min-width:0;width:auto;padding:9px 10px}.table-wrap .department-row{display:block}.table-wrap .department-row td{position:static;width:100%}.table-wrap .team-cell,.table-wrap .capability-cell{min-height:68px}.table-wrap .note-cell{grid-column:1/-1;width:auto;min-width:0}.table-wrap textarea{min-height:88px}.footer{flex-direction:column}
     }
   </style>
 </head>
@@ -119,9 +122,17 @@
               <label for="monthSelect">自然月</label>
               <select id="monthSelect" aria-label="选择自然月"></select>
             </div>
-            <button type="button" class="btn ghost" id="clearButton">清空本月记录</button>
+            <button type="button" class="btn ghost" id="clearButton">清空当前结果记录</button>
             <button type="button" class="btn primary" id="saveButton">保存全部</button>
           </div>
+        </section>
+
+        <section class="filters" aria-label="未达成项联动筛选">
+          <div class="field"><label for="domainFilter">领域</label><select id="domainFilter" data-filter="domain"></select></div>
+          <div class="field"><label for="dimensionFilter">评估维度</label><select id="dimensionFilter" data-filter="dimension"></select></div>
+          <div class="field"><label for="departmentFilter">部门</label><select id="departmentFilter" data-filter="dept"></select></div>
+          <div class="field"><label for="teamFilter">科组</label><select id="teamFilter" data-filter="team"></select></div>
+          <div class="filters-note"><span>选项随自然月和其他筛选条件联动收敛</span><span id="filterSummary">全部条件</span></div>
         </section>
 
         <section class="stats" aria-label="本月概览">
@@ -175,11 +186,19 @@
       ]
     };
 
-    const STORAGE_KEY = 'v2014-task20-monthly-gap-notes-v1';
+    const STORAGE_KEY = 'v2014-task20-monthly-gap-notes-v2';
+    const LEGACY_STORAGE_KEY = 'v2014-task20-monthly-gap-notes-v1';
+    const FILTER_FIELDS = [
+      {key:'domain',label:'领域',elementId:'domainFilter'},
+      {key:'dimension',label:'评估维度',elementId:'dimensionFilter'},
+      {key:'dept',label:'部门',elementId:'departmentFilter'},
+      {key:'team',label:'科组',elementId:'teamFilter'}
+    ];
     const DEFAULT_MONTH = BASELINE.asOf.slice(0, 7);
     let selectedMonth = DEFAULT_MONTH;
-    let savedNotes = readNotes();
-    let draftNotes = structuredCloneSafe(savedNotes);
+    let filters = {domain:'all',dimension:'all',dept:'all',team:'all'};
+    let savedNotes;
+    let draftNotes;
     let dirty = false;
     let toastTimer = null;
 
@@ -191,19 +210,53 @@
     };
     const plannedNaturalMonth = item => item.plannedMonth ? `${BASELINE.asOf.slice(0,4)}-${String(item.plannedMonth).padStart(2,'0')}` : String(item.due || '').slice(0,7);
     const extractionSource = item => item.plannedMonth ? '计划月份' : '预计交付日';
-    const noteKey = item => `${selectedMonth}::${item.id}`;
+    const stableIdentity = item => [item.domain,item.owner,item.dimension,item.sub,item.team]
+      .map(value => encodeURIComponent(String(value ?? '').trim())).join('|');
+    const noteKey = (item, month = selectedMonth) => `${month}::${stableIdentity(item)}`;
+    savedNotes = readNotes();
+    draftNotes = structuredCloneSafe(savedNotes);
 
     function structuredCloneSafe(value){return JSON.parse(JSON.stringify(value || {}))}
     function readNotes(){
       try{
         const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-        return parsed && parsed.schemaVersion === 1 && parsed.notes && typeof parsed.notes === 'object' ? parsed.notes : {};
+        if(parsed && parsed.schemaVersion === 2 && parsed.notes && typeof parsed.notes === 'object') return parsed.notes;
+        const legacy = JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY) || '{}');
+        if(!legacy || legacy.schemaVersion !== 1 || !legacy.notes || typeof legacy.notes !== 'object') return {};
+        return Object.entries(legacy.notes).reduce((notes,[key,value]) => {
+          const splitAt = key.lastIndexOf('::');
+          const month = key.slice(0,splitAt);
+          const item = BASELINE.capabilities.find(candidate => String(candidate.id) === key.slice(splitAt + 2));
+          if(splitAt > 0 && item) notes[noteKey(item,month)] = value;
+          return notes;
+        },{});
       }catch(error){return {}}
     }
-    function monthItems(){
+    function baseMonthItems(){
       return BASELINE.capabilities
         .filter(item => Number(item.achieved) === 0 && plannedNaturalMonth(item) === selectedMonth)
         .sort((a,b) => a.dept.localeCompare(b.dept,'zh-CN') || a.team.localeCompare(b.team,'zh-CN') || a.sub.localeCompare(b.sub,'zh-CN'));
+    }
+    function matchesFilters(item,excludedField = null){
+      return FILTER_FIELDS.every(({key}) => key === excludedField || filters[key] === 'all' || item[key] === filters[key]);
+    }
+    function filteredItems(excludedField = null){
+      return baseMonthItems().filter(item => matchesFilters(item,excludedField));
+    }
+    function availableValues(field){
+      return [...new Set(filteredItems(field).map(item => item[field]))].sort((a,b) => a.localeCompare(b,'zh-CN'));
+    }
+    function normalizeFilters(){
+      let changed = true;
+      while(changed){
+        changed = false;
+        FILTER_FIELDS.forEach(({key}) => {
+          if(filters[key] !== 'all' && !availableValues(key).includes(filters[key])){
+            filters[key] = 'all';
+            changed = true;
+          }
+        });
+      }
     }
     function monthOptions(){
       const years = new Set(BASELINE.capabilities.map(item => String(item.due || '').slice(0,4)).filter(Boolean));
@@ -228,7 +281,7 @@
       updateStats();
     }
     function updateStats(){
-      const items = monthItems();
+      const items = filteredItems();
       $('itemCount').textContent = items.length;
       $('departmentCount').textContent = new Set(items.map(item => item.dept)).size;
       $('teamCount').textContent = new Set(items.map(item => item.team)).size;
@@ -238,13 +291,28 @@
       $('monthSelect').innerHTML = monthOptions().map(value => `<option value="${value}">${monthLabel(value)}</option>`).join('');
       $('monthSelect').value = selectedMonth;
     }
+    function renderFilters(){
+      normalizeFilters();
+      FILTER_FIELDS.forEach(({key,elementId}) => {
+        const select = $(elementId);
+        const values = availableValues(key);
+        select.innerHTML = `<option value="all">全部</option>` + values.map(value => `<option value="${esc(value)}">${esc(value)}</option>`).join('');
+        select.value = filters[key];
+      });
+      const active = FILTER_FIELDS.filter(({key}) => filters[key] !== 'all');
+      $('filterSummary').textContent = active.length
+        ? active.map(({key,label}) => `${label}：${filters[key]}`).join(' · ')
+        : '全部条件';
+    }
     function renderTable(){
-      const items = monthItems();
+      renderFilters();
+      const items = filteredItems();
       $('periodSubtitle').textContent = `数据截至 ${BASELINE.asOf} · ${monthLabel(selectedMonth)}`;
-      $('tableTitle').textContent = `${monthLabel(selectedMonth)}未达成项`;
+      $('tableTitle').textContent = `${monthLabel(selectedMonth)}未达成项 · ${items.length} 项`;
       $('clearButton').disabled = !items.some(item => String(draftNotes[noteKey(item)] || '').trim());
       if(!items.length){
-        $('tableWrap').innerHTML = `<div class="empty"><div><strong>当前自然月无未达成项</strong><span>${monthLabel(selectedMonth)}</span></div></div>`;
+        const hasMonthItems = baseMonthItems().length > 0;
+        $('tableWrap').innerHTML = `<div class="empty"><div><strong>${hasMonthItems ? '没有符合筛选条件的未达成项' : '当前自然月无未达成项'}</strong><span>${monthLabel(selectedMonth)}${hasMonthItems ? ' · 可调整上方筛选条件' : ''}</span></div></div>`;
         updateStats();
         return;
       }
@@ -256,13 +324,13 @@
       const rows = [...departments.entries()].map(([department, departmentItems]) => {
         const teams = new Set(departmentItems.map(item => item.team)).size;
         return `<tr class="department-row"><td colspan="6">${esc(department)}<span class="department-count">${teams} 个科组 · ${departmentItems.length} 项</span></td></tr>` +
-          departmentItems.map(item => `<tr data-item-id="${item.id}">
+          departmentItems.map(item => `<tr data-item-id="${item.id}" data-domain="${esc(item.domain)}" data-dimension="${esc(item.dimension)}" data-dept="${esc(item.dept)}" data-team="${esc(item.team)}">
             <td class="team-cell">${esc(item.team)}</td>
             <td class="capability-cell"><b>${esc(item.sub)}</b><span class="meta">${esc(item.dimension)} · Owner ${esc(item.owner)}</span></td>
             <td>${esc(item.domain)}</td>
             <td><span class="tag todo">0 · 未达成</span></td>
             <td class="date-cell">${esc(item.due || '—')}<br><span class="tag source" title="自然月提取依据">${extractionSource(item)}</span></td>
-            <td class="note-cell"><textarea data-note-id="${item.id}" maxlength="800" placeholder="输入本月进展、阻塞或下一步安排">${esc(draftNotes[noteKey(item)] || '')}</textarea></td>
+            <td class="note-cell"><textarea data-note-id="${item.id}" data-note-key="${esc(noteKey(item))}" maxlength="800" placeholder="输入本月进展、阻塞或下一步安排">${esc(draftNotes[noteKey(item)] || '')}</textarea></td>
           </tr>`).join('');
       }).join('');
       $('tableWrap').innerHTML = `<table>
@@ -271,7 +339,7 @@
       </table>`;
       document.querySelectorAll('textarea[data-note-id]').forEach(textarea => {
         textarea.addEventListener('input', event => {
-          draftNotes[`${selectedMonth}::${event.target.dataset.noteId}`] = event.target.value;
+          draftNotes[event.target.dataset.noteKey] = event.target.value;
           markDirty();
           $('clearButton').disabled = false;
         });
@@ -281,7 +349,7 @@
     function saveAll(){
       const savedAt = new Date().toISOString();
       try{
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({schemaVersion:1,sourceCommit:BASELINE.sourceCommit,savedAt,notes:draftNotes}));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({schemaVersion:2,sourceCommit:BASELINE.sourceCommit,savedAt,identityFields:['domain','owner','dimension','sub','team'],notes:draftNotes}));
         savedNotes = structuredCloneSafe(draftNotes);
         dirty = false;
         setSaveState('saved',`已保存 · ${new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}`);
@@ -291,9 +359,9 @@
         showToast('保存失败，请检查浏览器本地存储权限');
       }
     }
-    function clearCurrentMonth(){
-      const items = monthItems();
-      if(!items.length || !confirm(`清空 ${monthLabel(selectedMonth)} 的全部文字记录？`)) return;
+    function clearCurrentResults(){
+      const items = filteredItems();
+      if(!items.length || !confirm(`清空当前 ${items.length} 项筛选结果的文字记录？`)) return;
       items.forEach(item => delete draftNotes[noteKey(item)]);
       markDirty();
       renderTable();
@@ -306,13 +374,22 @@
       draftNotes = structuredCloneSafe(savedNotes);
       dirty = false;
       selectedMonth = nextMonth;
+      filters = {domain:'all',dimension:'all',dept:'all',team:'all'};
       setSaveState('saved','已读取本地记录');
       renderTable();
     }
 
+    function switchFilter(field,value){
+      filters[field] = value;
+      renderTable();
+    }
+
     $('saveButton').addEventListener('click', saveAll);
-    $('clearButton').addEventListener('click', clearCurrentMonth);
+    $('clearButton').addEventListener('click', clearCurrentResults);
     $('monthSelect').addEventListener('change', event => switchMonth(event.target.value));
+    document.querySelectorAll('select[data-filter]').forEach(select => {
+      select.addEventListener('change', event => switchFilter(event.target.dataset.filter,event.target.value));
+    });
     window.addEventListener('beforeunload', event => {
       if(!dirty) return;
       event.preventDefault();
