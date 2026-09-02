@@ -259,8 +259,8 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 #gapView table.gap-table th{position:sticky;top:0;z-index:3;background:#f1f4f7;color:#43576b;font-size:12px;text-align:left;padding:11px 10px;border-bottom:1px solid #c2ced9;white-space:nowrap}
 #gapView table.gap-table td{font-size:12px;line-height:1.5;padding:10px;border-bottom:1px solid #d9e1e8;vertical-align:top;background:#fff}
 #gapView .gap-department-row td{position:sticky;top:39px;z-index:2;background:#e9eef3!important;color:#354b60;font-weight:800;border-top:1px solid #c2ced9;padding:8px 10px}
+#gapView .gap-team-row td{position:sticky;top:70px;z-index:1;background:#f4f7fa!important;color:#3d5368;font-weight:700;padding:7px 10px 7px 18px;border-top:1px solid #e3ebf2}
 #gapView .gap-department-count{display:inline-block;margin-left:8px;color:#65778a;font-weight:500;font-size:11px}
-#gapView .gap-team-cell{width:170px;font-weight:700;color:#334b61}
 #gapView .gap-capability-cell{min-width:220px}
 #gapView .gap-capability-cell b{display:block;margin-bottom:3px}
 #gapView .gap-meta{color:#65778a;font-size:11px}
@@ -271,7 +271,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 #gapFilterBar{grid-template-columns:repeat(4,minmax(0,1fr)) auto auto;align-items:center}
 #gapView .gap-tag.source{background:#fff5dd;color:#9a6300}
 #gapView .gap-note-cell{width:38%;min-width:360px}
-#gapView .gap-note-cell textarea{display:block;width:100%;min-height:74px;resize:vertical;border:1px solid #c2ced9;border-radius:4px;padding:8px 10px;font:12px/1.5 inherit}
+#gapView .gap-note-cell textarea{display:block;width:100%;min-height:74px;resize:vertical;border:1px solid #d9e1ea;border-radius:4px;padding:8px 10px;font:12px/1.5 inherit;background:#fff9}
 #gapView .gap-empty{display:grid;place-items:center;min-height:320px;padding:30px;text-align:center;color:#65778a}
 #gapView .gap-empty strong{display:block;color:#203246;font-size:15px;margin-bottom:6px}
 @media(max-width:980px){#gapView .gap-filters,#gapView .gap-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#gapView .gap-head{flex-direction:column;align-items:flex-start}}
@@ -2109,6 +2109,12 @@ function gapClone(value){return JSON.parse(JSON.stringify(value||{}))}
 function gapSnapshotOf(item){
   return {dept:item.dept||'',team:item.team||'',domain:item.domain||'',owner:item.owner||'',dimension:item.dimension||'',sub:item.sub||'',due:item.due||''};
 }
+function gapTeamTint(name){
+  const tints=['#f3f6f8','#f4f7f4','#f7f6f3','#f4f5f8','#f6f5f3','#f3f7f6'];
+  let hash=0; const text=String(name||'');
+  for(let i=0;i<text.length;i++) hash=(hash*33+text.charCodeAt(i))>>>0;
+  return tints[hash%tints.length];
+}
 function gapSortItems(items){
   return items.sort((a,b)=>(a.dept||'').localeCompare(b.dept||'','zh-CN')||(a.team||'').localeCompare(b.team||'','zh-CN')||(a.sub||'').localeCompare(b.sub||'','zh-CN'));
 }
@@ -2211,22 +2217,31 @@ function renderGapTable(){
     return;
   }
   const departments=new Map();
-  items.forEach(item=>{if(!departments.has(item.dept))departments.set(item.dept,[]);departments.get(item.dept).push(item)});
-  const rows=[...departments.entries()].map(([department,departmentItems])=>{
-    const teams=new Set(departmentItems.map(item=>item.team)).size;
-    return `<tr class="gap-department-row"><td colspan="5">${esc(department)}<span class="gap-department-count">${teams} 个科组 · ${departmentItems.length} 项</span></td></tr>`+
-      departmentItems.map(item=>`<tr>
-        <td class="gap-team-cell">${esc(item.team)}</td>
-        <td class="gap-capability-cell"><b>${esc(item.sub)}</b><span class="gap-meta">${esc(item.dimension)} · Owner ${esc(item.owner)}</span></td>
-        <td>${esc(item.domain)}</td>
-        <td><select class="gap-achieved" data-gap-status="${esc(gapRowIdentity(item))}" aria-label="达成情况" ${sealed?'disabled':''}>
+  items.forEach(item=>{
+    if(!departments.has(item.dept)) departments.set(item.dept,new Map());
+    const teams=departments.get(item.dept);
+    if(!teams.has(item.team)) teams.set(item.team,[]);
+    teams.get(item.team).push(item);
+  });
+  const rows=[...departments.entries()].map(([department,teams])=>{
+    const teamCount=teams.size;
+    const itemCount=[...teams.values()].reduce((n,list)=>n+list.length,0);
+    return `<tr class="gap-department-row"><td colspan="4">${esc(department)}<span class="gap-department-count">${teamCount} 个科组 · ${itemCount} 项</span></td></tr>`+
+      [...teams.entries()].map(([team,teamItems])=>{
+        const tint=gapTeamTint(team);
+        return `<tr class="gap-team-row"><td colspan="4" style="background:${tint}!important">${esc(team)}<span class="gap-department-count">${teamItems.length} 项</span></td></tr>`+
+        teamItems.map(item=>`<tr>
+        <td class="gap-capability-cell" style="background:${tint}!important"><b>${esc(item.sub)}</b><span class="gap-meta">${esc(item.dimension)} · Owner ${esc(item.owner)}</span></td>
+        <td style="background:${tint}!important">${esc(item.domain)}</td>
+        <td style="background:${tint}!important"><select class="gap-achieved" data-gap-status="${esc(gapRowIdentity(item))}" aria-label="达成情况" ${sealed?'disabled':''}>
           <option value="0" ${gapDraftAchieved(item)===0?'selected':''}>0 · 未达成</option>
           <option value="1" ${gapDraftAchieved(item)===1?'selected':''}>1 · 已达成</option>
         </select></td>
-        <td class="gap-note-cell"><textarea data-gap-note-key="${esc(gapNoteKey(item))}" maxlength="800" placeholder="输入本月进展、阻塞或下一步安排" ${sealed?'disabled':''}>${esc(gapDraftNotes[gapNoteKey(item)]||'')}</textarea></td>
+        <td class="gap-note-cell" style="background:${tint}!important"><textarea data-gap-note-key="${esc(gapNoteKey(item))}" maxlength="800" placeholder="输入未达成情况、阻塞或下一步安排" ${sealed?'disabled':''}>${esc(gapDraftNotes[gapNoteKey(item)]||'')}</textarea></td>
       </tr>`).join('');
+      }).join('');
   }).join('');
-  $('gapTableWrap').innerHTML=`<table class="gap-table"><thead><tr><th>科组</th><th>未达成能力项</th><th>领域</th><th>达成情况</th><th>文字记录</th></tr></thead><tbody>${rows}</tbody></table>`;
+  $('gapTableWrap').innerHTML=`<table class="gap-table"><thead><tr><th>未达成能力项</th><th>领域</th><th>达成情况</th><th>未达成情况记录</th></tr></thead><tbody>${rows}</tbody></table>`;
   if(!sealed){
     document.querySelectorAll('#gapTableWrap textarea[data-gap-note-key]').forEach(textarea=>{
       textarea.addEventListener('input',event=>{
@@ -2324,8 +2339,8 @@ async function saveGapNotes(){
   const response=await fetch('/api/monthly-gap-notes',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
   const result=await response.json().catch(()=>({}));
   if(!response.ok){
-    setGapSaveState('dirty',result.error||'文字记录保存失败');
-    alert(result.error||'文字记录保存失败');
+    setGapSaveState('dirty',result.error||'未达成情况记录保存失败');
+    alert(result.error||'未达成情况记录保存失败');
     return;
   }
   await loadGapNotesFromServer();
@@ -2340,7 +2355,7 @@ function openGapNotesFromRaw(){
 function clearGapCurrentResults(){
   if(gapIsSealed()){alert('该月份已封存，不能再修改');return}
   const items=gapFilteredItems();
-  if(!items.length || !confirm(`清空当前 ${items.length} 项筛选结果的文字记录？`)) return;
+  if(!items.length || !confirm(`清空当前 ${items.length} 项筛选结果的未达成情况记录？`)) return;
   items.forEach(item=>delete gapDraftNotes[gapNoteKey(item)]);
   markGapDirty();
   renderGapTable();
