@@ -266,6 +266,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 #gapView .gap-meta{color:#65778a;font-size:11px}
 #gapView .gap-tag{display:inline-flex;align-items:center;min-height:22px;padding:2px 7px;border-radius:3px;font-size:11px;font-weight:700}
 #gapView .gap-tag.todo{background:#fff0ee;color:#b42318}
+#gapView .gap-achieved{min-height:32px;min-width:128px;border:1px solid #c2ced9;border-radius:4px;background:#fff;padding:4px 8px}
 #gapView .gap-tag.source{background:#fff5dd;color:#9a6300}
 #gapView .gap-note-cell{width:38%;min-width:360px}
 #gapView .gap-note-cell textarea{display:block;width:100%;min-height:74px;resize:vertical;border:1px solid #c2ced9;border-radius:4px;padding:8px 10px;font:12px/1.5 inherit}
@@ -291,7 +292,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
       <a href="#distribution">分布与对比</a>
       <small>数据管理</small>
       <a href="#data" onclick="event.preventDefault();openRaw()">能力成熟度达成情况</a>
-      <a href="#gap" onclick="event.preventDefault();openGapNotes()">本月未达成记录</a>
+      <a href="#gap" onclick="event.preventDefault();openGapNotes()">本月未达成编辑</a>
       <a href="#config" data-role-need="owner" onclick="event.preventDefault();openConfig()">组织关系配置</a>
       <a href="#dictionary" onclick="event.preventDefault();openDictionary()">字段与关系字典</a>
       <a href="#logs" onclick="event.preventDefault();openLogs()">修改记录</a>
@@ -467,6 +468,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
       <button class="btn" onclick="exportRawExcel()">导出当前 Excel</button>
       <button class="btn" onclick="downloadTemplate()">下载导入模板</button>
       <button class="btn primary" data-role-need="owner" onclick="triggerFilePicker('excel')">导入 Excel</button>
+      <button class="btn primary" onclick="openGapNotesFromRaw()">本月未达成编辑</button>
       <button class="btn" onclick="closeRaw();openConfig()">组织关系配置</button>
       <button class="btn" data-role-need="owner" onclick="editSelectedRaw()">编辑选中项</button>
       <button class="btn" onclick="openLogs()">修改记录</button>
@@ -517,15 +519,15 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
   <header class="head" style="max-width:1500px;margin:auto">
     <div>
       <div class="crumb">能力运营 / 本月未达成项</div>
-      <h1>本月未达成项文字记录</h1>
-      <div class="muted" id="gapPeriodSubtitle">按自然月提取当前未达成项，文字记录保存到业务库。</div>
+      <h1>本月未达成项达成情况编辑</h1>
+      <div class="muted" id="gapPeriodSubtitle">按自然月提取未达成项，可直接编辑达成 0/1 并填写文字说明，保存到业务库。</div>
     </div>
     <div class="actions gap-toolbar">
       <label class="gap-field">自然月
         <select id="gapMonthSelect" aria-label="选择自然月"></select>
       </label>
       <button type="button" class="btn" id="gapClearButton" onclick="clearGapCurrentResults()">清空当前结果记录</button>
-      <button type="button" class="btn primary" id="gapSaveButton" onclick="saveGapNotes()">保存全部</button>
+      <button type="button" class="btn primary" id="gapSaveButton" onclick="saveGapNotes()">保存达成与记录</button>
       <button class="btn primary" onclick="closeGapNotes()">返回看板</button>
     </div>
   </header>
@@ -641,7 +643,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <table class="version-table">
           <thead><tr><th>版本号</th><th>发布日期</th><th>变更摘要</th></tr></thead>
           <tbody>
-            <tr><td>V2.0.14-1 <span class="version-current">当前</span></td><td>2026-09-02</td><td>完整复制 V2.0.14 后合入本月未达成项文字记录：按自然月提取未达成项，支持领域/评估维度/部门/科组四联动筛选，文字记录持久化到业务库；V2.0.14 原版保留可回滚。</td></tr>
+            <tr><td>V2.0.14-1 <span class="version-current">当前</span></td><td>2026-09-02</td><td>V2.0.14-1 临时版：在 V2.0.14 完整功能上增加本月未达成项达成情况编辑（0/1 写入业务库）+ 文字记录 + 四联动筛选；不升 15，V2.0.14 原版保留可回滚。</td></tr>
             <tr><td>V2.0.14</td><td>2026-08-27 更新</td><td>基于 V2.0.13 合入能力落地计划、月份预测、年度趋势、2026/2027 年度目标列与切换；移除无对应功能入口；Excel 模板保持原格式。</td></tr>
             <tr><td>V2.0.12</td><td>2026-08-21</td><td>结构增强：①科组新增 9月/12月预期达成（与实际达成互不影响、不参与统计，Excel 同步三列）②三级权限（管理员全权 / 能力Owner 仅能力属性 / 业务 仅达成与预期；登录、用户管理、服务端字段级校验）③业务线 G 雷达轴标签显示领域得分、总分移出雷达图。含 V2.0.11 全部内容。（本版内容曾以 V3.0 编号交付，按指令回归 V2.0.12；初始密码见随包说明）</td></tr>
             <tr><td>V2.0.11</td><td>2026-08-20</td><td>评估维度缺口分布数据样式统一：涉及领域改为彩色标签且一个领域一行，涉及科组数量/未交付能力数改为标签式（绿无/黄少/红多），与达成单元格风格一致；下穿与排序保留。</td></tr>
@@ -2079,7 +2081,16 @@ let gapSelectedMonth='';
 let gapFilters={domain:'all',dimension:'all',dept:'all',team:'all'};
 let gapSavedNotes={};
 let gapDraftNotes={};
+let gapDraftStatus={};
 let gapDirty=false;
+function gapRowIdentity(item){
+  return [item.domain,item.owner,item.dimension,item.sub,item.team].map(v=>String(v??'').trim()).join('|');
+}
+function gapDraftAchieved(item){
+  const id=gapRowIdentity(item);
+  if(Object.prototype.hasOwnProperty.call(gapDraftStatus,id)) return Number(gapDraftStatus[id].achieved);
+  return Number(item.achieved)||0;
+}
 function gapMonthLabel(value){const [year,month]=String(value||'').split('-');return `${year} 年 ${Number(month)} 月`}
 function gapDefaultMonth(){return String(asOf||TODAY||'').slice(0,7)}
 function gapPlannedNaturalMonth(item){
@@ -2095,7 +2106,12 @@ function gapNoteKey(item,month=gapSelectedMonth){return `${month}::${gapStableId
 function gapClone(value){return JSON.parse(JSON.stringify(value||{}))}
 function gapBaseMonthItems(){
   return (data||[])
-    .filter(item=>Number(item.achieved)===0 && gapPlannedNaturalMonth(item)===gapSelectedMonth)
+    .filter(item=>{
+      if(gapPlannedNaturalMonth(item)!==gapSelectedMonth) return false;
+      const id=gapRowIdentity(item);
+      if(Object.prototype.hasOwnProperty.call(gapDraftStatus,id)) return true;
+      return Number(item.achieved)===0;
+    })
     .sort((a,b)=>(a.dept||'').localeCompare(b.dept||'','zh-CN')||(a.team||'').localeCompare(b.team||'','zh-CN')||(a.sub||'').localeCompare(b.sub||'','zh-CN'));
 }
 function gapMatchesFilters(item,excludedField=null){
@@ -2172,17 +2188,28 @@ function renderGapTable(){
         <td class="gap-team-cell">${esc(item.team)}</td>
         <td class="gap-capability-cell"><b>${esc(item.sub)}</b><span class="gap-meta">${esc(item.dimension)} · Owner ${esc(item.owner)}</span></td>
         <td>${esc(item.domain)}</td>
-        <td><span class="gap-tag todo">0 · 未达成</span></td>
+        <td><select class="gap-achieved" data-gap-status="${esc(gapRowIdentity(item))}" aria-label="达成情况">
+          <option value="0" ${gapDraftAchieved(item)===0?'selected':''}>0 · 未达成</option>
+          <option value="1" ${gapDraftAchieved(item)===1?'selected':''}>1 · 已达成</option>
+        </select>${gapDraftAchieved(item)===1?'<div class="gap-meta">保存后将移出本月未达成列表</div>':''}</td>
         <td>${esc(item.due||'—')}<br><span class="gap-tag source">${gapExtractionSource(item)}</span></td>
         <td class="gap-note-cell"><textarea data-gap-note-key="${esc(gapNoteKey(item))}" maxlength="800" placeholder="输入本月进展、阻塞或下一步安排">${esc(gapDraftNotes[gapNoteKey(item)]||'')}</textarea></td>
       </tr>`).join('');
   }).join('');
-  $('gapTableWrap').innerHTML=`<table class="gap-table"><thead><tr><th>科组</th><th>未达成能力项</th><th>领域</th><th>当前状态</th><th>自然月依据</th><th>文字记录</th></tr></thead><tbody>${rows}</tbody></table>`;
+  $('gapTableWrap').innerHTML=`<table class="gap-table"><thead><tr><th>科组</th><th>未达成能力项</th><th>领域</th><th>达成情况</th><th>自然月依据</th><th>文字记录</th></tr></thead><tbody>${rows}</tbody></table>`;
   document.querySelectorAll('#gapTableWrap textarea[data-gap-note-key]').forEach(textarea=>{
     textarea.addEventListener('input',event=>{
       gapDraftNotes[event.target.dataset.gapNoteKey]=event.target.value;
       markGapDirty();
       $('gapClearButton').disabled=false;
+    });
+  });
+  document.querySelectorAll('#gapTableWrap select.gap-achieved').forEach(select=>{
+    select.addEventListener('change',event=>{
+      const id=event.target.dataset.gapStatus;
+      gapDraftStatus[id]={achieved:Number(event.target.value)?1:0};
+      markGapDirty();
+      renderGapTable();
     });
   });
   updateGapStats();
@@ -2204,6 +2231,7 @@ async function openGapNotes(){
   $('gapView').classList.add('show');
   gapSelectedMonth=gapSelectedMonth||gapDefaultMonth();
   gapFilters={domain:'all',dimension:'all',dept:'all',team:'all'};
+  gapDraftStatus={};
   try{
     await loadGapNotesFromServer();
     setGapSaveState('saved','已读取业务库记录');
@@ -2229,17 +2257,42 @@ function closeGapNotes(){
 }
 async function saveGapNotes(){
   if(!currentUser){ensureAuthThen(()=>saveGapNotes());return}
+  const role=currentUser.role;
+  if(Object.keys(gapDraftStatus).length && role!=='admin' && role!=='biz' && role!=='owner'){
+    alert('当前角色无权限修改达成情况');
+    return;
+  }
+  let changed=0;
+  Object.entries(gapDraftStatus).forEach(([id,st])=>{
+    const row=(data||[]).find(x=>gapRowIdentity(x)===id);
+    if(!row) return;
+    const next=Number(st.achieved)?1:0;
+    if(Number(row.achieved)===next) return;
+    row.achieved=next;
+    if(next===1) row.plannedMonth=null;
+    changed++;
+    changeLogs.unshift({time:new Date().toISOString().replace('T',' ').slice(0,19),action:'更新科组达成',changes:[`${row.team} → ${next}`],target:`${row.domain} / ${row.sub}`});
+  });
+  if(changed){
+    try{await persist();buildFilters();render()}
+    catch(error){setGapSaveState('dirty','达成保存失败');alert(error.message||'达成情况保存失败');return}
+  }
   const payload={schemaVersion:2,identityFields:['domain','owner','dimension','sub','team'],notes:gapDraftNotes};
   const response=await fetch('/api/monthly-gap-notes',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
   const result=await response.json().catch(()=>({}));
   if(!response.ok){
-    setGapSaveState('dirty',result.error||'保存失败');
-    alert(result.error||'保存未达成项记录失败');
+    setGapSaveState('dirty',result.error||'文字记录保存失败');
+    alert(result.error||'文字记录保存失败');
     return;
   }
   gapSavedNotes=gapClone(gapDraftNotes);
+  gapDraftStatus={};
   gapDirty=false;
-  setGapSaveState('saved',`已保存 · ${result.savedAt||new Date().toLocaleTimeString('zh-CN')}`);
+  setGapSaveState('saved',`已保存达成与记录 · ${result.savedAt||new Date().toLocaleTimeString('zh-CN')}`);
+  renderGapTable();
+}
+function openGapNotesFromRaw(){
+  openGapNotes();
 }
 function clearGapCurrentResults(){
   const items=gapFilteredItems();
@@ -2254,6 +2307,7 @@ function switchGapMonth(nextMonth){
     return;
   }
   gapDraftNotes=gapClone(gapSavedNotes);
+  gapDraftStatus={};
   gapDirty=false;
   gapSelectedMonth=nextMonth;
   gapFilters={domain:'all',dimension:'all',dept:'all',team:'all'};
