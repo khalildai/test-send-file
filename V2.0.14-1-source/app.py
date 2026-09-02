@@ -91,6 +91,8 @@ def init_db() -> None:
                 month TEXT NOT NULL,
                 identity_key TEXT NOT NULL,
                 note TEXT NOT NULL DEFAULT '',
+                snapshot TEXT,
+                achieved INTEGER,
                 updated_at TEXT NOT NULL,
                 updated_by TEXT
             );
@@ -116,9 +118,11 @@ def init_db() -> None:
             "INSERT OR IGNORE INTO users(username, password_hash, salt, role, display_name) VALUES (?, ?, ?, 'biz', '业务')",
             ('biz', biz_hash, biz_salt),
         )
-        db.execute("""
-            """
-        )
+        cols = {row[1] for row in db.execute("PRAGMA table_info(monthly_gap_notes)")}
+        if "snapshot" not in cols:
+            db.execute("ALTER TABLE monthly_gap_notes ADD COLUMN snapshot TEXT")
+        if "achieved" not in cols:
+            db.execute("ALTER TABLE monthly_gap_notes ADD COLUMN achieved INTEGER")
 
 
 def json_value(value):
@@ -724,6 +728,10 @@ def _valid_month(value: str) -> bool:
     return year.isdigit() and month.isdigit() and 1 <= int(month) <= 12
 
 
+def _system_month() -> str:
+    return datetime.now().strftime("%Y-%m")
+
+
 @app.get("/api/monthly-gap-notes")
 def get_monthly_gap_notes():
     with connect() as db:
@@ -731,64 +739,94 @@ def get_monthly_gap_notes():
         if not user:
             return jsonify({"error": "未登录，请先登录后再查看未达成项记录"}), 401
         rows = db.execute(
-            "SELECT note_key, note, updated_at, updated_by FROM monthly_gap_notes"
+            "SELECT note_key, month, identity_key, note, snapshot, achieved, updated_at, updated_by FROM monthly_gap_notes"
         ).fetchall()
+    current = _system_month()
+    items = {}
+    notes = {}
+    for row in rows:
+        snapshot = parse_json(row["snapshot"], None) if row["snapshot"] else None
+        items[row["note_key"]] = {
+            "month": row["month"],
+            "identityKey": row["identity_key"],
+            "note": row["note"] or "",
+            "snapshot": snapshot,
+            "achieved": row["achieved"],
+            "updatedAt": row["updated_at"],
+            "updatedBy": row["updated_by"],
+            "sealed": bool(row["month"] and row["month"] < current),
+        }
+        notes[row["note_key"]] = row["note"] or ""
     return jsonify({
-        "schemaVersion": 2,
+        "schemaVersion": 3,
+        "currentMonth": current,
         "identityFields": ["domain", "owner", "dimension", "sub", "team"],
-        "notes": {row["note_key"]: row["note"] for row in rows},
-        "meta": {
-            row["note_key"]: {"updatedAt": row["updated_at"], "updatedBy": row["updated_by"]}
-            for row in rows
-        },
+        "notes": notes,
+        "items": items,
     })
 
 
 @app.put("/api/monthly-gap-notes")
 def put_monthly_gap_notes():
     payload = request.get_json(silent=True) or {}
-    notes = payload.get("notes")
-    if not isinstance(notes, dict):
-        return jsonify({"error": "notes 必须是对象"}), 400
     with connect() as db:
         user = current_user(db)
     if not user:
         return jsonify({"error": "未登录，请先登录后再保存未达成项记录"}), 401
+    current = _system_month()
+    month = str(payload.get("month") or "").strip()
+    if not _valid_month(month):
+        return jsonify({"error": "请提供有效自然月"}), 400
+    if month > current:
+        return jsonify({"error": "未到该月份，不能提前编辑"}), 400
+    if month < current:
+        return jsonify({"error": "该月份已封存，不能再修改"}), 403
+    items = payload.get("items")
+    notes = payload.get("notes")
+    if items is None and isinstance(notes, dict):
+        items = [
+            {"identityKey": key.split("::", 1)[-1], "note": value, "snapshot": None, "achieved": None}
+            for key, value in notes.items() if isinstance(key, str) and key.startswith(f"{month}::")
+        ]
+    if not isinstance(items, list):
+        return jsonify({"error": "items 必须是数组"}), 400
     operator = user.get("displayName") or user["username"]
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     cleaned = []
-    for raw_key, raw_note in notes.items():
-        if not isinstance(raw_key, str) or "::" not in raw_key:
-            return jsonify({"error": "记录键格式无效，需为 月份::稳定标识"}), 400
-        month, identity_key = raw_key.split("::", 1)
-        if not _valid_month(month) or not identity_key:
-            return jsonify({"error": f"无效记录键：{raw_key}"}), 400
-        note = "" if raw_note is None else str(raw_note)
+    for item in items:
+        if not isinstance(item, dict):
+            return jsonify({"error": "记录格式无效"}), 400
+        identity_key = str(item.get("identityKey") or "").strip()
+        if not identity_key:
+            return jsonify({"error": "缺少能力项标识"}), 400
+        note = "" if item.get("note") is None else str(item.get("note"))
         if len(note) > 800:
             return jsonify({"error": "单条文字记录不能超过 800 字"}), 400
-        cleaned.append((raw_key, month, identity_key, note))
+        snapshot = item.get("snapshot") if isinstance(item.get("snapshot"), dict) else None
+        achieved = item.get("achieved")
+        if achieved is not None:
+            achieved = 1 if achieved in (1, "1", True) else 0
+        note_key = _gap_note_key(month, identity_key)
+        cleaned.append((note_key, month, identity_key, note, json_value(snapshot) if snapshot else None, achieved))
     with WRITE_LOCK:
         with connect() as db:
             db.execute("BEGIN IMMEDIATE")
-            for note_key, month, identity_key, note in cleaned:
-                if not note.strip():
-                    db.execute("DELETE FROM monthly_gap_notes WHERE note_key=?", (note_key,))
-                    continue
+            for note_key, month_value, identity_key, note, snapshot, achieved in cleaned:
                 db.execute(
                     """
-                    INSERT INTO monthly_gap_notes(note_key, month, identity_key, note, updated_at, updated_by)
-                    VALUES (?, ?, ?, ?, ?, ?)
+                    INSERT INTO monthly_gap_notes(note_key, month, identity_key, note, snapshot, achieved, updated_at, updated_by)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(note_key) DO UPDATE SET
                         note=excluded.note,
-                        month=excluded.month,
-                        identity_key=excluded.identity_key,
+                        snapshot=COALESCE(excluded.snapshot, monthly_gap_notes.snapshot),
+                        achieved=COALESCE(excluded.achieved, monthly_gap_notes.achieved),
                         updated_at=excluded.updated_at,
                         updated_by=excluded.updated_by
                     """,
-                    (note_key, month, identity_key, note, now, operator),
+                    (note_key, month_value, identity_key, note, snapshot, achieved, now, operator),
                 )
             db.commit()
-    return jsonify({"ok": True, "savedAt": now, "operator": operator})
+    return jsonify({"ok": True, "savedAt": now, "operator": operator, "month": month, "currentMonth": current})
 
 
 @app.delete("/api/audit-logs")

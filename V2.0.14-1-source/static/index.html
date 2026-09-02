@@ -2083,6 +2083,8 @@ const GAP_FILTER_FIELDS=[
 let gapSelectedMonth='';
 let gapFilters={domain:'all',dimension:'all',dept:'all',team:'all'};
 let gapSavedNotes={};
+let gapSavedItems={};
+let gapCurrentMonth='';
 let gapDraftNotes={};
 let gapDraftStatus={};
 let gapDirty=false;
@@ -2095,27 +2097,43 @@ function gapDraftAchieved(item){
   return Number(item.achieved)||0;
 }
 function gapMonthLabel(value){const [year,month]=String(value||'').split('-');return `${year} 年 ${Number(month)} 月`}
-function gapDefaultMonth(){return String(asOf||TODAY||'').slice(0,7)}
-function gapPlannedNaturalMonth(item){
-  if(item.plannedMonth) return `${String(asOf||TODAY).slice(0,4)}-${String(item.plannedMonth).padStart(2,'0')}`;
-  return String(item.due||'').slice(0,7);
-}
-function gapExtractionSource(item){return item.plannedMonth?'计划月份':'预计交付日'}
+function gapSystemMonth(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
+function gapDefaultMonth(){return gapCurrentMonth||gapSystemMonth()}
+function gapIsSealed(month=gapSelectedMonth){return String(month||'')<gapDefaultMonth()}
 function gapStableIdentity(item){
   return [item.domain,item.owner,item.dimension,item.sub,item.team]
     .map(value=>encodeURIComponent(String(value??'').trim())).join('|');
 }
 function gapNoteKey(item,month=gapSelectedMonth){return `${month}::${gapStableIdentity(item)}`}
 function gapClone(value){return JSON.parse(JSON.stringify(value||{}))}
+function gapSnapshotOf(item){
+  return {dept:item.dept||'',team:item.team||'',domain:item.domain||'',owner:item.owner||'',dimension:item.dimension||'',sub:item.sub||'',due:item.due||''};
+}
+function gapSortItems(items){
+  return items.sort((a,b)=>(a.dept||'').localeCompare(b.dept||'','zh-CN')||(a.team||'').localeCompare(b.team||'','zh-CN')||(a.sub||'').localeCompare(b.sub||'','zh-CN'));
+}
+function gapSavedRowsForMonth(month){
+  return Object.entries(gapSavedItems||{}).flatMap(([key,rec])=>{
+    if(!key.startsWith(`${month}::`)||!rec||!rec.snapshot) return [];
+    const live=(data||[]).find(x=>gapStableIdentity(x)===rec.identityKey);
+    return [{...rec.snapshot,...(live||{}),achieved:rec.achieved!=null?rec.achieved:(live?live.achieved:rec.snapshot.achieved),_saved:true}];
+  });
+}
 function gapBaseMonthItems(){
-  return (data||[])
-    .filter(item=>{
-      if(gapPlannedNaturalMonth(item)!==gapSelectedMonth) return false;
-      const id=gapRowIdentity(item);
-      if(Object.prototype.hasOwnProperty.call(gapDraftStatus,id)) return true;
-      return Number(item.achieved)===0;
-    })
-    .sort((a,b)=>(a.dept||'').localeCompare(b.dept||'','zh-CN')||(a.team||'').localeCompare(b.team||'','zh-CN')||(a.sub||'').localeCompare(b.sub||'','zh-CN'));
+  const saved=gapSavedRowsForMonth(gapSelectedMonth);
+  if(gapIsSealed()) return gapSortItems(saved);
+  const map=new Map();
+  saved.forEach(item=>map.set(gapRowIdentity(item),item));
+  (data||[]).filter(item=>Number(item.achieved)===0).forEach(item=>{
+    const id=gapRowIdentity(item);
+    map.set(id,{...item,_saved:map.has(id)});
+  });
+  Object.keys(gapDraftStatus).forEach(id=>{
+    if(map.has(id)) return;
+    const live=(data||[]).find(x=>gapRowIdentity(x)===id);
+    if(live) map.set(id,live);
+  });
+  return gapSortItems([...map.values()]);
 }
 function gapMatchesFilters(item,excludedField=null){
   return GAP_FILTER_FIELDS.every(({key})=>key===excludedField||gapFilters[key]==='all'||item[key]===gapFilters[key]);
@@ -2132,10 +2150,10 @@ function gapNormalizeFilters(){
   }
 }
 function gapMonthOptions(){
-  const years=new Set((data||[]).map(item=>String(item.due||'').slice(0,4)).filter(Boolean));
-  years.add(gapDefaultMonth().slice(0,4));
-  years.add(String(TODAY||'').slice(0,4));
-  return [...years].filter(Boolean).sort().flatMap(year=>Array.from({length:12},(_,index)=>`${year}-${String(index+1).padStart(2,'0')}`));
+  const current=gapDefaultMonth();
+  const year=current.slice(0,4);
+  const maxMonth=Math.max(1,Number(current.slice(5))||1);
+  return Array.from({length:maxMonth},(_,index)=>`${year}-${String(index+1).padStart(2,'0')}`);
 }
 function setGapSaveState(state,text){
   const el=$('gapSaveState');if(!el)return;
@@ -2179,12 +2197,16 @@ function clearGapUiFilters(){
 function renderGapTable(){
   renderGapFilters();
   const items=gapFilteredItems();
-  $('gapPeriodSubtitle').textContent=`数据截至 ${asOf||'—'} · ${gapMonthLabel(gapSelectedMonth)} · 记录持久化到业务库`;
+  const sealed=gapIsSealed();
+  $('gapPeriodSubtitle').textContent=sealed
+    ? `${gapMonthLabel(gapSelectedMonth)} 已封存，不再随达成情况变化`
+    : `${gapMonthLabel(gapSelectedMonth)} 实时展示当前未达成项；已保存过的记录即使改为已达成也保留`;
   $('gapTableTitle').textContent=`${gapMonthLabel(gapSelectedMonth)}未达成项 · ${items.length} 项`;
-  $('gapClearButton').disabled=!items.some(item=>String(gapDraftNotes[gapNoteKey(item)]||'').trim());
+  $('gapClearButton').disabled=sealed||!items.some(item=>String(gapDraftNotes[gapNoteKey(item)]||'').trim());
+  const saveBtn=$('gapSaveButton'); if(saveBtn) saveBtn.disabled=sealed;
   if(!items.length){
     const hasMonthItems=gapBaseMonthItems().length>0;
-    $('gapTableWrap').innerHTML=`<div class="gap-empty"><div><strong>${hasMonthItems?'没有符合筛选条件的未达成项':'当前自然月无未达成项'}</strong><span>${gapMonthLabel(gapSelectedMonth)}${hasMonthItems?' · 可调整上方筛选条件':''}</span></div></div>`;
+    $('gapTableWrap').innerHTML=`<div class="gap-empty"><div><strong>${hasMonthItems?'没有符合筛选条件的未达成项':(sealed?'该月没有已封存记录':'当前没有未达成项')}</strong><span>${gapMonthLabel(gapSelectedMonth)}${hasMonthItems?' · 可调整上方筛选条件':''}</span></div></div>`;
     updateGapStats();
     return;
   }
@@ -2192,42 +2214,45 @@ function renderGapTable(){
   items.forEach(item=>{if(!departments.has(item.dept))departments.set(item.dept,[]);departments.get(item.dept).push(item)});
   const rows=[...departments.entries()].map(([department,departmentItems])=>{
     const teams=new Set(departmentItems.map(item=>item.team)).size;
-    return `<tr class="gap-department-row"><td colspan="6">${esc(department)}<span class="gap-department-count">${teams} 个科组 · ${departmentItems.length} 项</span></td></tr>`+
+    return `<tr class="gap-department-row"><td colspan="5">${esc(department)}<span class="gap-department-count">${teams} 个科组 · ${departmentItems.length} 项</span></td></tr>`+
       departmentItems.map(item=>`<tr>
         <td class="gap-team-cell">${esc(item.team)}</td>
         <td class="gap-capability-cell"><b>${esc(item.sub)}</b><span class="gap-meta">${esc(item.dimension)} · Owner ${esc(item.owner)}</span></td>
         <td>${esc(item.domain)}</td>
-        <td><select class="gap-achieved" data-gap-status="${esc(gapRowIdentity(item))}" aria-label="达成情况">
+        <td><select class="gap-achieved" data-gap-status="${esc(gapRowIdentity(item))}" aria-label="达成情况" ${sealed?'disabled':''}>
           <option value="0" ${gapDraftAchieved(item)===0?'selected':''}>0 · 未达成</option>
           <option value="1" ${gapDraftAchieved(item)===1?'selected':''}>1 · 已达成</option>
-        </select>${gapDraftAchieved(item)===1?'<div class="gap-meta">保存后将移出本月未达成列表</div>':''}</td>
-        <td>${esc(item.due||'—')}<br><span class="gap-tag source">${gapExtractionSource(item)}</span></td>
-        <td class="gap-note-cell"><textarea data-gap-note-key="${esc(gapNoteKey(item))}" maxlength="800" placeholder="输入本月进展、阻塞或下一步安排">${esc(gapDraftNotes[gapNoteKey(item)]||'')}</textarea></td>
+        </select></td>
+        <td class="gap-note-cell"><textarea data-gap-note-key="${esc(gapNoteKey(item))}" maxlength="800" placeholder="输入本月进展、阻塞或下一步安排" ${sealed?'disabled':''}>${esc(gapDraftNotes[gapNoteKey(item)]||'')}</textarea></td>
       </tr>`).join('');
   }).join('');
-  $('gapTableWrap').innerHTML=`<table class="gap-table"><thead><tr><th>科组</th><th>未达成能力项</th><th>领域</th><th>达成情况</th><th>自然月依据</th><th>文字记录</th></tr></thead><tbody>${rows}</tbody></table>`;
-  document.querySelectorAll('#gapTableWrap textarea[data-gap-note-key]').forEach(textarea=>{
-    textarea.addEventListener('input',event=>{
-      gapDraftNotes[event.target.dataset.gapNoteKey]=event.target.value;
-      markGapDirty();
-      $('gapClearButton').disabled=false;
+  $('gapTableWrap').innerHTML=`<table class="gap-table"><thead><tr><th>科组</th><th>未达成能力项</th><th>领域</th><th>达成情况</th><th>文字记录</th></tr></thead><tbody>${rows}</tbody></table>`;
+  if(!sealed){
+    document.querySelectorAll('#gapTableWrap textarea[data-gap-note-key]').forEach(textarea=>{
+      textarea.addEventListener('input',event=>{
+        gapDraftNotes[event.target.dataset.gapNoteKey]=event.target.value;
+        markGapDirty();
+        $('gapClearButton').disabled=false;
+      });
     });
-  });
-  document.querySelectorAll('#gapTableWrap select.gap-achieved').forEach(select=>{
-    select.addEventListener('change',event=>{
-      const id=event.target.dataset.gapStatus;
-      gapDraftStatus[id]={achieved:Number(event.target.value)?1:0};
-      markGapDirty();
-      renderGapTable();
+    document.querySelectorAll('#gapTableWrap select.gap-achieved').forEach(select=>{
+      select.addEventListener('change',event=>{
+        const id=event.target.dataset.gapStatus;
+        gapDraftStatus[id]={achieved:Number(event.target.value)?1:0};
+        markGapDirty();
+        renderGapTable();
+      });
     });
-  });
+  }
   updateGapStats();
 }
 async function loadGapNotesFromServer(){
   const response=await fetch('/api/monthly-gap-notes',{cache:'no-store'});
   const result=await response.json().catch(()=>({}));
   if(!response.ok) throw Error(result.error||`读取未达成项记录失败（HTTP ${response.status}）`);
+  gapCurrentMonth=result.currentMonth||gapSystemMonth();
   gapSavedNotes=result.notes&&typeof result.notes==='object'?result.notes:{};
+  gapSavedItems=result.items&&typeof result.items==='object'?result.items:{};
   gapDraftNotes=gapClone(gapSavedNotes);
   gapDirty=false;
 }
@@ -2238,7 +2263,7 @@ async function openGapNotes(){
   $('dictionaryView').classList.remove('show');
   $('versionView').classList.remove('show');
   $('gapView').classList.add('show');
-  gapSelectedMonth=gapSelectedMonth||gapDefaultMonth();
+  gapSelectedMonth=gapDefaultMonth();
   gapFilters={domain:'all',dimension:'all',dept:'all',team:'all'};
   gapDraftStatus={};
   try{
@@ -2266,6 +2291,7 @@ function closeGapNotes(){
 }
 async function saveGapNotes(){
   if(!currentUser){ensureAuthThen(()=>saveGapNotes());return}
+  if(gapIsSealed()){alert('该月份已封存，不能再修改');return}
   const role=currentUser.role;
   if(Object.keys(gapDraftStatus).length && role!=='admin' && role!=='biz' && role!=='owner'){
     alert('当前角色无权限修改达成情况');
@@ -2286,7 +2312,15 @@ async function saveGapNotes(){
     try{await persist();buildFilters();render()}
     catch(error){setGapSaveState('dirty','达成保存失败');alert(error.message||'达成情况保存失败');return}
   }
-  const payload={schemaVersion:2,identityFields:['domain','owner','dimension','sub','team'],notes:gapDraftNotes};
+  const payload={
+    month:gapSelectedMonth,
+    items:gapBaseMonthItems().map(item=>({
+      identityKey:gapStableIdentity(item),
+      note:gapDraftNotes[gapNoteKey(item)]||'',
+      snapshot:gapSnapshotOf(item),
+      achieved:gapDraftAchieved(item)
+    }))
+  };
   const response=await fetch('/api/monthly-gap-notes',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
   const result=await response.json().catch(()=>({}));
   if(!response.ok){
@@ -2294,7 +2328,7 @@ async function saveGapNotes(){
     alert(result.error||'文字记录保存失败');
     return;
   }
-  gapSavedNotes=gapClone(gapDraftNotes);
+  await loadGapNotesFromServer();
   gapDraftStatus={};
   gapDirty=false;
   setGapSaveState('saved',`已保存达成与记录 · ${result.savedAt||new Date().toLocaleTimeString('zh-CN')}`);
@@ -2304,6 +2338,7 @@ function openGapNotesFromRaw(){
   openGapNotes();
 }
 function clearGapCurrentResults(){
+  if(gapIsSealed()){alert('该月份已封存，不能再修改');return}
   const items=gapFilteredItems();
   if(!items.length || !confirm(`清空当前 ${items.length} 项筛选结果的文字记录？`)) return;
   items.forEach(item=>delete gapDraftNotes[gapNoteKey(item)]);
@@ -2311,6 +2346,11 @@ function clearGapCurrentResults(){
   renderGapTable();
 }
 function switchGapMonth(nextMonth){
+  if(nextMonth>gapDefaultMonth()){
+    alert('未到该月份，不能提前编辑');
+    $('gapMonthSelect').value=gapSelectedMonth;
+    return;
+  }
   if(gapDirty && !confirm('当前有未保存更改，切换自然月将丢弃这些更改。是否继续？')){
     $('gapMonthSelect').value=gapSelectedMonth;
     return;
