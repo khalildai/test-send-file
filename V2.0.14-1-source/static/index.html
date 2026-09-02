@@ -268,6 +268,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 #gapView .gap-tag.todo{background:#fff0ee;color:#b42318}
 #gapView .gap-achieved{min-height:32px;min-width:128px;border:1px solid #c9d7e8;border-radius:8px;background:#fff;padding:6px 10px}
 #gapView .actions select.btn{min-width:160px;font:inherit}
+#gapFilterBar{grid-template-columns:repeat(4,minmax(0,1fr)) auto auto;align-items:center}
 #gapView .gap-tag.source{background:#fff5dd;color:#9a6300}
 #gapView .gap-note-cell{width:38%;min-width:360px}
 #gapView .gap-note-cell textarea{display:block;width:100%;min-height:74px;resize:vertical;border:1px solid #c2ced9;border-radius:4px;padding:8px 10px;font:12px/1.5 inherit}
@@ -531,19 +532,14 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
     </div>
   </header>
   <main class="gap-page">
-    <section class="filter-panel" id="gapFilterPanel" aria-label="筛选条件">
-      <div class="filter-toolbar">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          <b style="font-size:13px">筛选条件</b>
-          <span class="muted">选项随自然月和其他条件联动收敛</span>
-        </div>
-        <span class="muted" id="gapFilterSummary">全部条件</span>
-      </div>
-      <div class="filter-body">
-        <div class="filter-row"><div class="lab">领域</div><div class="chips" id="gapDomainFilter"></div></div>
-        <div class="filter-row"><div class="lab">评估维度</div><div class="chips" id="gapDimensionFilter"></div></div>
-        <div class="filter-row"><div class="lab">三级部门</div><div class="chips" id="gapDepartmentFilter"></div></div>
-        <div class="filter-row"><div class="lab">科组</div><div class="chips" id="gapTeamFilter"></div></div>
+    <section class="card">
+      <div class="rawfilters" id="gapFilterBar" aria-label="筛选条件">
+        <select id="gapDomainFilter" data-gap-filter="domain" aria-label="领域"></select>
+        <select id="gapDimensionFilter" data-gap-filter="dimension" aria-label="评估维度"></select>
+        <select id="gapDepartmentFilter" data-gap-filter="dept" aria-label="部门"></select>
+        <select id="gapTeamFilter" data-gap-filter="team" aria-label="科组"></select>
+        <button type="button" class="btn" onclick="clearGapUiFilters()">清空全部筛选</button>
+        <span class="raw-count-chip" id="gapFilterSummary">全部条件</span>
       </div>
     </section>
     <section class="gap-stats" aria-label="本月概览">
@@ -2163,22 +2159,22 @@ function renderGapMonthSelect(){
   select.innerHTML=gapMonthOptions().map(value=>`<option value="${value}">${gapMonthLabel(value)}</option>`).join('');
   select.value=gapSelectedMonth;
 }
-function gapChipGroup(el,items,key,allLabel){
-  if(!el)return;
-  const cur=gapFilters[key];
-  el.innerHTML=`<button type="button" class="chip ${cur==='all'?'on':''}" data-v="all">${allLabel}</button>`+
-    items.map(v=>`<button type="button" class="chip ${cur===v?'on':''}" data-v="${esc(v)}">${esc(v)}</button>`).join('');
-  el.querySelectorAll('.chip').forEach(btn=>btn.onclick=()=>switchGapFilter(key,btn.dataset.v));
-}
 function renderGapFilters(){
   gapNormalizeFilters();
-  gapChipGroup($('gapDomainFilter'),gapAvailableValues('domain'),'domain','全部领域');
-  gapChipGroup($('gapDimensionFilter'),gapAvailableValues('dimension'),'dimension','全部评估维度');
-  gapChipGroup($('gapDepartmentFilter'),gapAvailableValues('dept'),'dept','全部部门');
-  gapChipGroup($('gapTeamFilter'),gapAvailableValues('team'),'team','全部科组');
+  const labels={domain:'全部领域',dimension:'全部评估维度',dept:'全部部门',team:'全部科组'};
+  GAP_FILTER_FIELDS.forEach(({key,elementId})=>{
+    const select=$(elementId); if(!select) return;
+    const values=gapAvailableValues(key);
+    select.innerHTML=`<option value="all">${labels[key]}</option>`+values.map(value=>`<option value="${esc(value)}">${esc(value)}</option>`).join('');
+    select.value=gapFilters[key];
+  });
   const active=GAP_FILTER_FIELDS.filter(({key})=>gapFilters[key]!=='all');
   const summary=$('gapFilterSummary');
   if(summary) summary.textContent=active.length?active.map(({key,label})=>`${label}：${gapFilters[key]}`).join(' · '):'全部条件';
+}
+function clearGapUiFilters(){
+  gapFilters={domain:'all',dimension:'all',dept:'all',team:'all'};
+  renderGapTable();
 }
 function renderGapTable(){
   renderGapFilters();
@@ -2255,6 +2251,9 @@ async function openGapNotes(){
   }
   if(!$('gapMonthSelect').dataset.bound){
     $('gapMonthSelect').addEventListener('change',event=>switchGapMonth(event.target.value));
+    document.querySelectorAll('#gapFilterBar select[data-gap-filter]').forEach(select=>{
+      select.addEventListener('change',event=>switchGapFilter(event.target.dataset.gapFilter,event.target.value));
+    });
     $('gapMonthSelect').dataset.bound='1';
   }
   renderGapMonthSelect();
