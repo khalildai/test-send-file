@@ -1,0 +1,11 @@
+Task #21 temporary demo, round 3
+Date: 2026-09-03
+
+Selected composition
+- Annual target set: round 1 option A, progressive capability steps (recorded, not shown here).
+- Department chart: round 2 option B, enlarged typography.
+- Diagnostic: round 2 option C card structure with the v5 five-dimension team radar.
+- Comparison: round 2 option A data chart with x-axis team/department/business, y-axis score, and 2/3/4 level references.
+- Guidance: round 2 option A action cards, expanded with a business recommendation.
+
+Formal HTML v1-v5 and previous temporary demos remain unchanged.

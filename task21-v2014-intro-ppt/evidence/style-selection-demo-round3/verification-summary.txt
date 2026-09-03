@@ -1,0 +1,27 @@
+Task #21 temporary demo, round 3 verification
+Date: 2026-09-03
+
+Scope
+- Formal HTML v1-v5 unchanged.
+- Previous temporary selection pages unchanged.
+- Department chart uses the selected lightweight vertical-column style with enlarged typography.
+- Diagnostic uses the v5 five-dimension radar format and shows current scores against a uniform 3.0 target.
+- Comparison uses team/department/business on the x-axis, score on the y-axis, and visible 2/3/4 level reference lines.
+- Guidance contains team, department, and business recommendations.
+
+Chrome checks
+- Desktop viewport: 1600 x 1300
+- Mobile viewport: 390 x 844
+- Checked container overflow: 0 on desktop and mobile
+- External resources: 0
+- Stages: 3
+- Action cards: 3
+- Radar chart: present
+- Department bars: 3
+- Comparison groups: 3
+- Desktop and mobile screenshots visually inspected
+
+SHA-256
+- HTML: eedcd73263ae342e67b8ea544b533ead080e522d27ecdafaf5dbe2875c956c7d
+- Desktop preview: ba0f530fa02d454386d3e10da3c58b881e0de0ec86562c51ff9dd3b161aa04e5
+- Mobile preview: 6e6a9f8b9379a3d04de39d722ae0ed5a01fe20f91bf840d9f2470c7813904061
