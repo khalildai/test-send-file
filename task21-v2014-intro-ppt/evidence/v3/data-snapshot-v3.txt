@@ -1,0 +1,19 @@
+V2.0.14 read-only organization score snapshot used in HTML v3
+
+Teams
+- iFA软件测试组: 2.00
+- MCS测试组: 1.00
+
+Departments
+- 产品合规与准入部: 1.00
+- 硬件与EMC测试部: 0.33
+
+Business lines
+- 控制产品: 1.00
+- 机器人产品: 0.00
+
+Source
+- V2.0.14-source/data/maturity.db
+- Database SHA-256: 40d3a0578f3c4dfa68646704fc4fa1a0984367f65e7db9c01863ba5f10d3ba11
+- Scores were derived using V2.0.14 configured team-domain relationships, capability records, organization relationships, and the existing 2/3/4-level weighted scoring logic.
+- The multiplication detail is intentionally omitted from the slide per the requested presentation rule.
