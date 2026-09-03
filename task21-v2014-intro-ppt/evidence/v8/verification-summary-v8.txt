@@ -1,0 +1,35 @@
+Task #21 HTML v8 verification
+Date: 2026-09-03
+
+Artifact
+- html/测试能力成熟度2025-2026演进-单页PPT预览-v8.html
+- SHA-256: b3d6bea5855ae7e6a8295dd1b36b8109c0374d91be24459eddd653c790f05aa4
+
+Rendered evidence
+- preview-v8-1600x900.png
+  SHA-256: 9868078a8ec13c9775b3aa2035242747a3dd4a26eaa6d99856f93fff0cae2d61
+- preview-v8-mobile-390x844.png
+  SHA-256: 3e8cd97608d250c5060dd7503b5a216375759203afed1e08dd69cd2109b55610
+
+Chrome layout verification
+- Desktop viewport: 1600 x 900
+- Mobile viewport: 390 x 844
+- Overflow: 0
+- Out of bounds: 0
+- Overlaps: 0
+- Title lines: 1
+- External resources: 0
+
+Requirement verification
+- 2025/2026 content width ratio: 572/794 = 0.720, approximately 41.9:58.1.
+- Management example height: 293 px, increased from v7.
+- Example charts, headings, axes, labels, scores, legends, and analysis text are enlarged.
+- Removed: 演示数据 · 当前 9 月 · 各视角独立呈现.
+- Department and business notes both use aligned 现状分析 labels.
+- Improvement note uses 年度目标达成风险评估 label.
+- 2025 monitoring wording: 季度跟踪 / 年底集中验收 / 偏重进度管理.
+- Three 2025 monitoring items use calendar, acceptance, and progress SVG icons rather than text glyphs.
+
+Preservation
+- HTML v1-v7 and all temporary demos are unchanged.
+- V2.0.14-source/data/maturity.db SHA-256 remains 40d3a0578f3c4dfa68646704fc4fa1a0984367f65e7db9c01863ba5f10d3ba11.
