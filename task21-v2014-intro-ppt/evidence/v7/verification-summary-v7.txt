@@ -1,0 +1,37 @@
+Task #21 HTML v7 verification
+Date: 2026-09-03
+
+Artifact
+- html/测试能力成熟度2025-2026演进-单页PPT预览-v7.html
+- SHA-256: 91002b677e4c2a83bda4969fce1eed6a53394377e06effee04e9f68d8d1228d6
+
+Rendered evidence
+- preview-v7-1600x900.png
+  SHA-256: 2a6bd423d18bc108333fedd6b3b196d83fedc5789d1eccc035b30ec61d9368f8
+- preview-v7-mobile-390x844.png
+  SHA-256: c4112fdf25a6c7be74e823e195b42e2c781409b819948fb04ee0f75ab258db23
+
+Chrome layout verification
+- Desktop viewport: 1600 x 900
+- Mobile viewport: 390 x 844
+- Overflow: 0
+- Out of bounds: 0
+- Overlaps: 0
+- Title lines: 1
+- External resources: 0
+
+Requirement verification
+- 2025/2026 content width ratio: 636/730 = 0.871, approximately 46.5:53.5 and above the required 4:6 minimum.
+- 2025 capability design: 科组自选范围 / 目标自行选取 / 结果无法对比.
+- 2026 capability design: 能力 Owner 统一提供 / 新增六大领域 / 各组目标一致并支持同领域横向比较.
+- Monitoring mapping: 季度跟踪 / 年底集中验收 / 偏重协助算分 versus 实时跟踪 / 达成即验收 / 落地辅导.
+- Value wording: 引导不足 / 无法驱动业务自我优化升级.
+- 可诊断 / 可对比 / 可引导 are inside the value realization row.
+- 专项价值 uses a lighter visual treatment immediately below the 2025 to 2026 evolution bar.
+- Management example headings: 科组视角 / 部门视角 / 业务视角 / 改进建议.
+- Named examples: 运控测试组 / 驱动测试部 / 伺服产品业务.
+- Improvement trend covers September through December and ends above 3.0 for team, department, and business.
+
+Preservation
+- HTML v1-v6 and all temporary demos are unchanged.
+- V2.0.14-source/data/maturity.db SHA-256 remains 40d3a0578f3c4dfa68646704fc4fa1a0984367f65e7db9c01863ba5f10d3ba11.
