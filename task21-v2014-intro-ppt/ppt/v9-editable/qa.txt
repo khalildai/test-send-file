@@ -1,0 +1,15 @@
+﻿reopen_ok=true
+slides=1
+slide_width_pt=960
+slide_height_pt=540
+slide_size_16x9=True
+shape_count=329
+type_mix=9=32;17=136;1=157;5=4
+picture_count=0
+max_picture_coverage=0
+full_page_raster=False
+overflow_count=0
+out_of_slide_count=0
+unintended_overlap_count=0
+charts=radar_native_poly;dept_native_bars;domain_native_pair_bars;trend_native_lines
+pass=True
