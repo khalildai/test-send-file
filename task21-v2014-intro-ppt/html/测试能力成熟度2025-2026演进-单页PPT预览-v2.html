@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>测试能力成熟度 2025-2026 演进 · v2</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#dfe4e8;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;color:#183042}
+  body{display:flex;align-items:center;justify-content:center}
+  #viewport{position:relative;width:100vw;height:100vh;overflow:hidden}
+  #slide{position:absolute;left:0;top:0;width:1600px;height:900px;transform-origin:0 0;background:#f7f8f6;overflow:hidden}
+  #slide:before{content:"";position:absolute;left:0;top:0;width:12px;height:900px;background:#bc7568}
+  .topline{position:absolute;left:66px;right:60px;top:36px;height:104px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:2px solid #d7dde0}
+  .title h1{margin:0;font-size:48px;line-height:1.2;letter-spacing:0;color:#17324d;font-weight:800}
+  .title p{margin:10px 0 0;font-size:20px;color:#536775}
+  .version{margin-top:6px;text-align:right;color:#536775;font-size:17px;line-height:1.45}
+  .version b{display:block;color:#16837a;font-size:23px}
+
+  .evolution{position:absolute;left:66px;right:60px;top:151px;height:78px;display:grid;grid-template-columns:565px 105px 1fr;align-items:stretch}
+  .era{display:flex;align-items:center;padding:0 30px;gap:24px}
+  .era-old{background:#e4e7e8;color:#344b5a;border-left:7px solid #82919a}
+  .era-new{background:#dcefeb;color:#105e59;border-right:7px solid #16837a}
+  .year{font-size:34px;font-weight:900}
+  .era-text strong{display:block;font-size:25px;line-height:1.2}
+  .era-text span{display:block;margin-top:5px;font-size:17px;color:#61727c}
+  .arrow{position:relative;background:#d89b36;clip-path:polygon(0 22%,64% 22%,64% 0,100% 50%,64% 100%,64% 78%,0 78%)}
+  .arrow span{position:absolute;left:13px;top:28px;font-size:17px;color:white;font-weight:800}
+
+  .matrix{position:absolute;left:66px;right:60px;top:251px;height:430px;display:grid;grid-template-columns:142px 460px 872px;grid-template-rows:45px 151px 117px 113px;border-top:1px solid #ccd5da;border-bottom:1px solid #ccd5da}
+  .matrix-head{display:flex;align-items:center;padding:0 22px;font-size:20px;font-weight:800;color:#294250}
+  .matrix-head.old{background:#dce1e3}
+  .matrix-head.new{background:#d8ebe7;color:#205f5b}
+  .matrix-corner{background:#d5dde1}
+  .row-label{display:flex;align-items:center;padding:0 16px;background:#edf0f1;border-top:1px solid #ccd5da;font-size:22px;font-weight:800;color:#17324d}
+  .row-label small{display:block;font-size:14px;color:#77858d;margin-top:5px;font-weight:600}
+  .cell{position:relative;padding:12px 17px;border-top:1px solid #ccd5da;background:#fff}
+  .cell.old{border-right:1px solid #ccd5da;background:#f2f4f4}
+  .cell.new{background:#fbfdfc}
+  .cell h3{margin:0 0 7px;font-size:20px;line-height:1.2;color:#263e4d}
+  .cell p{margin:0;font-size:15px;line-height:1.42;color:#50636f}
+  .pain-art{display:flex;align-items:center;gap:7px;margin:9px 0 8px}
+  .pain-pill{padding:6px 10px;background:#d9dfe2;color:#415762;font-size:14px;font-weight:800}
+  .pain-art i{font-style:normal;color:#ba7569;font-size:18px;font-weight:900}
+  .formula{display:inline-block;padding:6px 10px;background:#dce8ec;color:#244b5d;font-size:16px;font-weight:800;white-space:nowrap;border-left:4px solid #6f98a8}
+  .target{margin-left:8px;font-size:16px;font-weight:800;color:#a86a19;white-space:nowrap}
+  .domains{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+  .domain{padding:5px 10px;border-radius:3px;color:#17324d;font-size:13px;font-weight:800;background:#dfeeea;border-left:4px solid #16837a}
+  .domain:nth-child(2){background:#e9e5f1;border-color:#786aa5}.domain:nth-child(3){background:#f4eadb;border-color:#c88332}
+  .domain:nth-child(4){background:#e2ebf1;border-color:#4f7fa0}.domain:nth-child(5){background:#f1e4e0;border-color:#c76654}.domain:nth-child(6){background:#e5eee0;border-color:#6d9660}
+  .standard-flow,.level-flow{display:flex;align-items:center;gap:6px;margin:8px 0}
+  .standard-flow span,.level-flow span{padding:6px 9px;background:#dcefeb;color:#176b65;font-size:13px;font-weight:800;white-space:nowrap}
+  .standard-flow i,.level-flow i{font-style:normal;color:#c48935;font-size:18px;font-weight:900}
+  .takeaways{display:flex;align-items:center;gap:8px;margin:8px 0}
+  .takeaways span{padding:7px 13px;background:#dcefeb;color:#176b65;font-size:14px;font-weight:800}
+  .takeaways i{font-style:normal;color:#c48935;font-size:20px;font-weight:900}
+
+  .bottom{position:absolute;left:66px;right:60px;top:696px;height:139px;display:grid;grid-template-columns:916px 1fr;gap:14px}
+  .example-panel,.role-panel{height:139px;border-top:3px solid #879ca7;background:#fff}
+  .example-panel{border-top-color:#6f9d96}
+  .panel-head{height:39px;display:flex;align-items:center;padding:0 15px;border-bottom:1px solid #d4dcdf;font-size:20px;font-weight:800;color:#17324d}
+  .panel-head small{margin-left:10px;font-size:12px;font-weight:500;color:#72828a}
+  .example-body{height:97px;display:grid;grid-template-columns:repeat(3,168px) 1fr;gap:8px;padding:10px 12px}
+  .sample{position:relative;padding:8px 10px;background:#f2f5f4;border-left:4px solid #8da1aa}
+  .sample.done{background:#e7f1ee;border-left-color:#6f9d96}
+  .sample b{display:block;font-size:13px;color:#294250}
+  .sample strong{display:block;margin-top:4px;font-size:14px;line-height:1.2;color:#17324d}
+  .sample span{display:block;margin-top:5px;font-size:12px;color:#687a84}
+  .sample .status{position:absolute;right:7px;top:7px;margin:0;padding:2px 6px;background:#dce2e4;color:#536775;font-size:11px;font-weight:800}
+  .sample em{font-style:normal}
+  .sample.done .status{background:#cfe4de;color:#176b65}
+  .sample-score{padding:4px 4px 0 10px;border-left:1px solid #d4dcdf}
+  .sample-score b{display:block;font-size:13px;color:#536775}
+  .sample-score strong{display:block;margin:5px 0 4px;font-size:19px;color:#176b65}
+  .sample-score span{font-size:11.5px;line-height:1.25;color:#687a84}
+  .role-list{height:97px;display:grid;grid-template-rows:repeat(3,1fr);padding:4px 14px}
+  .role{display:grid;grid-template-columns:112px 1fr;align-items:center;border-bottom:1px solid #e0e5e7;font-size:13px}
+  .role:last-child{border-bottom:0}
+  .role h3{margin:0;font-size:14px;color:#263e4d}
+  .role p{margin:0;color:#536775}
+  .role b{color:#176b65}
+
+  .proof{position:absolute;left:66px;right:60px;bottom:26px;height:32px;display:flex;align-items:center;gap:18px;padding:0 15px;background:#e4eaed;color:#38515f;font-size:13px}
+  .proof strong{font-size:15px;color:#7b6335}
+  .proof span{display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .proof span:before{content:"";width:6px;height:6px;border-radius:50%;background:#75a69e}
+  .source{margin-left:auto;color:#72828a;font-size:12px}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <main id="slide" aria-label="测试能力成熟度从2025到2026的演进单页介绍">
+    <header class="topline">
+      <div class="title">
+        <h1>测试能力成熟度：从专项评分到持续能力经营</h1>
+        <p>从以得分为中心的专项评估，升级为以能力提升为中心的持续经营</p>
+      </div>
+      <div class="version"><b>2025 → 2026</b>基于 V2.0.14 管理机制整理<br>年度目标：3.0 分</div>
+    </header>
+
+    <section class="evolution" aria-label="年度演进主轴">
+      <div class="era era-old"><div class="year">2025</div><div class="era-text"><strong>专项评分</strong><span>领域混杂 · 目标主观 · 导向偏弱</span></div></div>
+      <div class="arrow"><span>进化</span></div>
+      <div class="era era-new"><div class="year">2026</div><div class="era-text"><strong>持续能力经营</strong><span>分领域 · 建标准 · 强引导</span></div></div>
+    </section>
+
+    <section class="matrix" aria-label="2025与2026管理、运营和价值对比">
+      <div class="matrix-corner"></div><div class="matrix-head old">2025 · 专项评分</div><div class="matrix-head new">2026 · 持续能力经营</div>
+
+      <div class="row-label"><div>管理模式<small>目标与计分</small></div></div>
+      <div class="cell old">
+        <h3>科组自选能力 + 阶梯式得分</h3>
+        <div class="pain-art"><span class="pain-pill">2级全部达成</span><i>→</i><span class="pain-pill">才计算3级</span></div>
+        <p>清单不一致 → “不涉及”项可剔除 → 做得少反而更易高分 → 部门/科组得分难以横向比较。</p>
+      </div>
+      <div class="cell new">
+        <h3>分领域统一目标 + 2/3/4级加权计分</h3>
+        <div><span class="formula">2级达成率×2 + 3级达成率 + 4级达成率</span><span class="target">年度目标 3.0</span></div>
+        <div class="domains"><span class="domain">软件</span><span class="domain">硬件</span><span class="domain">机械</span><span class="domain">EMC</span><span class="domain">合规</span><span class="domain">环境可靠性</span></div>
+        <p style="margin-top:8px">三项机制：分领域统一目标、2/3/4级加权计分、同领域形成可比较的能力刻度。</p>
+      </div>
+
+      <div class="row-label"><div>运营模式<small>跟踪与改进</small></div></div>
+      <div class="cell old">
+        <h3>季度跟踪，年底集中验收</h3>
+        <div class="pain-art"><span class="pain-pill">季度跟踪</span><i>→</i><span class="pain-pill">年底集中验收</span></div>
+        <p>偏专项运营和得分协助，过程反馈间隔长。</p>
+      </div>
+      <div class="cell new">
+        <h3>实时跟踪 + 不定期验收 + 落地辅导</h3>
+        <div class="standard-flow"><span>实时看板</span><i>→</i><span>不定期验收</span><i>→</i><span>过程纠偏</span><i>→</i><span>改进建议</span></div>
+        <p>标准化评估与数字化验收降低运营成本，从“专项管理”转向持续能力提升。</p>
+      </div>
+
+      <div class="row-label"><div>价值管理<small>战略与决策</small></div></div>
+      <div class="cell old">
+        <h3>承接 SP/BP，拆解能力项并关联 KPI</h3>
+        <div class="pain-art"><span class="pain-pill">中心 SP/BP</span><i>→</i><span class="pain-pill">能力细分项</span><i>→</i><span class="pain-pill">年度 KPI</span></div>
+        <p>能够衡量工程能力，但统一性、可比性与改进导向偏弱。</p>
+      </div>
+      <div class="cell new">
+        <h3>保留战略承接，形成三个可用的管理结论</h3>
+        <div class="takeaways"><span>可诊断 · 看清能力现状</span><i>→</i><span>可对比 · 审视同领域差距</span><i>→</i><span>可引导 · 明确提升路径</span></div>
+        <p>2级基础基底、3级年度重点、4级度量/数字化/AI挑战；低分仍需结合实际业务场景评估。</p>
+      </div>
+    </section>
+
+    <section class="bottom" aria-label="实际数据切片与角色价值">
+      <div class="example-panel">
+        <div class="panel-head">实际机制示例 · 硬件领域<small>取自 V2.0.14 的 3 条能力记录，仅作机制切片</small></div>
+        <div class="example-body">
+          <div class="sample"><b>2级 · 基础基底</b><strong>单板测试方案设计</strong><span>伺服硬件测试组</span><em class="status">未达成</em></div>
+          <div class="sample done"><b>3级 · 年度重点</b><strong>器件一致性测试设计</strong><span>控制制动硬件组</span><em class="status">已达成</em></div>
+          <div class="sample done"><b>4级 · 挑战能力</b><strong>板级回归测试</strong><span>变频硬件测试</span><em class="status">已达成</em></div>
+          <div class="sample-score"><b>三项样例加权结果</b><strong>0%×2 + 100% + 100% = 2.0</strong><span>2级基础待补齐，3/4级成果保留；示例非正式考核。</span></div>
+        </div>
+      </div>
+      <div class="role-panel">
+        <div class="panel-head">三类角色拿到什么</div>
+        <div class="role-list">
+          <div class="role"><h3>科组 / 部门</h3><p>看清<b>下一步提升什么</b></p></div>
+          <div class="role"><h3>能力 Owner</h3><p>验证<b> SP/BP 是否落地</b></p></div>
+          <div class="role"><h3>管理者</h3><p>判断<b>差距与资源投向</b></p></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="proof">
+      <strong>V2.0.14 支撑机制</strong>
+      <span>能力主数据 + 组织关系</span><span>实际 / 预测趋势</span><span>组织排名与逐级下钻</span><span>后续：持续跟踪 · 分析报告 · 阶段验收</span>
+      <div class="source">只读引用少量机制</div>
+    </footer>
+  </main>
+</div>
+<script>
+  function fitSlide(){
+    const scale=Math.min(window.innerWidth/1600,window.innerHeight/900);
+    const slide=document.getElementById('slide');
+    slide.style.transform=`scale(${scale})`;
+    slide.style.left=`${(window.innerWidth-1600*scale)/2}px`;
+    slide.style.top=`${(window.innerHeight-900*scale)/2}px`;
+  }
+  window.addEventListener('resize',fitSlide);
+  fitSlide();
+</script>
+</body>
+</html>

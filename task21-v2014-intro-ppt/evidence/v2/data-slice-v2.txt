@@ -1,0 +1,12 @@
+V2.0.14 read-only mechanism slice used in HTML v2
+
+Domain: 硬件
+
+2级 | 测试设计 | 单板测试方案设计 | 硬件与EMC测试部 | 伺服硬件测试组 | achieved=0 | due=2026-08-15
+3级 | 测试方案 | 器件一致性测试设计 | 硬件与EMC测试部 | 控制制动硬件组 | achieved=1 | due=2026-07-12
+4级 | 测试执行 | 板级回归测试 | 硬件与EMC测试部 | 变频硬件测试 | achieved=1 | due=2026-06-30
+
+Displayed mechanism calculation:
+0% x 2 + 100% + 100% = 2.0
+
+This is a deliberately small cross-team domain slice for explaining the weighted rule. It is not a formal team, department, or domain assessment result.

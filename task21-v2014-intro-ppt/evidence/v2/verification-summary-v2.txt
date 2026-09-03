@@ -1,0 +1,25 @@
+Task #21 HTML v2 verification
+Date: 2026-09-03
+
+Artifact
+- html/测试能力成熟度2025-2026演进-单页PPT预览-v2.html
+- SHA-256: 2615c5ee59329037f3b69ea4e74f45e9690f0a4dede94e5811d112a67b4953e5
+- Single-file HTML with no external src/href resources
+
+Rendered QA
+- Chrome viewport: 1600 x 900
+- overflow: 0
+- outOfBounds: 0
+- overlaps: 0
+- titleLines: 1
+- Preview: preview-v2-1600x900.png
+- Preview SHA-256: aaefb66de3590987b0ee9281222284cfeea96062e78249ec37fa933b70073a19
+
+Version isolation
+- v1 HTML SHA-256 remains 1bf9cf54f8bcd6e2cb64686d18345b9f39a9d9beb8912a3886f6c8a7bbef52af
+- v2 is a new file; v1 was not modified or overwritten
+
+Data boundary
+- Example uses three read-only records from V2.0.14-source/data/maturity.db
+- Database SHA-256 remains 40d3a0578f3c4dfa68646704fc4fa1a0984367f65e7db9c01863ba5f10d3ba11
+- The displayed 2.0 score is explicitly labeled as a three-record mechanism slice, not a formal assessment result
