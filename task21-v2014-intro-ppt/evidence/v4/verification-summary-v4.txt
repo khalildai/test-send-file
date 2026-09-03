@@ -1,0 +1,29 @@
+Task #21 HTML v4 verification
+Date: 2026-09-03
+
+Artifact
+- html/测试能力成熟度2025-2026演进-单页PPT预览-v4.html
+- SHA-256: 58da647f7cbe8c96cc594c17f13301dc51da4c743679c21a6b6bfe200f4f2139
+- Single-file HTML with no external src/href resources
+
+Rendered QA
+- Chrome viewport: 1600 x 900
+- overflow: 0
+- outOfBounds: 0
+- overlaps: 0
+- titleLines: 1
+- Preview: preview-v4-1600x900.png
+- Preview SHA-256: 06fefe1027c5f55e09e665c8c98c24f92a68e8cf3c99322c5b5c42a391aba085
+
+Content structure
+- Upper section: 2025 to 2026 evolution and 2026 redesign highlights
+- Lower section: organization comparisons, annual target markers, strengths, target gap, and improvement action
+- Upper and lower sections follow their actual information density rather than a 50/50 split
+
+Version isolation
+- v1, v2, and v3 remain separate files
+- v4 is a new file; earlier HTML versions were not modified or overwritten
+
+Data boundary
+- Organization scores and capability conclusions are derived from the read-only V2.0.14 database and existing scoring logic
+- Database SHA-256 remains 40d3a0578f3c4dfa68646704fc4fa1a0984367f65e7db9c01863ba5f10d3ba11

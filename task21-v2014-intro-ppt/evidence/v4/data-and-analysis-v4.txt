@@ -1,0 +1,22 @@
+V2.0.14 read-only snapshot and displayed analysis for HTML v4
+
+Organization comparisons
+- Team: iFA软件测试组 2.00 vs MCS测试组 1.00
+- Department: 产品合规与准入部 1.00 vs 硬件与EMC测试部 0.33
+- Business line: 控制产品 1.00 vs 机器人产品 0.00
+- Annual target marker: 3.00 on a 4.00 scale
+
+Strength capability evidence
+- 接口测试设计: achieved=1, 软件, 2级, iFA软件测试组
+- 器件一致性测试设计: achieved=1, 硬件, 3级, 控制制动硬件组
+- 板级回归测试: achieved=1, 硬件, 4级, 变频硬件测试
+
+Displayed target-gap conclusion
+- Highest sample score is 2.00, which is 1.00 below the annual target of 3.00
+
+Displayed improvement recommendation
+- Low-scoring organizations should first close level-2 foundation gaps, then replicate achieved practices within the same capability domain
+
+Source
+- V2.0.14-source/data/maturity.db
+- Database SHA-256: 40d3a0578f3c4dfa68646704fc4fa1a0984367f65e7db9c01863ba5f10d3ba11
