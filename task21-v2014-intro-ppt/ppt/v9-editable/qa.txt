@@ -1,10 +1,10 @@
-﻿reopen_ok=true
+reopen_ok=true
 slides=1
 slide_width_pt=960
 slide_height_pt=540
 slide_size_16x9=True
-shape_count=329
-type_mix=9=32;17=136;1=157;5=4
+shape_count=324
+type_mix=9=32;17=135;1=153;5=4
 picture_count=0
 max_picture_coverage=0
 full_page_raster=False
@@ -12,4 +12,10 @@ overflow_count=0
 out_of_slide_count=0
 unintended_overlap_count=0
 charts=radar_native_poly;dept_native_bars;domain_native_pair_bars;trend_native_lines
+visual_year=closed: 2025/2026 each single-line, vertically centered, no wrap
+visual_owner=closed: Owner title above 5 dim chips then 统一分发; no overlay
+visual_radar=closed: 测试用例 3.0 fully inside panel; dim labels spaced; 达成 text readable
+visual_trend=closed: Dec labels stacked right of plot (科组/部门/业务) with 13pt gap, not on line ends
+visual_value_cards=closed: icons reduced, title 6.5 / body 5.5, extra text inset
+visual_human_pass=True
 pass=True
