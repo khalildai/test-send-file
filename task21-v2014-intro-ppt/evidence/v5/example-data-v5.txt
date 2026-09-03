@@ -1,0 +1,26 @@
+Illustrative management data used in HTML v5
+
+Review date: September 4
+Annual target: 3.0 for every evaluation dimension
+
+Team radar - iFA软件测试组
+- 测试设计: 3.2
+- 自动化: 2.4
+- 测试执行: 3.1
+- 测试方案: 2.2
+- 测试用例: 3.0
+- Result: 3 of 5 dimensions meet target
+- Strengths: 测试设计、测试执行
+- Gaps: 自动化 -0.6、测试方案 -0.8
+- Improvement plan: 9月补齐自动化基线；10月完成方案复审
+
+Department comparison - 硬件与EMC测试部
+- 控制制动硬件组: 3.2
+- 变频硬件测试: 2.7
+- 伺服硬件测试组: 2.1
+
+Business-line six-domain comparison
+- 控制产品: 软件 3.2, 硬件 2.8, 机械 3.0, EMC 2.6, 合规 3.1, 可靠性 2.4
+- 伺服产品: 软件 2.5, 硬件 3.1, 机械 2.2, EMC 3.0, 合规 2.7, 可靠性 2.9
+
+All values in this file are presentation examples, not V2.0.14 production measurements.
