@@ -27,18 +27,16 @@
   .arrow{position:relative;background:#d89b36;clip-path:polygon(0 22%,64% 22%,64% 0,100% 50%,64% 100%,64% 78%,0 78%)}
   .arrow span{position:absolute;left:13px;top:28px;font-size:17px;color:white;font-weight:800}
 
-  .matrix{position:absolute;left:66px;right:60px;top:251px;height:430px;display:grid;grid-template-columns:142px 350px 610px 372px;grid-template-rows:45px repeat(3,127px);border-top:1px solid #ccd5da;border-bottom:1px solid #ccd5da}
+  .matrix{position:absolute;left:66px;right:60px;top:251px;height:430px;display:grid;grid-template-columns:142px 460px 872px;grid-template-rows:45px 151px 117px 113px;border-top:1px solid #ccd5da;border-bottom:1px solid #ccd5da}
   .matrix-head{display:flex;align-items:center;padding:0 22px;font-size:20px;font-weight:800;color:#294250}
   .matrix-head.old{background:#dce1e3}
   .matrix-head.new{background:#d8ebe7;color:#205f5b}
-  .matrix-head.work{background:#eee8db;color:#6c5831}
   .matrix-corner{background:#d5dde1}
   .row-label{display:flex;align-items:center;padding:0 16px;background:#edf0f1;border-top:1px solid #ccd5da;font-size:22px;font-weight:800;color:#17324d}
   .row-label small{display:block;font-size:14px;color:#77858d;margin-top:5px;font-weight:600}
   .cell{position:relative;padding:12px 17px;border-top:1px solid #ccd5da;background:#fff}
   .cell.old{border-right:1px solid #ccd5da;background:#f2f4f4}
-  .cell.new{background:#fbfdfc;border-right:1px solid #ccd5da}
-  .cell.work{background:#fdfbf7}
+  .cell.new{background:#fbfdfc}
   .cell h3{margin:0 0 7px;font-size:20px;line-height:1.2;color:#263e4d}
   .cell p{margin:0;font-size:15px;line-height:1.42;color:#50636f}
   .pain-art{display:flex;align-items:center;gap:7px;margin:9px 0 8px}
@@ -53,11 +51,12 @@
   .standard-flow,.level-flow{display:flex;align-items:center;gap:6px;margin:8px 0}
   .standard-flow span,.level-flow span{padding:6px 9px;background:#dcefeb;color:#176b65;font-size:13px;font-weight:800;white-space:nowrap}
   .standard-flow i,.level-flow i{font-style:normal;color:#c48935;font-size:18px;font-weight:900}
-  .work-tag{display:inline-block;margin-bottom:9px;padding:5px 9px;background:#eee5d2;color:#725d32;font-size:13px;font-weight:800}
-  .work-arrow{position:absolute;right:16px;bottom:13px;color:#c49a52;font-size:28px}
+  .takeaways{display:flex;align-items:center;gap:8px;margin:8px 0}
+  .takeaways span{padding:7px 13px;background:#dcefeb;color:#176b65;font-size:14px;font-weight:800}
+  .takeaways i{font-style:normal;color:#c48935;font-size:20px;font-weight:900}
 
-  .bottom{position:absolute;left:66px;right:60px;top:696px;height:139px;display:grid;grid-template-columns:900px 1fr;gap:20px}
-  .role-panel,.plan-panel{border-top:3px solid #879ca7;background:#fff}
+  .bottom{position:absolute;left:66px;right:60px;top:696px;height:139px}
+  .role-panel{height:139px;border-top:3px solid #879ca7;background:#fff}
   .panel-head{height:39px;display:flex;align-items:center;padding:0 15px;border-bottom:1px solid #d4dcdf;font-size:20px;font-weight:800;color:#17324d}
   .role-grid{display:grid;grid-template-columns:repeat(3,1fr);height:97px}
   .role{position:relative;padding:13px 14px 8px 51px;border-right:1px solid #d7dde0}
@@ -67,12 +66,6 @@
   .role h3{margin:0 0 4px;font-size:17px;color:#263e4d}
   .role p{margin:0;font-size:13px;line-height:1.38;color:#536775}
   .role b{color:#17324d}
-  .plan-panel{border-top-color:#b99a62}
-  .plan-list{padding:5px 14px 0}
-  .plan-item{display:grid;grid-template-columns:25px 1fr 116px;gap:8px;align-items:center;min-height:29px;border-bottom:1px solid #ece8df;font-size:13px;color:#4d606b}
-  .plan-item:last-child{border-bottom:0}
-  .plan-item b{display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#e7eee9;color:#286b65;font-size:12px}
-  .plan-item time{text-align:right;color:#8a6c35;font-weight:800}
 
   .proof{position:absolute;left:66px;right:60px;bottom:26px;height:32px;display:flex;align-items:center;gap:18px;padding:0 15px;background:#e4eaed;color:#38515f;font-size:13px}
   .proof strong{font-size:15px;color:#7b6335}
@@ -98,47 +91,45 @@
       <div class="era era-new"><div class="year">2026</div><div class="era-text"><strong>持续能力经营</strong><span>分领域 · 建标准 · 强引导</span></div></div>
     </section>
 
-    <section class="matrix" aria-label="2025痛点、2026改进方法与专项组工作">
-      <div class="matrix-corner"></div><div class="matrix-head old">2025 · 痛点</div><div class="matrix-head new">2026 · 改进方法</div><div class="matrix-head work">专项组工作</div>
+    <section class="matrix" aria-label="2025与2026管理、运营和价值对比">
+      <div class="matrix-corner"></div><div class="matrix-head old">2025 · 专项评分</div><div class="matrix-head new">2026 · 持续能力经营</div>
 
-      <div class="row-label"><div>01 分领域<small>评价标尺</small></div></div>
+      <div class="row-label"><div>管理模式<small>目标与计分</small></div></div>
       <div class="cell old">
-        <h3>领域混杂，评价失准</h3>
-        <div class="pain-art"><span class="pain-pill">科组自选</span><i>+</i><span class="pain-pill">清单不同</span><i>→</i><span class="pain-pill">不可横比</span></div>
-        <p>“不涉及”可剔除分母，涉及能力越少越容易得高分，难以反映实际能力。</p>
-      </div>
-      <div class="cell new">
-        <h3>建立不同领域的统一评价标尺</h3>
-        <div class="domains"><span class="domain">软件</span><span class="domain">硬件</span><span class="domain">机械</span><span class="domain">EMC</span><span class="domain">合规</span><span class="domain">环境可靠性</span></div>
-        <p style="margin-top:8px">Owner 按领域制定清单；同领域科组年度目标一致，仅考核业务涉及领域，使能力可诊断、可对比。</p>
-      </div>
-      <div class="cell work"><span class="work-tag">报告交付</span><h3>输出各测试领域能力成熟度报告</h3><p>形成领域、组织与评估维度的能力现状及差距视图。</p><span class="work-arrow">→</span></div>
-
-      <div class="row-label"><div>02 建标准<small>规则与验收</small></div></div>
-      <div class="cell old">
-        <h3>目标主观，验收困难</h3>
-        <div class="pain-art"><span class="pain-pill">季度跟踪</span><i>→</i><span class="pain-pill">年底集中验收</span></div>
-        <p>评价规则与证据标准不统一，过程反馈间隔长，专项运营成本高。</p>
-      </div>
-      <div class="cell new">
-        <h3>标准化评估规则 + 数字化验收机制</h3>
-        <div><span class="formula">2级达成率×2 + 3级达成率 + 4级达成率</span><span class="target">年度目标 3.0</span></div>
-        <div class="standard-flow"><span>实时看板</span><i>→</i><span>不定期验收</span><i>→</i><span>过程纠偏</span><i>→</i><span>改进建议</span></div>
-      </div>
-      <div class="cell work"><span class="work-tag">运营升级</span><h3>过程监控，及时纠偏</h3><p>从协助算分与年底收口，转向实时监控、验收和落地辅导。</p><span class="work-arrow">→</span></div>
-
-      <div class="row-label"><div>03 强引导<small>建设路径</small></div></div>
-      <div class="cell old">
-        <h3>导向偏弱，改进不明</h3>
+        <h3>科组自选能力 + 阶梯式得分</h3>
         <div class="pain-art"><span class="pain-pill">2级全部达成</span><i>→</i><span class="pain-pill">才计算3级</span></div>
-        <p>阶梯门槛和自选分母不鼓励多做能力建设，也难以给出持续提升路径。</p>
+        <p>不区分领域；“不涉及”可剔除分母，能力选得越少越容易得高分。各组清单不同，得分难以横向对比。</p>
       </div>
       <div class="cell new">
-        <h3>优化分级规则，明确可落地、可迭代路径</h3>
-        <div class="level-flow"><span>2级 · 基础基底</span><i>→</i><span>3级 · 年度重点</span><i>→</i><span>4级 · 度量 / 数字化 / AI 挑战</span></div>
-        <p>分级加权鼓励多做建设；低分不等于业务不满足，仍需结合实际场景评估。</p>
+        <h3>分领域统一目标 + 2/3/4级加权计分</h3>
+        <div><span class="formula">2级达成率×2 + 3级达成率 + 4级达成率</span><span class="target">年度目标 3.0</span></div>
+        <div class="domains"><span class="domain">软件</span><span class="domain">硬件</span><span class="domain">机械</span><span class="domain">EMC</span><span class="domain">合规</span><span class="domain">环境可靠性</span></div>
+        <p style="margin-top:8px">Owner 按领域制定统一清单；同领域科组年度目标一致，仅考核业务涉及领域。鼓励多做能力建设，并形成可比刻度。</p>
       </div>
-      <div class="cell work"><span class="work-tag">目标引导</span><h3>通过能力分级推动业务持续提升</h3><p>保留 SP/BP 与 KPI 承接，同时把差距转化为下一步建设方向。</p><span class="work-arrow">→</span></div>
+
+      <div class="row-label"><div>运营模式<small>跟踪与改进</small></div></div>
+      <div class="cell old">
+        <h3>季度跟踪，年底集中验收</h3>
+        <div class="pain-art"><span class="pain-pill">季度跟踪</span><i>→</i><span class="pain-pill">年底集中验收</span></div>
+        <p>偏专项运营和得分协助，过程反馈间隔长。</p>
+      </div>
+      <div class="cell new">
+        <h3>实时跟踪 + 不定期验收 + 落地辅导</h3>
+        <div class="standard-flow"><span>实时看板</span><i>→</i><span>不定期验收</span><i>→</i><span>过程纠偏</span><i>→</i><span>改进建议</span></div>
+        <p>标准化评估与数字化验收降低运营成本，从“专项管理”转向持续能力提升。</p>
+      </div>
+
+      <div class="row-label"><div>价值管理<small>战略与决策</small></div></div>
+      <div class="cell old">
+        <h3>承接 SP/BP，拆解能力项并关联 KPI</h3>
+        <div class="pain-art"><span class="pain-pill">中心 SP/BP</span><i>→</i><span class="pain-pill">能力细分项</span><i>→</i><span class="pain-pill">年度 KPI</span></div>
+        <p>能够衡量工程能力，但统一性、可比性与改进导向偏弱。</p>
+      </div>
+      <div class="cell new">
+        <h3>保留战略承接，形成三个可用的管理结论</h3>
+        <div class="takeaways"><span>可诊断 · 看清能力现状</span><i>→</i><span>可对比 · 审视同领域差距</span><i>→</i><span>可引导 · 明确提升路径</span></div>
+        <p>2级基础基底、3级年度重点、4级度量/数字化/AI挑战；低分仍需结合实际业务场景评估。</p>
+      </div>
     </section>
 
     <section class="bottom" aria-label="角色价值与2026年运营计划">
@@ -150,20 +141,12 @@
           <div class="role"><span class="role-num">03</span><h3>管理者</h3><p><b>监控达成与横向差距</b>，支撑资源和改进决策。</p></div>
         </div>
       </div>
-      <div class="plan-panel">
-        <div class="panel-head">2026 年内后续运营计划</div>
-        <div class="plan-list">
-          <div class="plan-item"><b>1</b><span>组织、监控、辅导过程与结果，助力能力落地与人才培养</span><time>持续至年末</time></div>
-          <div class="plan-item"><b>2</b><span>交付各测试业务能力成熟度分析报告</span><time>8 月启动</time></div>
-          <div class="plan-item"><b>3</b><span>阶段性评分与验收材料管理</span><time>季度末 / 年末</time></div>
-        </div>
-      </div>
     </section>
 
     <footer class="proof">
       <strong>V2.0.14 支撑机制</strong>
-      <span>能力主数据 + 组织关系</span><span>科组关联适用领域</span><span>实际 / 预测趋势</span><span>组织排名与逐级下钻</span>
-      <div class="source">只读引用少量机制，不展示完整能力与科组台账</div>
+      <span>能力主数据 + 组织关系</span><span>实际 / 预测趋势</span><span>组织排名与逐级下钻</span><span>后续：持续跟踪 · 分析报告 · 阶段验收</span>
+      <div class="source">只读引用少量机制</div>
     </footer>
   </main>
 </div>
