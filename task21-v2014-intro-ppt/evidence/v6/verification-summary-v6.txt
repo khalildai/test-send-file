@@ -1,0 +1,36 @@
+Task #21 HTML v6 verification
+Date: 2026-09-03
+
+Artifact
+- html/测试能力成熟度2025-2026演进-单页PPT预览-v6.html
+- SHA-256: 5e6855928cf1dfa3f55c37cf70fa340e6f0f81bc29c7d917899b702eab9f40f5
+
+Rendered evidence
+- preview-v6-1600x900.png
+  SHA-256: 0081260a98fd739c420714d547853388181a46e2d67575eb4685073128df1f53
+- preview-v6-mobile-390x844.png
+  SHA-256: 3e76863bc3c2795a4de2acc5270effe9f675fbce3755452b9c92ffe073eb59e2
+
+Chrome layout verification
+- Desktop viewport: 1600 x 900
+- Mobile viewport: 390 x 844
+- Overflow: 0
+- Out of bounds: 0
+- Overlaps: 0
+- Title lines: 1
+- External resources: 0
+
+Requirement verification
+- Six domains: 6
+- Each domain explicitly shows participating teams share target 3.0
+- 2025 capability design, monitoring operation, and value realization use visual modules
+- Yearly goal set uses locked option A, progressive capability stairs
+- Special value is promoted to a full-width primary visual band
+- Department chart uses locked option B with larger labels, department x-axis, score y-axis, target 3.0, and average 2.68
+- Diagnosis uses the five-dimension team radar with target gap
+- Comparison covers team, department, and business scores with level 2/3/4 references
+- Guidance includes team, department, and business actions
+
+Preservation
+- HTML v1-v5 and all temporary demos are unchanged.
+- V2.0.14-source/data/maturity.db SHA-256 remains 40d3a0578f3c4dfa68646704fc4fa1a0984367f65e7db9c01863ba5f10d3ba11.
