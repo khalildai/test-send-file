@@ -1,0 +1,28 @@
+Task #21 - 正式 HTML v9 验证摘要
+
+生成日期：2026-09-03
+基线：v8
+变更范围：仅替换 2026 年“能力设计”行中的“能力 Owner 统一提供”和“各组目标一致”两个模块，其余内容保持不变。
+
+变更结果：
+- 能力 Owner 模块改为图文流程：Owner -> 统一设计五类评估维度能力 -> 统一分发至各涉域科组。
+- 目标模块改为双场景图：“目标：试点”和“目标：全面落地”；用项目覆盖块区分部分项目与所有项目，同时显示各科组统一目标 3.0。
+- 六大领域模块保留，并补充“同域统一口径”。
+- v8 文件 SHA-256 保持 b3d6bea5855ae7e6a8295dd1b36b8109c0374d91be24459eddd653c790f05aa4。
+
+Chrome 验证：
+- 1600 x 900：overflow=0，outOfBounds=0，overlaps=0，externalResources=0，titleLines=1。
+- 390 x 844：overflow=0，outOfBounds=0，overlaps=0，externalResources=0，titleLines=1。
+- 25/26 内容宽度比保持 0.72；六领域、三类角色、四个管理示例视角和既有文案均保留。
+- 新文案与流程检查通过；旧“能力 Owner 统一提供”“各组目标一致”卡片文字已移除。
+- 1600 x 900 预览已按原始分辨率人工检查，无文字截断、对象遮挡或图表错位。
+
+SHA-256：
+- HTML v9: 9e89a4ec21a4217a93d3e7693dc0ea9a8c40c4541843b6ef703d0d7cba73f9f9
+- desktop preview: 804fe7eb0a18dcc2a52906d3ba48092d5ccec13bdd4090f3dd275bd6deb9dfb7
+- mobile preview: 6943c8a1967e6596bcbf1a34b00eb04cc87b28ee5d801e427613efeedd66befe
+
+边界：
+- v1-v8 与历史 Demo 均未覆盖。
+- V2.0.14 源码与业务库未修改。
+- PPTX 继续暂停生成。
