@@ -1,0 +1,21 @@
+Task #21 temporary style-selection demo verification
+Date: 2026-09-03
+
+Scope
+- Formal HTML v1-v5 unchanged.
+- Temporary page contains three annual-target-set alternatives and three department-chart alternatives.
+- Pending items 1, 2, and 5 are recorded but intentionally not implemented.
+
+Chrome checks
+- Desktop viewport: 1600 x 1200
+- Mobile viewport: 390 x 844
+- Option cards: 6
+- Checked container overflow: 0 on desktop and mobile
+- External resources: 0
+- Selection interaction: goal B and department C stored and recovered from localStorage
+- Desktop and mobile screenshots visually inspected
+
+SHA-256
+- HTML: 831a211592fa5f0c24f8c3fcbd95861d266d0b965ab9dcd78027da7073336752
+- Desktop preview: 7b974470b78efeaef1b8f3873530d916c2b73dc8fab1573fcb878d673624b921
+- Mobile preview: 71267c09d52154bb1f8b76ba2c55237dcb83df235fc68afade29f324f5d799df

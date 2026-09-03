@@ -1,0 +1,12 @@
+Task #21 pending requirements recorded on 2026-09-03
+
+Not implemented in the temporary style-selection demo:
+1. Redesign the 2025 monitoring operation and value realization presentation using the 2026 visual language.
+2. Make explicit that, within each of the six domains, every participating team has the same target.
+5. Promote the Special Program Value section from the lower-right corner because it is the most important part of the slide.
+
+Implemented only for visual selection:
+3. Three alternatives for the complete annual capability target set, plus expanded diagnostic/comparison/guidance explanations.
+4. Three horizontal department-score bar-chart alternatives with target 3.0 and department average 2.68 reference markers, plus revised resource-review wording.
+
+Formal HTML v1-v5 remain unchanged. The selected alternatives will be incorporated into a new numbered version.
