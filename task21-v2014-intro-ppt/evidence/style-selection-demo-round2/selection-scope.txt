@@ -13,9 +13,10 @@ Round 2 choices:
 - Three-stage figure C: decision canvas.
 
 Fixed example data:
-- Team scores: 3.20, 2.72, 2.12.
-- Department average: 2.68.
+- Department scores: 3.20, 2.72, 2.12.
+- All-department average: 2.68.
 - Annual target: 3.0.
 - Diagnostic example: automation capability current 2.4, gap -0.6.
+- Comparison examples cover team, department, and business levels.
 
 Formal HTML v1-v5 and the first temporary selection page remain unchanged.

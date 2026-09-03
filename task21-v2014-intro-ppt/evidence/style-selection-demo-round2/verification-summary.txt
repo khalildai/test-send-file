@@ -5,7 +5,8 @@ Scope
 - Formal HTML v1-v5 unchanged.
 - Round 1 temporary selection page unchanged.
 - Annual target set option A recorded as selected, but not merged into a formal version yet.
-- Three department vertical-column alternatives and three complete diagnostic/comparison/guidance figure alternatives included.
+- Three vertical-column alternatives with departments on the x-axis and score on the y-axis, plus three complete diagnostic/comparison/guidance figure alternatives.
+- Comparison evidence covers team, department, and business levels.
 
 Chrome checks
 - Desktop viewport: 1600 x 2000
@@ -17,6 +18,6 @@ Chrome checks
 - Desktop and mobile screenshots visually inspected
 
 SHA-256
-- HTML: ea51b8e8cc71bfdabcaf7c79e08b1a10c7beb521f3f73128f6b15acf556eb8c1
-- Desktop preview: c527d4fbf2f3b16b5165b1ce40d849af44eff0628b3559b1a977ab0d3eac089a
-- Mobile preview: 82aa6f906736c41c6159d7d131c1fc31e8d350cd82ae9e7758956d6106deb8af
+- HTML: b12f111e86f30358ca6a7772414af9a4a6e891fc70a92b50ac0231bab17d966d
+- Desktop preview: 2a310861de0eed388bfc00fd7bb4007e2768e51c2758655d6d384de7d4222e6d
+- Mobile preview: baa13934b731812e75c73d4a69b3cf62728a20cc739769f8f76ab607aee9373a
