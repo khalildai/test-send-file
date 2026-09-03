@@ -1,0 +1,24 @@
+Task: task #21 V2.0.14 introduction slide HTML preview v1
+Verified: 2026-09-03 Asia/Singapore
+
+Output
+- HTML: html/测试能力成熟度2025-2026演进-单页PPT预览-v1.html
+- HTML SHA-256: 302fc05d9962b85f21b810e6ff531254aec03b44da68bf5b49fa76d536c061af
+- Preview: evidence/preview-1600x900.png
+- Preview SHA-256: a2e423757123b6cfd4bdf915f80a0b9d2e242b44eb584ba362e7ebb166d7cba7
+
+Checks
+- Standalone file:// HTML with no external resource or network dependency.
+- Fixed 1600 x 900 (16:9) presentation canvas, scaled proportionally to the browser window.
+- Real Chrome render at 1600 x 900 completed.
+- Programmatic layout verification: overflow=0, outOfBounds=0, overlaps=0, titleLines=1.
+- Visual inspection: all requested sections visible; no clipped or overlapping text, arrows, tables, or labels.
+- V2.0.14 source and database were not modified.
+
+Content coverage
+- 2025 -> 2026 evolution headline.
+- Three improvement paths: 分领域 / 建标准 / 强引导.
+- 2025 pain points, 2026 methods, and corresponding special-program work.
+- Six test-capability domains and V2.0.14 weighted score formula.
+- Role value for team/department, capability Owner, and managers.
+- Three 2026 follow-up operating actions and timing.
