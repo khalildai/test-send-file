@@ -1,0 +1,22 @@
+Task #21 temporary style selection, round 2 verification
+Date: 2026-09-03
+
+Scope
+- Formal HTML v1-v5 unchanged.
+- Round 1 temporary selection page unchanged.
+- Annual target set option A recorded as selected, but not merged into a formal version yet.
+- Three department vertical-column alternatives and three complete diagnostic/comparison/guidance figure alternatives included.
+
+Chrome checks
+- Desktop viewport: 1600 x 2000
+- Mobile viewport: 390 x 844
+- Option cards: 6
+- Checked container overflow: 0 on desktop and mobile
+- External resources: 0
+- Selection interaction: department B and three-stage C stored and recovered from localStorage
+- Desktop and mobile screenshots visually inspected
+
+SHA-256
+- HTML: ea51b8e8cc71bfdabcaf7c79e08b1a10c7beb521f3f73128f6b15acf556eb8c1
+- Desktop preview: c527d4fbf2f3b16b5165b1ce40d849af44eff0628b3559b1a977ab0d3eac089a
+- Mobile preview: 82aa6f906736c41c6159d7d131c1fc31e8d350cd82ae9e7758956d6106deb8af

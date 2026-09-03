@@ -1,0 +1,21 @@
+Task #21 temporary style selection, round 2
+Date: 2026-09-03
+
+Locked from round 1:
+- Complete annual capability target set: option A, progressive capability steps.
+
+Round 2 choices:
+- Department chart A: standard vertical columns.
+- Department chart B: lightweight narrow columns.
+- Department chart C: threshold-zone columns.
+- Three-stage figure A: evidence chain.
+- Three-stage figure B: management swimlanes.
+- Three-stage figure C: decision canvas.
+
+Fixed example data:
+- Team scores: 3.20, 2.72, 2.12.
+- Department average: 2.68.
+- Annual target: 3.0.
+- Diagnostic example: automation capability current 2.4, gap -0.6.
+
+Formal HTML v1-v5 and the first temporary selection page remain unchanged.
