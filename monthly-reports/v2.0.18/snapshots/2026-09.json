@@ -1,0 +1,384 @@
+{
+  "period": "2026-09",
+  "generated_at": "2026-09-04 16:33:19",
+  "db_path": "E:\\Raft\\.slock\\agents\\f52b15b9-3681-42d4-83b9-6d7008511440\\clean-test\\Demo\\data\\maturity.db",
+  "db_sha256": "23a1cb88010e7166b225e544991b515af704d8b29a63fdb1eb8eb91cfa703a3e",
+  "n_items": 18,
+  "n_done": 7,
+  "attain_rate": 38.88888888888889,
+  "center_score": 0.6,
+  "domains": [
+    {
+      "name": "软件",
+      "score": 0.75,
+      "rate": 50.0,
+      "n": 4
+    },
+    {
+      "name": "硬件",
+      "score": 0.5,
+      "rate": 50.0,
+      "n": 4
+    },
+    {
+      "name": "机械",
+      "score": 0.3333333333333333,
+      "rate": 33.33333333333333,
+      "n": 3
+    },
+    {
+      "name": "EMC",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 2
+    },
+    {
+      "name": "合规",
+      "score": 2.0,
+      "rate": 50.0,
+      "n": 2
+    },
+    {
+      "name": "环境可靠性",
+      "score": 0.5,
+      "rate": 33.33333333333333,
+      "n": 3
+    }
+  ],
+  "teams": [
+    {
+      "name": "iFA软件测试组",
+      "score": 2.0,
+      "rate": 100.0,
+      "n": 1
+    },
+    {
+      "name": "安规",
+      "score": 2.0,
+      "rate": 50.0,
+      "n": 2
+    },
+    {
+      "name": "MCS测试组",
+      "score": 1.0,
+      "rate": 100.0,
+      "n": 1
+    },
+    {
+      "name": "变频硬件测试",
+      "score": 1.0,
+      "rate": 100.0,
+      "n": 1
+    },
+    {
+      "name": "大储测试组",
+      "score": 1.0,
+      "rate": 100.0,
+      "n": 1
+    },
+    {
+      "name": "控制制动硬件组",
+      "score": 1.0,
+      "rate": 100.0,
+      "n": 1
+    },
+    {
+      "name": "高速流体测试组",
+      "score": 1.0,
+      "rate": 100.0,
+      "n": 1
+    },
+    {
+      "name": "EMC测试组",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 2
+    },
+    {
+      "name": "OS测试组",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 1
+    },
+    {
+      "name": "伺服硬件测试组",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 1
+    },
+    {
+      "name": "减速机测试组",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 1
+    },
+    {
+      "name": "可靠性",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 2
+    },
+    {
+      "name": "机器人平台软件测试组",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 1
+    },
+    {
+      "name": "电机测试组",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 1
+    },
+    {
+      "name": "电梯整机测试组",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 1
+    },
+    {
+      "name": "CNC测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "HMI&PAC产品测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "IO产品测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "IO测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "PLC测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "中大PLC产品测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "中小PLC产品测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "人形机器人测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "传动解决方案测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "传感器测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "伺服测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "六关节测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "变频器测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "变频驱动测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "四关节测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "大型传动",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "工业电源测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "工商及解决方案测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "工艺及解决方案测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "整机硬件测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "智能机械硬件组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "电柜及整机性能测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "组串测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "视觉测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "通信系统测试组（网络产品）",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "集成流体测试组",
+      "score": null,
+      "rate": null,
+      "n": 0
+    }
+  ],
+  "departments": [
+    {
+      "name": "α实验室与控制测试部",
+      "score": 1.0,
+      "rate": 50.0,
+      "n": 2
+    },
+    {
+      "name": "产品合规与准入部",
+      "score": 1.0,
+      "rate": 25.0,
+      "n": 4
+    },
+    {
+      "name": "能源产品测试部",
+      "score": 1.0,
+      "rate": 100.0,
+      "n": 1
+    },
+    {
+      "name": "驱动产品测试部",
+      "score": 1.0,
+      "rate": 100.0,
+      "n": 1
+    },
+    {
+      "name": "硬件与EMC测试部",
+      "score": 0.5,
+      "rate": 40.0,
+      "n": 5
+    },
+    {
+      "name": "机电传动产品测试部",
+      "score": 0.3333333333333333,
+      "rate": 33.33333333333333,
+      "n": 3
+    },
+    {
+      "name": "智能机器人产品测试部",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 1
+    },
+    {
+      "name": "电梯产品测试部",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 1
+    },
+    {
+      "name": "控制测试部",
+      "score": null,
+      "rate": null,
+      "n": 0
+    },
+    {
+      "name": "驱动测试部",
+      "score": null,
+      "rate": null,
+      "n": 0
+    }
+  ],
+  "businesses": [
+    {
+      "name": "控制产品",
+      "score": 1.0,
+      "rate": 66.66666666666666,
+      "n": 3
+    },
+    {
+      "name": "新能源产品",
+      "score": 1.0,
+      "rate": 100.0,
+      "n": 1
+    },
+    {
+      "name": "伺服产品",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 3
+    },
+    {
+      "name": "机器人产品",
+      "score": 0.0,
+      "rate": 0.0,
+      "n": 1
+    }
+  ]
+}
