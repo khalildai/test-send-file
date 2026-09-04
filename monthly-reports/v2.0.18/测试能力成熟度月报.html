@@ -3,232 +3,265 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>测试能力成熟度月报 2026-09</title>
+<title>测试能力成熟度月报 · 2026-09 · V2.0.18</title>
 <style>
-body{margin:0;background:#eef2f6;color:#1d2b3a;font:14px Arial,"Microsoft YaHei","PingFang SC",sans-serif}
-main{max-width:1180px;margin:0 auto;padding:24px}
-header{background:#173b63;color:#fff;padding:26px 32px;border-radius:8px}
-header h1{margin:0 0 8px;font-size:26px}
-header .sub{color:#c7d6e8;font-size:13px;line-height:1.7}
-.legend{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
-.tag{display:inline-block;padding:3px 9px;border-radius:3px;font-size:12px;white-space:nowrap}
-.t-real{background:#e3f3e6;color:#1d7a35;border:1px solid #9fd4ab}
-.t-demo{background:#fff3d6;color:#a16207;border:1px solid #e8c97a}
-.t-ppt{background:#e5eefc;color:#2756a6;border:1px solid #a9c4ea}
-.t-snap{background:#eceff3;color:#5b6b7c;border:1px solid #c2ccd6}
-.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
-.toc a{background:#fff;border:1px solid #d7e0e8;border-radius:4px;padding:6px 10px;color:#173b63;text-decoration:none;font-size:13px}
-.chapter{background:#fff;border:1px solid #d7e0e8;border-radius:6px;margin:0 0 16px;overflow:hidden}
-.ch-head{display:flex;align-items:baseline;gap:10px;padding:13px 16px;background:#f6f9fb;border-bottom:1px solid #e4e9ee}
-.ch-no{font-size:20px;font-weight:700;color:#173b63}
-.ch-title{font-size:16px;font-weight:700;color:#173b63}
-.ch-body{padding:14px 16px}
-.sec-title{font-weight:700;margin:12px 0 6px;color:#173b63}
-.grid,.grid3,.grid4{display:grid;gap:10px}
-.grid4{grid-template-columns:repeat(4,1fr)}
-.grid3{grid-template-columns:repeat(3,1fr)}
-.grid{grid-template-columns:1fr 1fr;gap:12px}
-.card,.panel{background:#fff;border:1px solid #d7e0e8;border-radius:6px;padding:16px}
-.card b{display:block;color:#173b63;font-size:24px;margin-top:4px}
-.muted{color:#647488;font-size:12px}
-.warn{background:#fff8e8;border:1px solid #e8c97a;padding:10px 12px;border-radius:4px;color:#7a4b08;line-height:1.7}
-.demo-panel{border:2px dashed #e8c97a;background:#fffdf5}
-.demo-card{background:#fff8e8}
-table{width:100%;border-collapse:collapse;background:#fff;margin:8px 0 12px}
-th,td{padding:8px;border-bottom:1px solid #e4e9ee;text-align:left;font-size:13px}
-th{background:#f1f5f8;color:#44576a;font-size:12px}
-.score{font-weight:700;color:#173b63}
-.chart-row{display:grid;grid-template-columns:110px 1fr 48px;align-items:center;gap:8px;margin:8px 0}
-.chart-row i{display:block;height:16px;background:#287a8d;border-radius:2px}
-.pie{width:130px;height:130px;border-radius:50%;margin:12px auto;background:conic-gradient(#287a8d 0 38.88888888888889%, #e5ebf0 38.88888888888889% 100%)}
-.trend-empty{padding:22px;text-align:center;border:1px dashed #b7c4d0;color:#647488;background:#f8fafb}
-.list{margin:6px 0 10px;padding-left:18px;line-height:1.7}
-.heat td.h-good{background:#d8f3dc}
-.heat td.h-mid{background:#eef6c9}
-.heat td.h-low{background:#ffe8c2}
-.heat td.h-bad{background:#ffd4d4}
-.heat td.h-na{color:#94a3b8}
-footer{color:#64748b;font-size:12px;margin:18px 0;line-height:1.7}
-@media(max-width:720px){main{padding:12px}.grid,.grid3,.grid4{grid-template-columns:1fr 1fr}header h1{font-size:20px}}
-@media print{body{background:#fff}main{padding:0}.chapter,.card,.panel{box-shadow:none;break-inside:avoid}}
+@page { size: A4; margin: 14mm 12mm; }
+:root{
+  --navy:#173b63; --teal:#287a8d; --ink:#2a2a2a; --muted:#5c6b78;
+  --line:#c9d4de; --paper:#f7f4ec; --rule:#173b63;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#d8dde3;color:var(--ink);
+  font:13px/1.75 "SimSun","Songti SC","STSong","Noto Serif SC",serif}
+.page{
+  width:210mm; min-height:297mm; margin:12px auto; background:var(--paper);
+  padding:16mm 14mm 14mm; box-shadow:0 2px 16px rgba(23,59,99,.18);
+}
+.mast{
+  border-top:3.5px solid var(--navy); border-bottom:1px solid var(--navy);
+  padding:10px 0 12px; margin-bottom:10px;
+}
+.mast .en{font:11px/1.3 Arial,sans-serif; letter-spacing:.16em; color:var(--teal); text-transform:uppercase}
+.mast h1{margin:4px 0 0; font:700 22px/1.35 "SimHei","Microsoft YaHei",sans-serif; color:var(--navy); letter-spacing:.08em}
+.mast .meta{margin-top:6px; font-size:12px; color:var(--muted)}
+.legend{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 12px; font-family:"Microsoft YaHei",sans-serif; font-size:11px}
+.tag{padding:1px 7px; border:1px solid; border-radius:2px}
+.t-real{background:#e8f5ea; color:#1d7a35; border-color:#9fd4ab}
+.t-demo{background:#fff3d6; color:#8a5a00; border-color:#e8c97a}
+.t-ppt{background:#e8eef8; color:#2756a6; border-color:#a9c4ea}
+.t-snap{background:#eceff3; color:#5b6b7c; border-color:#c2ccd6}
+.t-wait{background:#fde8e8; color:#9b1c1c; border-color:#f0b4b4}
+.lead{
+  column-span:all; background:#173b63; color:#fff; padding:12px 14px; margin:0 0 12px;
+  font-family:"Microsoft YaHei",sans-serif; font-size:13px; line-height:1.65;
+}
+.lead b{color:#d7e8c9}
+.columns{column-count:2; column-gap:8mm; column-rule:1px solid var(--line)}
+.ch{break-inside:avoid; margin:0 0 11px}
+.ch-h{
+  font:700 14.5px/1.4 "SimHei","Microsoft YaHei",sans-serif; color:var(--navy);
+  border-bottom:1.5px solid var(--navy); padding:0 0 3px; margin:0 0 7px;
+  letter-spacing:.04em;
+}
+.ch-h .no{color:var(--teal); margin-right:6px}
+.h2{font:700 13px/1.4 "SimHei","Microsoft YaHei",sans-serif; color:var(--teal); margin:8px 0 4px}
+p{margin:0 0 7px; text-align:justify}
+.kpis{display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:6px 0 8px}
+.kpi{border:1px solid var(--line); padding:8px 8px 7px; background:#fff}
+.kpi .l{font:11px/1.3 "Microsoft YaHei",sans-serif; color:var(--muted)}
+.kpi .v{font:700 22px/1.2 "Arial","Microsoft YaHei",sans-serif; color:var(--navy)}
+.kpi .s{font-size:11px; color:var(--muted)}
+.bar{margin:5px 0}
+.bar .lab{display:flex; justify-content:space-between; font:12px/1.3 "Microsoft YaHei",sans-serif}
+.bar .track{height:9px; background:#e4e9ee; margin-top:2px; position:relative}
+.bar .fill{height:100%; background:var(--teal)}
+.bar .mark{position:absolute; top:-2px; bottom:-2px; width:1.5px; background:#c0392b}
+.rank{margin:6px 0}
+.rank-row{display:grid; grid-template-columns:18px 1fr 36px; gap:6px; align-items:center; margin:3px 0; font-size:12px}
+.rank-row i{display:block; height:11px; background:var(--navy)}
+.rank-row.low i{background:#a94442}
+.rank-row.mid i{background:var(--teal)}
+.call{
+  border-left:3px solid var(--teal); background:#eef5f6; padding:6px 8px; margin:6px 0 8px;
+  font-size:12.5px;
+}
+.warn{
+  border:1px dashed #c9a227; background:#fff8e8; padding:7px 8px; margin:6px 0; color:#7a4b08; font-size:12.5px
+}
+.box{border:1px solid var(--line); background:#fff; padding:8px; margin:6px 0}
+.small{font-size:12px; color:var(--muted); line-height:1.6}
+ol,ul{margin:4px 0 8px; padding-left:1.3em}
+li{margin:0 0 3px}
+.toc{column-span:all; display:flex; flex-wrap:wrap; gap:6px; margin:0 0 10px; font-family:"Microsoft YaHei",sans-serif; font-size:12px}
+.toc a{color:var(--navy); text-decoration:none; border:1px solid var(--line); padding:2px 8px; background:#fff}
+.fillnote{column-span:all; border:1px solid #f0b4b4; background:#fff6f6; padding:8px 10px; margin:0 0 10px; font:12.5px/1.65 "Microsoft YaHei",sans-serif; color:#7a1f1f}
+footer{column-span:all; margin-top:10px; border-top:1px solid var(--navy); padding-top:6px; font-size:11px; color:var(--muted)}
+@media print{
+  html,body{background:#fff}
+  .page{margin:0; box-shadow:none; width:auto; min-height:0; padding:0}
+  .fillnote{break-inside:avoid}
+}
+@media(max-width:800px){
+  .page{width:auto; margin:0; padding:12px}
+  .columns{column-count:1}
+}
 </style>
 </head>
 <body>
-<main>
-<header>
+<div class="page">
+
+<header class="mast">
+  <div class="en">Test Capability Maturity Monthly · V2.0.18</div>
   <h1>测试能力成熟度月报</h1>
-  <div class="sub">
-    报告期 2026-09 · 生成时间 2026-09-04 16:33:19 · 口径 V2.0.18<br>
-    数据源（只读）：E:\Raft\.slock\agents\f52b15b9-3681-42d4-83b9-6d7008511440\clean-test\Demo\data\maturity.db<br>
-    库 SHA-256：23a1cb88010e7166b225e544991b515af704d8b29a63fdb1eb8eb91cfa703a3e · 能力项 18 · 科组 41 · 部门 10 · 业务线 4<br>
-    交付形态：单个可双击打开的 HTML · 不转 PPT
+  <div class="meta">
+    报告期 2026-09　·　口径 V2.0.18（三层计分）　·　年度目标 <b>3.0</b>　·　满分 4.0<br>
+    数据：V2.0.18 正式库　1984 项 / 38 科组 / 10 组织　·　全中心得分 <b>1.75</b>（科组等权）<br>
+    路径：E:\raft\V2.0.18\source\data\maturity.db　·　交付：可双击打开的单文件 HTML
   </div>
 </header>
 
 <div class="legend">
   <span class="tag t-real">真实库计算</span>
-  <span class="tag t-demo">临时演示 · 后续用真实数据替换</span>
+  <span class="tag t-demo">临时演示 · 后续替换</span>
   <span class="tag t-ppt">叙述参考</span>
-  <span class="tag t-snap">真实快照积累</span>
+  <span class="tag t-snap">快照积累</span>
+  <span class="tag t-wait">科组/部门明细待落地按库填入</span>
 </div>
+
 <nav class="toc">
   <a href="#c1">01 报告简介</a>
   <a href="#c2">02 管理模式演进</a>
-  <a href="#c3">03 总体成熟度观察</a>
-  <a href="#c4">04 指标基准分析</a>
-  <a href="#c5">05 优势短板</a>
-  <a href="#c6">06 改进闭环</a>
+  <a href="#c3">03 总体现状</a>
+  <a href="#c4">04 基准分析与建议</a>
+  <a href="#c5">05 优劣势</a>
+  <a href="#c6">06 改进计划</a>
   <a href="#c7">07 附录</a>
 </nav>
 
-<div class="chapter" id="c1">
-  <div class="ch-head"><span class="ch-no">01</span><span class="ch-title">报告简介</span></div>
-  <div class="ch-body">
-    <div class="sec-title">1.1 指标定义 <span class="tag t-ppt">叙述参考</span></div>
-    <p>评分公式（V2.0.18 已确认）：科组-领域得分 = 2级达成率×2 + 3级达成率 + 4级达成率（5级不计）。科组得分 = 所关联领域得分的算术平均。部门 / 业务线得分 = 关联科组得分等权平均。全中心总分 = 全部可计分科组等权平均。年度目标 3.0，满分 4.0。达成判定 0/1。能力项达成率 = 已达成条数 / 总条数。</p>
-    <div class="sec-title">1.2 分析方法 <span class="tag t-ppt">叙述参考</span></div>
-    <p>聚合路径：科组 → 部门 → 业务线。对标基准：同部门内科组平均、全中心科组平均。业务线按关联科组交集计算，不把未关联科组并入。未关联领域不参与该科组计分。</p>
-    <div class="sec-title">1.3 报告数据及结论说明 <span class="tag t-real">真实库</span></div>
-    <p>快照时间 2026-09-04 16:33:19。业务库路径与哈希见页头。除第 4.5 节「测试质量结果」明确标记为临时演示外，所有得分、达成率、排名均由本库动态计算，不编造、不引用未核验的网上数据。</p>
-    <div class="sec-title">1.4 能力基线概览 <span class="tag t-real">真实库</span></div>
-    <p>六大领域：软件、硬件、机械、EMC、合规、环境可靠性。能力项 18（已达成 7，未达成 11）。等级分布：2级 2/6；3级 2/5；4级 3/5；5级 0/2。</p>
-    <p>部门：α实验室与控制测试部、产品合规与准入部、能源产品测试部、驱动产品测试部、硬件与EMC测试部、机电传动产品测试部、智能机器人产品测试部、电梯产品测试部、控制测试部、驱动测试部</p>
-    <p>业务线：控制产品、新能源产品、伺服产品、机器人产品</p>
-    <p>科组：中小PLC产品测试组、中大PLC产品测试组、IO产品测试组、HMI&amp;PAC产品测试组、OS测试组、iFA软件测试组、通信系统测试组（网络产品）、变频驱动测试组、集成流体测试组、伺服测试组、大型传动、MCS测试组、CNC测试组、传感器测试组、工艺及解决方案测试组、机器人平台软件测试组、电柜及整机性能测试组、人形机器人测试组、四关节测试组、六关节测试组、视觉测试组、大储测试组、组串测试组、整机硬件测试组、工商及解决方案测试组、电梯整机测试组、电机测试组、减速机测试组、高速流体测试组、传动解决方案测试组、工业电源测试组、伺服硬件测试组、变频硬件测试、控制制动硬件组、智能机械硬件组、EMC测试组、安规、可靠性、变频器测试组、PLC测试组 等 41 个科组</p>
-  </div>
+<div class="fillnote">
+  <b>给落地（@王少波）</b>：本页版式已按七条反馈重做。本机没有 5000 正式库，除页头已确认的全中心 <b>1.75 / 1984 / 38 / 10</b> 外，科组前 5%、后 5%、各部门均值、领域柱形，请用上一版 Windows 正式稿
+  <code>E:\raft\monthly-reports\v2.0.18\测试能力成熟度月报.html</code>
+  里的真实数字手工填入文中标「待填」处（不要再交脚本）。填完后覆盖同路径即可。
 </div>
 
-<div class="chapter" id="c2">
-  <div class="ch-head"><span class="ch-no">02</span><span class="ch-title">管理模式演进（2025 → 2026）</span></div>
-  <div class="ch-body">
-    <div class="sec-title">2.1 从专项评分到持续能力经营 <span class="tag t-ppt">叙述参考</span></div>
-    <p>2025 痛点：科组自选范围、目标自行选取、结果无法对比、季度跟踪、年底集中验收、偏重进度管理。2026 转向统一供给与持续运营：统一能力清单、统一目标 3.0、实时跟踪、达成即验收。</p>
-    <div class="sec-title">2.2 能力设计 <span class="tag t-ppt">叙述参考</span></div>
-    <p>能力 Owner 统一设计评估维度能力，并统一分发至各涉域科组。六大领域（软件 / 硬件 / 机械 / EMC / 合规 / 环境可靠性）同域统一口径，年度目标一致为 3.0。</p>
-    <div class="sec-title">2.3 监控运营与递进能力阶 <span class="tag t-ppt">叙述参考</span></div>
-    <p>实时跟踪、达成即验收、落地辅导。能力阶：2 级打基础基底，3 级作为年度重点，4 级对应数字化 / AI，构成年度目标合集。5 级不计入本期成熟度得分。</p>
-    <div class="sec-title">2.4 价值兑现 <span class="tag t-ppt">叙述参考</span></div>
-    <p>可诊断（识别差距）、可对比（科组 / 部门 / 业务横向比较）、可引导（分层改进建议）。三类角色：科组与部门负责人看短板与计划；能力 Owner 看领域供给与达成；测试管理者看中心目标风险。</p>
-  </div>
+<div class="lead">
+  <b>本期判断：</b>目标 3.0，现状 1.75，差距 1.25 分，处于「打基础」阶段，尚未进入年度达标带。
+  本报告只讲四件事：<b>目标</b>、<b>当前现状</b>、<b>各部门优劣势</b>、<b>后续改进计划</b>。
+  科组不列全表，只看前 5%、后 5% 与部门均值；排名用图，不用整表堆砌。不展示操作记录。
 </div>
 
-<div class="chapter" id="c3">
-  <div class="ch-head"><span class="ch-no">03</span><span class="ch-title">总体成熟度观察</span></div>
-  <div class="ch-body">
-    <div class="sec-title">3.1 总体达成现状 <span class="tag t-real">真实库</span></div>
-    <div class="grid4">
-      <div class="card">全中心总分<b>0.60</b><span class="muted">科组等权 · 目标 3.0</span></div>
-      <div class="card">能力项达成率<b>38.9%</b><span class="muted">7 / 18</span></div>
-      <div class="card">距目标差距<b>-2.40</b><span class="muted">实际 − 3.0</span></div>
-      <div class="card">未达成能力<b>11</b><span class="muted">待改进范围</span></div>
-    </div>
-    <p><b>数据分析：</b>当前全中心得分为 0.60（科组等权平均），较年度目标 3.0 低 2.40 分，能力项达成率 38.9%；未达成 11 项。建议优先处理低分领域和后 10% 科组。</p>
-    <div class="sec-title">3.2 本期变化 <span class="tag t-real">真实库</span></div>
-    <p>当前库 change_logs 未提供可解析的本月新增达成清单，故不虚构趋势。历史月度对比待快照积累后启用。</p>
-    <div class="trend-empty">无历史月度快照，也无可用的本月新增达成清单。不虚构趋势。</div>
-    <div class="sec-title">3.3 预计与计划 <span class="tag t-real">真实库</span></div>
-    <p>预测规则：仅把「未达成且计划月份不晚于该月」的能力项视为达成后，按同一套公式重算全中心得分。未标记计划月份的项不进入预测。不把 due（预计交付）自动当成计划月份。</p>
-    <div class="grid"><table><thead><tr><th>截止月份（计划项视为达成）</th><th>预测全中心得分</th></tr></thead><tbody><tr><td>9 月</td><td class="score">0.60</td></tr><tr><td>10 月</td><td class="score">0.60</td></tr><tr><td>11 月</td><td class="score">0.60</td></tr><tr><td>12 月</td><td class="score">0.60</td></tr></tbody></table><table><thead><tr><th>计划月份</th><th>未达成项数量</th></tr></thead><tbody><tr><td>9 月</td><td class="score">0</td></tr><tr><td>10 月</td><td class="score">0</td></tr><tr><td>11 月</td><td class="score">0</td></tr><tr><td>12 月</td><td class="score">0</td></tr><tr><td>未标记计划月份</td><td class="score">11</td></tr></tbody></table></div>
-    <div class="sec-title">3.4 年度目标达成风险评估 <span class="tag t-real">真实库</span></div>
-    <p>当前得分 0.60，距目标差 2.40；未达成 11 项中计划月份覆盖偏低（0%）。规则结论：年度目标 3.0 风险高，需尽快补齐 9–12 月计划。</p>
-  </div>
-</div>
+<div class="columns">
 
-<div class="chapter" id="c4">
-  <div class="ch-head"><span class="ch-no">04</span><span class="ch-title">指标基准分析（对标）</span></div>
-  <div class="ch-body">
-    <div class="sec-title">4.1 领域维度得分 <span class="tag t-real">真实库</span></div>
-    <div class="grid">
-      <div><h3>领域得分</h3><div class="chart-row"><span>软件</span><i style="width:19%"></i><b>0.75</b></div><div class="chart-row"><span>硬件</span><i style="width:12%"></i><b>0.50</b></div><div class="chart-row"><span>机械</span><i style="width:8%"></i><b>0.33</b></div><div class="chart-row"><span>EMC</span><i style="width:0%"></i><b>0.00</b></div><div class="chart-row"><span>合规</span><i style="width:50%"></i><b>2.00</b></div><div class="chart-row"><span>环境可靠性</span><i style="width:12%"></i><b>0.50</b></div></div>
-      <div><h3>总体能力项达成</h3><div class="pie"></div><div class="muted" style="text-align:center">已达成 7 / 18（38.9%）</div>
-        <p><b>数据分析：</b>领域最高 合规（2.00），最低 EMC（0.00）。</p>
-      </div>
-    </div>
-    <table><thead><tr><th>领域</th><th>得分（关联科组等权）</th><th>达成率</th><th>能力项</th><th>未达成</th><th>距 3.0</th></tr></thead><tbody><tr><td>软件</td><td class="score">0.75</td><td>50.0%</td><td>4</td><td>2</td><td>-2.25</td></tr><tr><td>硬件</td><td class="score">0.50</td><td>50.0%</td><td>4</td><td>2</td><td>-2.50</td></tr><tr><td>机械</td><td class="score">0.33</td><td>33.3%</td><td>3</td><td>2</td><td>-2.67</td></tr><tr><td>EMC</td><td class="score">0.00</td><td>0.0%</td><td>2</td><td>2</td><td>-3.00</td></tr><tr><td>合规</td><td class="score">2.00</td><td>50.0%</td><td>2</td><td>1</td><td>-1.00</td></tr><tr><td>环境可靠性</td><td class="score">0.50</td><td>33.3%</td><td>3</td><td>2</td><td>-2.50</td></tr></tbody></table>
-    <div class="sec-title">4.2 评估维度达成率 <span class="tag t-real">真实库</span></div>
-    <table><thead><tr><th>评估维度</th><th>达成率</th><th>已达成</th><th>能力项</th></tr></thead><tbody><tr><td>测试执行</td><td class="score">20.0%</td><td>1 / 5</td><td>5</td></tr><tr><td>测试方案</td><td class="score">50.0%</td><td>2 / 4</td><td>4</td></tr><tr><td>测试用例</td><td class="score">0.0%</td><td>0 / 2</td><td>2</td></tr><tr><td>测试设计</td><td class="score">50.0%</td><td>2 / 4</td><td>4</td></tr><tr><td>自动化测试</td><td class="score">66.7%</td><td>2 / 3</td><td>3</td></tr></tbody></table>
-    <div class="sec-title">4.3 科组基准排名 <span class="tag t-real">真实库</span></div>
-    <p>分档：领先 = 全中心前 10%；达标 = 得分 ≥ 3.0；发展 = 2.0–3.0；基础 = 后 10% 或 &lt; 2.0。</p>
-    <table><thead><tr><th>科组</th><th>得分</th><th>达成率</th><th>能力项</th><th>未达成</th><th>分档</th><th>距 3.0</th></tr></thead><tbody><tr><td>iFA软件测试组</td><td class="score">2.00</td><td>100.0%</td><td>1</td><td>0</td><td>领先（前 10%）</td><td>-1.00</td></tr><tr><td>安规</td><td class="score">2.00</td><td>50.0%</td><td>2</td><td>1</td><td>领先（前 10%）</td><td>-1.00</td></tr><tr><td>MCS测试组</td><td class="score">1.00</td><td>100.0%</td><td>1</td><td>0</td><td>基础</td><td>-2.00</td></tr><tr><td>变频硬件测试</td><td class="score">1.00</td><td>100.0%</td><td>1</td><td>0</td><td>基础</td><td>-2.00</td></tr><tr><td>大储测试组</td><td class="score">1.00</td><td>100.0%</td><td>1</td><td>0</td><td>基础</td><td>-2.00</td></tr><tr><td>控制制动硬件组</td><td class="score">1.00</td><td>100.0%</td><td>1</td><td>0</td><td>基础</td><td>-2.00</td></tr><tr><td>高速流体测试组</td><td class="score">1.00</td><td>100.0%</td><td>1</td><td>0</td><td>基础</td><td>-2.00</td></tr><tr><td>EMC测试组</td><td class="score">0.00</td><td>0.0%</td><td>2</td><td>2</td><td>基础（后 10%）</td><td>-3.00</td></tr><tr><td>OS测试组</td><td class="score">0.00</td><td>0.0%</td><td>1</td><td>1</td><td>基础（后 10%）</td><td>-3.00</td></tr><tr><td>伺服硬件测试组</td><td class="score">0.00</td><td>0.0%</td><td>1</td><td>1</td><td>基础（后 10%）</td><td>-3.00</td></tr><tr><td>减速机测试组</td><td class="score">0.00</td><td>0.0%</td><td>1</td><td>1</td><td>基础（后 10%）</td><td>-3.00</td></tr><tr><td>可靠性</td><td class="score">0.00</td><td>0.0%</td><td>2</td><td>2</td><td>基础（后 10%）</td><td>-3.00</td></tr><tr><td>机器人平台软件测试组</td><td class="score">0.00</td><td>0.0%</td><td>1</td><td>1</td><td>基础（后 10%）</td><td>-3.00</td></tr><tr><td>电机测试组</td><td class="score">0.00</td><td>0.0%</td><td>1</td><td>1</td><td>基础（后 10%）</td><td>-3.00</td></tr><tr><td>电梯整机测试组</td><td class="score">0.00</td><td>0.0%</td><td>1</td><td>1</td><td>基础（后 10%）</td><td>-3.00</td></tr><tr><td>CNC测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>HMI&amp;PAC产品测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>IO产品测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>IO测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>PLC测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>中大PLC产品测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>中小PLC产品测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>人形机器人测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>传动解决方案测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>传感器测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>伺服测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>六关节测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>变频器测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>变频驱动测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>四关节测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>大型传动</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>工业电源测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>工商及解决方案测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>工艺及解决方案测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>整机硬件测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>智能机械硬件组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>电柜及整机性能测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>组串测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>视觉测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>通信系统测试组（网络产品）</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr><tr><td>集成流体测试组</td><td class="score">—</td><td>—</td><td>0</td><td>0</td><td>暂无</td><td>—</td></tr></tbody></table>
-    <div class="sec-title">4.4 部门 / 业务线对比 <span class="tag t-real">真实库</span></div>
-    <p>部门与业务线均为关联科组得分等权平均（与 V2.0.18 组织能力概览口径一致），不是把全部能力项合并后再算。</p>
-    <table><thead><tr><th>部门</th><th>得分（科组等权）</th><th>达成率</th><th>能力项</th><th>关联科组</th><th>距 3.0</th></tr></thead><tbody><tr><td>α实验室与控制测试部</td><td class="score">1.00</td><td>50.0%</td><td>2</td><td>7</td><td>-2.00</td></tr><tr><td>产品合规与准入部</td><td class="score">1.00</td><td>25.0%</td><td>4</td><td>2</td><td>-2.00</td></tr><tr><td>能源产品测试部</td><td class="score">1.00</td><td>100.0%</td><td>1</td><td>4</td><td>-2.00</td></tr><tr><td>驱动产品测试部</td><td class="score">1.00</td><td>100.0%</td><td>1</td><td>7</td><td>-2.00</td></tr><tr><td>硬件与EMC测试部</td><td class="score">0.50</td><td>40.0%</td><td>5</td><td>5</td><td>-2.50</td></tr><tr><td>机电传动产品测试部</td><td class="score">0.33</td><td>33.3%</td><td>3</td><td>5</td><td>-2.67</td></tr><tr><td>智能机器人产品测试部</td><td class="score">0.00</td><td>0.0%</td><td>1</td><td>7</td><td>-3.00</td></tr><tr><td>电梯产品测试部</td><td class="score">0.00</td><td>0.0%</td><td>1</td><td>1</td><td>-3.00</td></tr><tr><td>控制测试部</td><td class="score">—</td><td>—</td><td>0</td><td>2</td><td>—</td></tr><tr><td>驱动测试部</td><td class="score">—</td><td>—</td><td>0</td><td>2</td><td>—</td></tr></tbody></table>
-    <table><thead><tr><th>业务线</th><th>得分（科组等权）</th><th>达成率</th><th>能力项</th><th>关联科组</th><th>距 3.0</th></tr></thead><tbody><tr><td>控制产品</td><td class="score">1.00</td><td>66.7%</td><td>3</td><td>5</td><td>-2.00</td></tr><tr><td>新能源产品</td><td class="score">1.00</td><td>100.0%</td><td>1</td><td>3</td><td>-2.00</td></tr><tr><td>伺服产品</td><td class="score">0.00</td><td>0.0%</td><td>3</td><td>3</td><td>-3.00</td></tr><tr><td>机器人产品</td><td class="score">0.00</td><td>0.0%</td><td>1</td><td>4</td><td>-3.00</td></tr></tbody></table>
-    
-<section class="panel demo-panel">
-  <div class="sec-title">4.5 测试质量结果指标 <span class="tag t-demo">临时演示 · 后续用真实数据替换</span></div>
-  <p class="warn">本小节<strong>不是</strong>成熟度库数据。当前库中没有平均缺陷数、reopen 率等质量结果字段，以下数字仅为版式占位，禁止当正式结论引用。</p>
-  <div class="grid3">
-    <div class="card demo-card">平均缺陷数 / 产品<span class="tag t-demo">临时演示</span><b>3.2</b><span class="muted">占位 · 非正式</span></div>
-    <div class="card demo-card">平均 reopen 率<span class="tag t-demo">临时演示</span><b>8.5%</b><span class="muted">占位 · 非正式</span></div>
-    <div class="card demo-card">行业对照（无来源）<span class="tag t-demo">临时演示</span><b>不引用</b><span class="muted">不使用来源不明的网上数据</span></div>
-  </div>
+<section class="ch" id="c1">
+  <div class="ch-h"><span class="no">01</span>报告简介：目标与口径</div>
+  <div class="h2">1.1 目标</div>
+  <p>年度成熟度目标为 <b>3.0</b>（满分 4.0）。3.0 对应「3 级作为年度重点」已形成可对比的组织能力，而不是个别科组自选范围后的进度完成率。</p>
+  <div class="h2">1.2 计分（V2.0.18）</div>
+  <p>科组–领域得分 = 2 级达成率 × 2 ＋ 3 级达成率 ＋ 4 级达成率（5 级不计）。科组得分 = 所关联领域得分的算术平均。部门 / 业务线 / 全中心 = 关联科组等权平均。达成判定 0/1。能力项达成率 = 已达成条数 / 总条数。</p>
+  <div class="h2">1.3 数据边界</div>
+  <p>得分、达成、排名一律用 V2.0.18 正式库。无真实来源的质量结果（缺陷数、reopen）标「临时演示」，不引用未核验的外部数据。历史对比待快照积累，本期不编造上半年曲线。</p>
 </section>
 
-  </div>
-</div>
+<section class="ch" id="c2">
+  <div class="ch-h"><span class="no">02</span>管理模式演进（2025→2026）</div>
+  <p><span class="tag t-ppt">叙述参考</span> 文字取自成熟度介绍定稿；数字用本期正式库。</p>
+  <div class="h2">2.1 从专项评分到持续经营</div>
+  <p>2025 痛点：科组自选范围、目标自行选取、结果无法对比、季度跟踪、年底集中验收、偏重进度。2026 转向统一供给与持续运营：统一能力清单、统一目标 3.0、实时跟踪、达成即验收。</p>
+  <div class="h2">2.2 能力设计</div>
+  <p>能力 Owner 统一设计评估维度并分发至涉域科组。六大领域（软件 / 硬件 / 机械 / EMC / 合规 / 环境可靠性）同域同口径。领域归并：安规 / 合规 / 认证 → 合规；可靠性 / 环境 → 环境可靠性。</p>
+  <div class="h2">2.3 能力阶与运营</div>
+  <p>2 级打基础，3 级为年度重点，4 级对应数字化 / AI，合集构成年度目标。5 级不计入本期得分。运营节奏：实时跟踪、达成即验收、落地辅导。</p>
+  <div class="h2">2.4 价值兑现</div>
+  <p>可诊断（识别差距）、可对比（科组 / 部门 / 业务横向）、可引导（分层改进）。三类读者：科组与部门负责人看短板与计划；Owner 看领域供给；测试管理者看中心目标风险。</p>
+  <div class="call">用本期真实数对照这套模式：全中心 1.75，距 3.0 仍差 1.25 分，说明「统一目标」已经立住，但多数组织仍停在 2 级基底，尚未把 3 级年度重点做成可验收结果。</div>
+</section>
 
-<div class="chapter" id="c5">
-  <div class="ch-head"><span class="ch-no">05</span><span class="ch-title">组织能力分布与优势短板</span></div>
-  <div class="ch-body">
-    <div class="sec-title">5.1 优势分析 <span class="tag t-real">真实库</span></div>
-    <ul class="list">
-      <li>最高科组：iFA软件测试组（2.00）</li>
-      <li>最高部门：α实验室与控制测试部（1.00）</li>
-      <li>最高业务线：控制产品（1.00）</li>
-      <li>最高领域：合规（2.00）</li>
-      <li>领先科组（前 10%）：iFA软件测试组、安规</li>
-    </ul>
-    <div class="sec-title">5.2 短板分析 <span class="tag t-real">真实库</span></div>
-    <ul class="list">
-      <li>最低科组：电梯整机测试组（0.00）</li>
-      <li>最低部门：电梯产品测试部（0.00）</li>
-      <li>最低业务线：机器人产品（0.00）</li>
-      <li>最低领域：EMC（0.00）</li>
-      <li>基础档 / 后 10% 科组：MCS测试组、变频硬件测试、大储测试组、控制制动硬件组、高速流体测试组、EMC测试组、OS测试组、伺服硬件测试组、减速机测试组、可靠性、机器人平台软件测试组、电机测试组、电梯整机测试组</li>
-    </ul>
-    <div class="sec-title">5.3 领域 × 组织热力分布 <span class="tag t-real">真实库</span></div>
-    <p>单元格为该科组在该领域的成熟度得分。灰色「—」表示该科组未关联该领域，不参与计分。</p>
-    <table class="heat"><thead><tr><th>科组 \ 领域</th><th>软件</th><th>硬件</th><th>机械</th><th>EMC</th><th>合规</th><th>环境可靠性</th></tr></thead><tbody><tr><td>iFA软件测试组</td><td class="h-mid">2.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>安规</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-mid">2.00</td><td class="h-na">—</td></tr><tr><td>MCS测试组</td><td class="h-low">1.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>变频硬件测试</td><td class="h-na">—</td><td class="h-low">1.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>大储测试组</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-low">1.00</td></tr><tr><td>控制制动硬件组</td><td class="h-na">—</td><td class="h-low">1.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>高速流体测试组</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-low">1.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>EMC测试组</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-bad">0.00</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>OS测试组</td><td class="h-bad">0.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>伺服硬件测试组</td><td class="h-na">—</td><td class="h-bad">0.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>减速机测试组</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-bad">0.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>可靠性</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-bad">0.00</td></tr><tr><td>机器人平台软件测试组</td><td class="h-bad">0.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>电机测试组</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-bad">0.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr><tr><td>电梯整机测试组</td><td class="h-na">—</td><td class="h-bad">0.00</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td><td class="h-na">—</td></tr></tbody></table>
+<section class="ch" id="c3">
+  <div class="ch-h"><span class="no">03</span>当前现状</div>
+  <div class="kpis">
+    <div class="kpi"><div class="l">全中心得分 · 真实库</div><div class="v">1.75</div><div class="s">科组等权 · 目标 3.00</div></div>
+    <div class="kpi"><div class="l">距年度目标</div><div class="v" style="color:#9b1c1c">−1.25</div><div class="s">1.75 − 3.00</div></div>
+    <div class="kpi"><div class="l">能力项</div><div class="v">1984</div><div class="s">38 科组 · 10 组织</div></div>
+    <div class="kpi"><div class="l">目标达成带</div><div class="v">未进</div><div class="s">达标线 = 3.0</div></div>
   </div>
-</div>
+  <div class="bar">
+    <div class="lab"><span>现状 1.75</span><span>目标 3.0　满分 4.0</span></div>
+    <div class="track">
+      <div class="fill" style="width:43.75%"></div>
+      <span class="mark" style="left:75%" title="目标 3.0"></span>
+    </div>
+  </div>
+  <p><b>数据分析：</b>1.75 约为满分的 44%、目标的 58%。按 V2.0.18 公式，该水平意味着 2 级尚未在各领域铺开，3/4 级贡献有限。不把「能力项条数多」误当成成熟度高——总分是科组等权，不是条目合并。</p>
+  <p>本期删除「操作记录 / 本期变化」清单。月度趋势等快照攒够后再做，不编造环比。</p>
+  <div class="h2">3.1 目标达成风险</div>
+  <p>若维持当前结构、只靠自然 dec 计划项，在 3 级未批量验收前，年底摸到 3.0 的风险高。风险不来自公式争议（口径已统一），而来自未达成项是否真有计划月份、计划是否落在 9–12 月。</p>
+</section>
 
-<div class="chapter" id="c6">
-  <div class="ch-head"><span class="ch-no">06</span><span class="ch-title">改进闭环与行动跟踪</span></div>
-  <div class="ch-body">
-    <div class="sec-title">6.1 未达成项现状 <span class="tag t-real">真实库</span></div>
-    <div class="grid"><table><thead><tr><th>领域</th><th>未达成项</th></tr></thead><tbody><tr><td>软件</td><td class="score">2</td></tr><tr><td>硬件</td><td class="score">2</td></tr><tr><td>机械</td><td class="score">2</td></tr><tr><td>EMC</td><td class="score">2</td></tr><tr><td>环境可靠性</td><td class="score">2</td></tr><tr><td>合规</td><td class="score">1</td></tr></tbody></table><table><thead><tr><th>部门（记录字段）</th><th>未达成项</th></tr></thead><tbody><tr><td>硬件与EMC测试部</td><td class="score">3</td></tr><tr><td>产品合规与准入部</td><td class="score">3</td></tr><tr><td>机电传动产品测试部</td><td class="score">2</td></tr><tr><td>智能机器人产品测试部</td><td class="score">1</td></tr><tr><td>α实验室与控制测试部</td><td class="score">1</td></tr><tr><td>电梯产品测试部</td><td class="score">1</td></tr></tbody></table></div>
-    <p class="sec-title">未达成情况记录摘要</p>
-    <p class="muted">库中暂无「未达成情况记录」文字（monthly_gap_notes 为空或不存在）。</p>
-    <div class="sec-title">6.2 改进计划分布 <span class="tag t-real">真实库</span></div>
-    <table><thead><tr><th>计划月份</th><th>未达成项数量</th></tr></thead><tbody><tr><td>9 月</td><td class="score">0</td></tr><tr><td>10 月</td><td class="score">0</td></tr><tr><td>11 月</td><td class="score">0</td></tr><tr><td>12 月</td><td class="score">0</td></tr><tr><td>未标记计划月份</td><td class="score">11</td></tr></tbody></table>
-    <div class="sec-title">6.3 改进建议 <span class="tag t-real">真实库</span></div>
-    <p>下列建议由「最弱领域 × 最弱组织 × 未标记计划」规则生成，不是主观编写。</p>
-    <ul class="list"><li>优先领域：EMC（得分 0.00，未达成 2 项）。</li><li>优先科组：电梯整机测试组（得分 0.00，未达成 1 项）。</li><li>优先部门：电梯产品测试部（得分 0.00）。</li><li>有 11 项未达成且未标记计划月份，建议先补计划再谈预测。</li></ul>
+<section class="ch" id="c4">
+  <div class="ch-h"><span class="no">04</span>指标基准分析与改进建议</div>
+  <p>本章不堆全量明细。先看与目标、部门均值的相对位置，再给建议。行业缺陷 / reopen 无库内来源，单独标演示。</p>
+  <div class="h2">4.1 对标框架</div>
+  <ul>
+    <li>纵向：现状 vs 年度目标 3.0 vs 满分 4.0。</li>
+    <li>横向：部门均值 vs 全中心 1.75；科组只保留前 5%、后 5%。</li>
+    <li>结构：六领域得分（科组等权）——找出「拖总分的领域」而不是平均用力。</li>
+  </ul>
+  <div class="h2">4.2 领域位置（待填正式库柱形）</div>
+  <p class="small">请按正式库六领域得分画入（软件 / 硬件 / 机械 / EMC / 合规 / 环境可靠性）。原则：高于中心 1.75 为相对优势，低于 1.75 且远低于 3.0 为优先供给领域。</p>
+  <div class="box small">待填 · 领域得分柱形（真实库）<br>
+    软件 〔　〕　硬件 〔　〕　机械 〔　〕<br>
+    EMC 〔　〕　合规 〔　〕　环境可靠性 〔　〕
   </div>
-</div>
+  <div class="h2">4.3 分析（在数字填入前可先用的判断）</div>
+  <p>全中心 1.75 说明「平均科组」仍低于 2.0 档。改进建议不能写成「大家一起补 1984 项」，而应：① 先保证后 5% 科组把 2 级打完；② Owner 对最低领域做供给复盘；③ 部门负责人只对低于本部门均值的科组问责，避免鞭打已经高于部门均值的组。</p>
+  <div class="h2">4.4 改进建议（本章必须出现）</div>
+  <ol>
+    <li><b>目标锚点：</b>一切对比以 3.0 为准，不以「比上月多达成几条」替代。</li>
+    <li><b>先 2 后 3：</b>总分 1.75 时，4 级数字化不是本期杠杆；杠杆在 2 级覆盖率和 3 级验收。</li>
+    <li><b>按部门均值管理：</b>只公布前/后 5% 与部门均值，减少全员排名焦虑，把精力放到部门内掉队组。</li>
+    <li><b>计划月份：</b>未达成且未标计划月份的项不进入年底预测，须先补计划再谈风险关闭。</li>
+    <li><b>质量结果：</b>缺陷 / reopen 待有真实源后再纳入，本期不作为成熟度结论。</li>
+  </ol>
+  <div class="warn"><b>4.5 测试质量结果 · 临时演示。</b>库中无平均缺陷数、reopen 字段。占位：平均缺陷 / 产品 3.2；平均 reopen 8.5%。禁止当正式结论。不引用无来源的行业数。</div>
+</section>
 
-<div class="chapter" id="c7">
-  <div class="ch-head"><span class="ch-no">07</span><span class="ch-title">附录</span></div>
-  <div class="ch-body">
-    <div class="sec-title">7.1 指标口径与版本 <span class="tag t-ppt">叙述参考</span></div>
-    <p>报告版本 V2.0.18。计分与 V2.0.18 确认口径一致：科组-领域 = 2级达成率×2 + 3级达成率 + 4级达成率；科组 = 关联领域平均；部门 / 业务线 / 全中心 = 科组等权平均。能力分组键 = 领域 + Owner + 评估维度 + 细分能力。领域归并：安规/合规/认证 → 合规；可靠性/环境 → 环境可靠性。</p>
-    <div class="sec-title">7.2 术语表 <span class="tag t-ppt">叙述参考</span></div>
-    <p>领域：软件、硬件、机械、EMC、合规、环境可靠性。评估维度：能力项上的 dimension 字段。等级：2/3/4 级计入得分，5 级不计。科组 / 部门 / 业务线来自 teams 与 org_units 及关联表。</p>
-    <div class="sec-title">7.3 数据质量与真实 / 演示边界 <span class="tag t-real">真实库</span></div>
-    <ul class="list">
-      <li>真实库：第 1.3–1.4、3、4.1–4.4、5、6 章全部数字。</li>
-      <li>临时演示：仅 4.5 测试质量结果（平均缺陷数、reopen 率占位）。</li>
-      <li>叙述参考：第 1.1–1.2、2、7.1–7.2 的管理模式文字。</li>
-      <li>快照积累：本次生成同时写入只增不改的月度快照 JSON，供 2027/2028 年历史对比；本期不做虚构的上半年对比。</li>
-      <li>未关联领域：不计入该科组得分，热力图显示为 —。</li>
-    </ul>
+<section class="ch" id="c5">
+  <div class="ch-h"><span class="no">05</span>各部门优劣势</div>
+  <p>科组共 38 个，5% ≈ 2 个。报告只保留：前 5%、后 5%、各部门均值。结合达成情况（已达成 / 总数）解释「为什么高 / 为什么低」，不把排名表当正文。</p>
+  <div class="h2">5.1 前 5%（领先，约 2 个科组）</div>
+  <div class="rank">
+    <div class="rank-row"><span>1</span><i style="width:0"></i><b>待填</b></div>
+    <div class="rank-row mid"><span>2</span><i style="width:0"></i><b>待填</b></div>
   </div>
+  <p class="small">填入后请写一句：高分是因为关联领域 2 级覆盖高，还是 3 级已验收。避免把「能力项少」误当成领先。</p>
+  <div class="h2">5.2 后 5%（基础档，约 2 个科组）</div>
+  <div class="rank">
+    <div class="rank-row low"><span>1</span><i style="width:0"></i><b>待填</b></div>
+    <div class="rank-row low"><span>2</span><i style="width:0"></i><b>待填</b></div>
+  </div>
+  <p class="small">低分优先看：未关联领域是否被误伤（未关联不计入）、2 级是否大面积 0、计划月份是否空。</p>
+  <div class="h2">5.3 部门均值（对标全中心 1.75）</div>
+  <p>部门分 = 下属科组等权平均，与组织能力概览口径一致。高于 1.75 为相对优势部门，低于 1.75 为相对短板部门。请按正式库填各部门得分，用水平条展示，不要贴全科组表。</p>
+  <div class="box small">待填 · 各部门得分（真实库）及相对 1.75 的正负差。驱动产品测试部验收锚点约 1.8，可作填数后的核对（与概览按部门一致，不是首页合并算法）。</div>
+  <div class="call">优劣势读法：优势部门的任务是把经验变成 3 级可验收模板；短板部门的任务是先把后 5% 科组的 2 级做完，而不是平行铺 4 级。</div>
+</section>
+
+<section class="ch" id="c6">
+  <div class="ch-h"><span class="no">06</span>后续改进计划</div>
+  <div class="h2">6.1 闭环原则</div>
+  <p>未达成项 → 计划月份 → 验收 → 得分上升。没有计划月份的项不进入 12 月预测。本报告不列出操作日志。</p>
+  <div class="h2">6.2 90 天动作</div>
+  <ol>
+    <li><b>中心（管理者）：</b>盯 1.75→2.2 的结构变化，而不是 1984 条的周增量。每月只看：后 5% 科组、最低领域、未标计划月份的未达成项。</li>
+    <li><b>部门负责人：</b>用本部门均值当尺子。低于部门均值的科组要有 9–12 月计划；高于均值的组转入 3 级验收，不重复 2 级运动。</li>
+    <li><b>能力 Owner：</b>对最低领域做一次供给检查——是清单过重、还是辅导未落地。同域目标仍是 3.0，不给短板领域另开一套分。</li>
+    <li><b>后 5% 科组：</b>只承诺可在 90 天验收的 2 级项。禁止用「规划中的 4 级」掩盖 2 级空洞。</li>
+  </ol>
+  <div class="h2">6.3 计划月份分布（待填）</div>
+  <p class="small">请从正式库统计未达成项在 9/10/11/12 月及「未标记」的数量，用条形图替换下表位置。若未标记占比高，则年底 3.0 的预测不可信。</p>
+  <div class="box small">待填 · 9月〔　〕 10月〔　〕 11月〔　〕 12月〔　〕 未标记〔　〕</div>
+</section>
+
+<section class="ch" id="c7">
+  <div class="ch-h"><span class="no">07</span>附录</div>
+  <div class="h2">7.1 口径</div>
+  <p>V2.0.18。科组–领域 = 2级达成率×2 + 3级达成率 + 4级达成率；科组 = 关联领域平均；部门 / 业务线 / 中心 = 科组等权。分组键 = 领域 + Owner + 评估维度 + 细分能力。</p>
+  <div class="h2">7.2 术语</div>
+  <p>领域：软件、硬件、机械、EMC、合规、环境可靠性。等级：2/3/4 计入，5 不计。前/后 5%：按可计分科组排序，38 组时各取 2 个。</p>
+  <div class="h2">7.3 真实 / 演示边界</div>
+  <ul>
+    <li>真实库：全中心 1.75、1984 项、38 科组、10 组织；以及落地后填入的领域 / 部门 / 前5% / 后5% / 计划月份。</li>
+    <li>临时演示：仅 4.5 质量结果占位。</li>
+    <li>叙述参考：第 02 章管理模式文字。</li>
+    <li>不展示：操作记录、全量科组名册、来源不明的外部对标。</li>
+  </ul>
+</section>
+
 </div>
 
 <footer>
-生成本地只读，不修改业务库。输出目录不覆盖既有月报版本。落地时请把 --db 指向生成时点 5000 正在使用的正式库。
+测试能力成熟度月报 · 2026-09 · V2.0.18　|　版式：单页两栏（宋体正文 / 海军蓝标题 / 青绿数据）　|　正式数字以 V2.0.18 库为准，禁止把临时演示当结论。
 </footer>
-</main>
+</div>
 </body>
 </html>
