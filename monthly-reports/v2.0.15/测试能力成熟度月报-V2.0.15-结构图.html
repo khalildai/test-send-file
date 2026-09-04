@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>测试能力成熟度月报 V2.0.15 · 结构图</title>
+<style>
+body{margin:0;background:#eef2f6;color:#1d2b3a;font:14px Arial,"Microsoft YaHei","PingFang SC",sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px}
+header{background:#173b63;color:#fff;padding:26px 32px;border-radius:8px}
+header h1{margin:0 0 8px;font-size:26px}
+header .sub{color:#c7d6e8;font-size:13px;line-height:1.7}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 6px}
+.tag{display:inline-block;padding:3px 9px;border-radius:3px;font-size:12px;white-space:nowrap}
+.t-real{background:#e3f3e6;color:#1d7a35;border:1px solid #9fd4ab}
+.t-demo{background:#fff3d6;color:#a16207;border:1px solid #e8c97a}
+.t-ppt{background:#e5eefc;color:#2756a6;border:1px solid #a9c4ea}
+.t-snap{background:#eceff3;color:#5b6b7c;border:1px solid #c2ccd6}
+.pipeline{background:#fff;border:1px solid #d7e0e8;border-radius:6px;padding:14px 16px;margin:14px 0 20px}
+.pipeline .flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px}
+.pipeline .node{background:#f1f5f8;border:1px solid #c9d6e2;border-radius:4px;padding:8px 12px}
+.pipeline .arrow{color:#64748b;font-weight:700}
+.chapter{background:#fff;border:1px solid #d7e0e8;border-radius:6px;margin:0 0 14px;overflow:hidden}
+.ch-head{display:flex;align-items:baseline;gap:10px;padding:13px 16px;background:#f6f9fb;border-bottom:1px solid #e4e9ee}
+.ch-no{font-size:20px;font-weight:700;color:#173b63}
+.ch-title{font-size:16px;font-weight:700;color:#173b63}
+.ch-note{color:#64748b;font-size:12px}
+.sec{display:flex;gap:10px;align-items:flex-start;padding:10px 16px;border-bottom:1px solid #eef2f5}
+.sec:last-child{border-bottom:none}
+.sec-id{flex:0 0 44px;font-weight:700;color:#44576a}
+.sec-body{flex:1;min-width:0}
+.sec-title{font-weight:700;margin-bottom:2px}
+.sec-desc{color:#55677a;font-size:12.5px;line-height:1.6}
+.sec .tag{margin-left:8px;vertical-align:1px}
+.note-box{background:#fff;border:1px dashed #a8b8c8;border-radius:6px;padding:14px 16px;margin-top:4px;line-height:1.8;font-size:13px;color:#44576a}
+.note-box b{color:#173b63}
+footer{color:#64748b;font-size:12px;margin:18px 0 6px;line-height:1.7}
+@media(max-width:720px){main{padding:12px}.pipeline .flow{flex-direction:column;align-items:stretch}.pipeline .arrow{text-align:center}}
+@media print{body{background:#fff}main{padding:0}.chapter,.pipeline,.note-box{box-shadow:none}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>测试能力成熟度月报 V2.0.15 · 结构图</h1>
+  <div class="sub">
+    数据基线：V2.0.15 Windows 本地库（E:\raft\V2.0.15\source\data\maturity.db，只读）<br>
+    交付形态：单个可双击打开的 HTML 月报 · 本图为结构预览，供确认章节与内容口径<br>
+    昨日《成熟度介绍》PPT 仅作叙述参考素材，不转 PPT、不复刻版式
+  </div>
+</header>
+
+<div class="legend">
+  <span class="tag t-real">V2.0.15 真实库计算</span>
+  <span class="tag t-demo">临时演示 · 后续用真实数据替换</span>
+  <span class="tag t-ppt">叙述参考（介绍 PPT 素材）</span>
+  <span class="tag t-snap">真实快照积累（供 27/28 年历史参考）</span>
+</div>
+
+<div class="pipeline">
+  <div class="flow">
+    <span class="node">V2.0.15 Windows 本地库（只读）</span>
+    <span class="arrow">→</span>
+    <span class="node">月报生成脚本（本期重构）</span>
+    <span class="arrow">→</span>
+    <span class="node">HTML 月报：E:\raft\monthly-reports\v2.0.15\（新目录，不覆盖既有月报）</span>
+    <span class="arrow">+</span>
+    <span class="node">月度真实快照（只增不改）</span>
+  </div>
+</div>
+
+<div class="chapter">
+  <div class="ch-head"><span class="ch-no">01</span><span class="ch-title">报告简介</span><span class="ch-note">先讲口径与数据，再讲结论</span></div>
+  <div class="sec"><div class="sec-id">1.1</div><div class="sec-body"><div class="sec-title">指标定义<span class="tag t-ppt">叙述参考</span></div><div class="sec-desc">评分公式：2级达成率×2 + 3级达成率 + 4级达成率；年度目标 3.0、满分 4.0；达成判定 0/1；达成率口径。</div></div></div>
+  <div class="sec"><div class="sec-id">1.2</div><div class="sec-body"><div class="sec-title">分析方法<span class="tag t-ppt">叙述参考</span></div><div class="sec-desc">科组→部门→业务线三层聚合；对标基准 = 同部门内平均 / 全中心平均；业务线按关联科组交集计算。</div></div></div>
+  <div class="sec"><div class="sec-id">1.3</div><div class="sec-body"><div class="sec-title">报告数据及结论说明<span class="tag t-real">真实库</span></div><div class="sec-desc">数据范围、快照时间、业务库版本；所有结论由真实库动态计算生成，不编造。</div></div></div>
+  <div class="sec"><div class="sec-id">1.4</div><div class="sec-body"><div class="sec-title">能力基线概览<span class="tag t-real">真实库</span></div><div class="sec-desc">六大领域、能力项数量、科组/部门/业务线组织一览。</div></div></div>
+</div>
+
+<div class="chapter">
+  <div class="ch-head"><span class="ch-no">02</span><span class="ch-title">管理模式演进（2025 → 2026）</span><span class="ch-note">吸收昨日成熟度介绍 PPT 内容</span></div>
+  <div class="sec"><div class="sec-id">2.1</div><div class="sec-body"><div class="sec-title">从专项评分到持续能力经营<span class="tag t-ppt">叙述参考</span></div><div class="sec-desc">2025 痛点：科组自选范围、目标自行选取、结果无法对比、季度跟踪、年底集中验收、偏重进度管理；2026 转向统一供给与持续运营。</div></div></div>
+  <div class="sec"><div class="sec-id">2.2</div><div class="sec-body"><div class="sec-title">能力设计<span class="tag t-ppt">叙述参考</span></div><div class="sec-desc">能力 Owner 统一设计评估维度能力并统一分发至各涉域科组；六大领域（软件/硬件/机械/EMC/合规/可靠性）同域统一口径、目标一致 3.0。</div></div></div>
+  <div class="sec"><div class="sec-id">2.3</div><div class="sec-body"><div class="sec-title">监控运营与递进能力阶<span class="tag t-ppt">叙述参考</span></div><div class="sec-desc">实时跟踪、达成即验收、落地辅导；2级基础基底 → 3级年度重点 → 4级数字化/AI 的年度目标合集。</div></div></div>
+  <div class="sec"><div class="sec-id">2.4</div><div class="sec-body"><div class="sec-title">价值兑现<span class="tag t-ppt">叙述参考</span></div><div class="sec-desc">可诊断（识别差距）、可对比（科组/部门/业务横向比较）、可引导（分层改进建议）；科组/部门、能力 Owner、测试管理者三类角色的管理价值。</div></div></div>
+</div>
+
+<div class="chapter">
+  <div class="ch-head"><span class="ch-no">03</span><span class="ch-title">总体成熟度观察</span></div>
+  <div class="sec"><div class="sec-id">3.1</div><div class="sec-body"><div class="sec-title">总体达成现状<span class="tag t-real">真实库</span></div><div class="sec-desc">全中心总分、能力达成率、与目标 3.0 的差距、未达成能力数。</div></div></div>
+  <div class="sec"><div class="sec-id">3.2</div><div class="sec-body"><div class="sec-title">本期变化<span class="tag t-real">真实库</span></div><div class="sec-desc">本期新增达成项清单（来自修改记录，含操作者与时间）；无历史月度快照则如实标注，不虚构趋势。</div></div></div>
+  <div class="sec"><div class="sec-id">3.3</div><div class="sec-body"><div class="sec-title">预计与计划<span class="tag t-real">真实库</span></div><div class="sec-desc">按计划月份的预测得分、9–12 月计划分布、未标记计划项数量。</div></div></div>
+  <div class="sec"><div class="sec-id">3.4</div><div class="sec-body"><div class="sec-title">年度目标达成风险评估<span class="tag t-real">真实库</span></div><div class="sec-desc">距 3.0 缺口与当前计划覆盖度下的规则化风险结论。</div></div></div>
+</div>
+
+<div class="chapter">
+  <div class="ch-head"><span class="ch-no">04</span><span class="ch-title">指标基准分析（对标）</span></div>
+  <div class="sec"><div class="sec-id">4.1</div><div class="sec-body"><div class="sec-title">领域维度得分<span class="tag t-real">真实库</span></div><div class="sec-desc">六大领域当前得分、与目标差距、领域间排序。</div></div></div>
+  <div class="sec"><div class="sec-id">4.2</div><div class="sec-body"><div class="sec-title">评估维度达成率<span class="tag t-real">真实库</span></div><div class="sec-desc">各评估维度达成率分布。</div></div></div>
+  <div class="sec"><div class="sec-id">4.3</div><div class="sec-body"><div class="sec-title">科组基准排名<span class="tag t-real">真实库</span></div><div class="sec-desc">科组得分排名、水平分档（领先/达标/发展/基础）、全中心前/后 10% 标注。</div></div></div>
+  <div class="sec"><div class="sec-id">4.4</div><div class="sec-body"><div class="sec-title">部门 / 业务线对比<span class="tag t-real">真实库</span></div><div class="sec-desc">同部门内平均与全中心平均双基准对比、三色标注、与目标差距。</div></div></div>
+  <div class="sec"><div class="sec-id">4.5</div><div class="sec-body"><div class="sec-title">测试质量结果指标（如涉及）<span class="tag t-demo">临时演示</span></div><div class="sec-desc">平均缺陷数、平均 reopen 率等质量结果数据：当前无真实数据，用假数据填充并显著标记「临时演示 · 后续用真实数据替换」；报告不涉及的则不展示。不使用任何来源不明的外部数据。</div></div></div>
+</div>
+
+<div class="chapter">
+  <div class="ch-head"><span class="ch-no">05</span><span class="ch-title">组织能力分布与优势短板</span></div>
+  <div class="sec"><div class="sec-id">5.1</div><div class="sec-body"><div class="sec-title">优势分析<span class="tag t-real">真实库</span></div><div class="sec-desc">得分最高科组/部门/业务线及其优势能力。</div></div></div>
+  <div class="sec"><div class="sec-id">5.2</div><div class="sec-body"><div class="sec-title">短板分析<span class="tag t-real">真实库</span></div><div class="sec-desc">得分最低与全中心后 10% 组织、短板能力清单。</div></div></div>
+  <div class="sec"><div class="sec-id">5.3</div><div class="sec-body"><div class="sec-title">领域 × 组织热力分布<span class="tag t-real">真实库</span></div><div class="sec-desc">哪个领域整体偏弱、哪个组织跨领域偏弱。</div></div></div>
+</div>
+
+<div class="chapter">
+  <div class="ch-head"><span class="ch-no">06</span><span class="ch-title">改进闭环与行动跟踪</span></div>
+  <div class="sec"><div class="sec-id">6.1</div><div class="sec-body"><div class="sec-title">未达成项现状<span class="tag t-real">真实库</span></div><div class="sec-desc">按领域/部门分布；含「未达成情况记录」文字记录摘要（来自本月未达成编辑）。</div></div></div>
+  <div class="sec"><div class="sec-id">6.2</div><div class="sec-body"><div class="sec-title">改进计划分布<span class="tag t-real">真实库</span></div><div class="sec-desc">计划月份（9–12 月）的未达成项数量与归属组织。</div></div></div>
+  <div class="sec"><div class="sec-id">6.3</div><div class="sec-body"><div class="sec-title">改进建议<span class="tag t-real">真实库</span></div><div class="sec-desc">按最弱领域 × 最弱组织给出优先级建议（规则化生成，不编造）。</div></div></div>
+</div>
+
+<div class="chapter">
+  <div class="ch-head"><span class="ch-no">07</span><span class="ch-title">附录</span></div>
+  <div class="sec"><div class="sec-id">7.1</div><div class="sec-body"><div class="sec-title">指标口径与版本<span class="tag t-ppt">叙述参考</span></div><div class="sec-desc">V2.0.15 正式版字段、公式与口径版本。</div></div></div>
+  <div class="sec"><div class="sec-id">7.2</div><div class="sec-body"><div class="sec-title">术语表<span class="tag t-ppt">叙述参考</span></div><div class="sec-desc">领域、评估维度、等级（2/3/4 级）、科组/部门/业务线定义。</div></div></div>
+  <div class="sec"><div class="sec-id">7.3</div><div class="sec-body"><div class="sec-title">数据质量与真实/演示边界声明<span class="tag t-real">真实库</span></div><div class="sec-desc">集中声明：哪些章节为真实库数据、哪些为临时演示数据、未关联领域的排除规则。</div></div></div>
+</div>
+
+<div class="note-box">
+  <b>基准与历史口径：</b><br>
+  · 公司阶段性/历史基准：当前没有真实上半年基线数据，本期不做历史对比；从本月起月报生成时同步保存真实月度快照（得分、达成率、各层级聚合值，只增不改），2027/2028 年起即可引用 2026 年全年真实历史数据。<span class="tag t-snap">快照积累</span><br>
+  · 行业基准：不引用任何来源不明的网上数据；如后续需要，仅以显著标注的占位小节呈现。<br>
+  · 落地规则：输出到新目录 E:\raft\monthly-reports\v2.0.15\，既有各版月报全部保留不覆盖。
+</div>
+
+<footer>结构图预览 · 供确认章节结构与内容口径 · 确认后按此结构开发完整 HTML 月报（数据源：V2.0.15 Windows 本地库）</footer>
+</main>
+</body>
+</html>
