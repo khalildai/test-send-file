@@ -71,7 +71,6 @@ function App() {
         </Row>
       </section>
 
-      <section><div className="section-heading"><div><Title level={3}>产品质量对比</Title><Text type="secondary">按产品查看当前质量信号，归属、问题单和执行细节通过下穿查看</Text></div><Button onClick={() => showDetail('产品质量对比')}>下穿查看</Button></div><Card bodyStyle={{ padding: 0 }}><Table columns={columns} dataSource={tableRows} pagination={false} scroll={{ x: 760 }} /></Card></section>
     </main>
     <Modal open={Boolean(detail)} title={detail?.title} onCancel={() => setDetail(null)} footer={<Button type="primary" onClick={() => setDetail(null)}>关闭</Button>} width={760}><Table columns={columns} dataSource={detail?.rows || []} pagination={false} size="small" /></Modal>
   </div>;
