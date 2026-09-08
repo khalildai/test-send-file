@@ -7,11 +7,11 @@
   <title>测试管理者驾驶舱｜结构稿</title>
   <style>
     :root {
-      --ink:#172334; --muted:#66758a; --line:#dce3ea; --paper:#fff; --bg:#f3f6f9;
-      --navy:#10283f; --navy2:#183f5d; --cyan:#0b8c92; --blue:#2b68c5; --green:#27855d;
-      --amber:#b77506; --red:#bd4545; --purple:#7257b4;
-      --soft-blue:#edf4ff; --soft-cyan:#eaf8f7; --soft-green:#ecf8f2; --soft-amber:#fff6e5;
-      --soft-red:#fff0ef; --soft-purple:#f4f0ff; --shadow:0 10px 28px rgba(17,39,61,.08);
+      --ink:#161616; --muted:#525252; --line:#e0e0e0; --paper:#fff; --bg:#f4f4f4;
+      --navy:#161616; --navy2:#161616; --cyan:#0f62fe; --blue:#0f62fe; --green:#24a148;
+      --amber:#f1c21b; --red:#da1e28; --purple:#0f62fe;
+      --soft-blue:#f4f4f4; --soft-cyan:#f4f4f4; --soft-green:#f4f4f4; --soft-amber:#f4f4f4;
+      --soft-red:#f4f4f4; --soft-purple:#f4f4f4; --shadow:none;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -71,8 +71,8 @@
     .focus-panel{padding:17px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:var(--shadow)}
     .focus-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:13px}.focus-head h3{margin:0;font-size:15px}.focus-head p{margin:3px 0 0;color:var(--muted);font-size:10px}
     .focus-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.focus-metric{padding:11px;border:1px solid var(--line);border-radius:10px;background:#fafcfd}.focus-metric label{display:block;color:var(--muted);font-size:10px}.focus-metric strong{display:block;margin:4px 0 2px;font-size:22px;line-height:1.1;font-variant-numeric:tabular-nums}.focus-metric small{display:block;color:var(--muted);font-size:9px}.trend-up{color:var(--red)}.trend-down{color:var(--green)}
-    .sparkline{height:28px;display:flex;align-items:flex-end;gap:3px;margin-top:7px}.sparkline i{display:block;flex:1;min-width:3px;border-radius:2px 2px 0 0;background:var(--spark,#2b68c5);opacity:.78}
-    .product-split{display:grid;grid-template-columns:1fr 1.15fr;gap:16px;align-items:start}.product-list{display:grid;gap:7px}.product-row{display:grid;grid-template-columns:1fr 45px;gap:8px;align-items:center;font-size:10px}.product-row span:last-child{text-align:right;font-weight:800}.product-track{grid-column:1/-1;height:7px;background:#edf1f5;border-radius:4px;overflow:hidden;margin-top:-5px}.product-track i{display:block;height:100%;background:#b77506;border-radius:4px}
+    .sparkline{height:28px;display:flex;align-items:flex-end;gap:3px;margin-top:7px}.sparkline i{display:block;flex:1;min-width:3px;border-radius:2px 2px 0 0;background:var(--spark,#0f62fe);opacity:.78}
+    .product-split{display:grid;grid-template-columns:1fr 1.15fr;gap:16px;align-items:start}.product-list{display:grid;gap:7px}.product-row{display:grid;grid-template-columns:1fr 45px;gap:8px;align-items:center;font-size:10px}.product-row span:last-child{text-align:right;font-weight:800}.product-track{grid-column:1/-1;height:7px;background:#e0e0e0;border-radius:2px;overflow:hidden;margin-top:-5px}.product-track i{display:block;height:100%;background:#0f62fe;border-radius:2px}
     .domains{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
     .domain{padding:12px 8px;border:1px solid var(--line);border-radius:10px;background:#fafcfd;text-align:center}
     .domain i{display:block;width:8px;height:8px;margin:0 auto 6px;border-radius:50%;background:var(--dot,var(--blue))}
@@ -129,6 +129,16 @@
     .toast{position:fixed;right:24px;bottom:24px;z-index:80;padding:11px 14px;border-radius:9px;background:#183044;color:#fff;font-size:11px;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);pointer-events:none;transition:.18s}.toast.show{opacity:1;transform:translateY(0)}
     footer{margin-top:18px;padding:14px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--muted);font-size:10px}
     @media(max-width:1280px){.metric-grid{grid-template-columns:repeat(3,1fr)}.governance-grid{grid-template-columns:repeat(3,1fr)}}
+
+    /* IBM DESIGN.md visual layer: Carbon-like square chrome, white surfaces, one blue accent. */
+    :root{--ink:#161616;--muted:#525252;--line:#e0e0e0;--paper:#fff;--bg:#f4f4f4;--navy:#161616;--navy2:#161616;--cyan:#0f62fe;--blue:#0f62fe;--green:#24a148;--amber:#f1c21b;--red:#da1e28;--purple:#0f62fe;--soft-blue:#f4f4f4;--soft-cyan:#f4f4f4;--soft-green:#f4f4f4;--soft-amber:#f4f4f4;--soft-red:#f4f4f4;--soft-purple:#f4f4f4;--shadow:none}
+    body{font-family:"IBM Plex Sans","Microsoft YaHei",Arial,sans-serif;font-size:16px;line-height:1.5}
+    header{background:#161616;box-shadow:none}
+    .header-row{height:64px}.brand-mark{border-radius:2px;background:#0f62fe;color:#fff}.brand strong{font-size:20px;font-weight:400}.brand small{font-size:12px;color:#c6c6c6}
+    .btn{height:40px;border-radius:0;padding:12px 16px;font-size:14px;font-weight:400}.btn.primary{background:#0f62fe;border-color:#0f62fe}.btn.ghost{border-color:#c6c6c6;background:transparent;color:#fff}
+    .filterbar{background:#fff}.field label{font-size:12px;font-weight:400;color:#525252}.field select,.field input{height:40px;border-radius:0;border-color:#8c8c8c;background:#f4f4f4;color:#161616;font-size:16px}
+    .filter-note{font-size:12px}.section-head h2{font-size:24px;font-weight:400;letter-spacing:0}.section-head p{font-size:14px}.badge{border-radius:0;font-size:12px;font-weight:400}.metric,.panel,.issue-board,.process-board,.focus-panel,.policy,.table-wrap,footer{border-radius:0;box-shadow:none}.metric{padding:16px;background:#fff;border-color:#e0e0e0}.metric label{font-size:14px}.metric strong{font-size:32px;font-weight:300}.metric small{font-size:12px}.panel-head h3,.focus-head h3{font-size:20px;font-weight:400}.panel-head span,.focus-head p{font-size:12px}.mini,.focus-metric,.govern,.node,.ticket,.ticket-detail{border-radius:0}.mini label,.focus-metric label{font-size:12px}.mini b,.focus-metric strong{font-size:24px;font-weight:400}.focus-metric small,.product-row{font-size:12px}.policy{font-size:14px}.table-wrap table{font-size:14px}.table-wrap th{font-size:14px;background:#161616}.table-wrap td{font-size:14px}.table-wrap td strong{font-size:16px}.table-wrap td small{font-size:12px}.footer{font-size:14px}.drawer{border-radius:0}.drawer-head h3{font-size:20px}.drawer-body{font-size:16px}
+    .b-blue,.b-cyan,.b-purple{background:#f4f4f4;color:#0f62fe}.b-green{background:#f4f4f4;color:#24a148}.b-amber{background:#f4f4f4;color:#161616}.b-red{background:#f4f4f4;color:#da1e28}
   </style>
 </head>
 <body>
@@ -201,7 +211,7 @@
     <section class="section">
       <div class="section-head"><div><h2>领域测试周期</h2><p>组织下各领域测试任务周期，先展示总周期，再拆分初样 / 正样，单位：天。</p></div><span class="badge b-amber">任务数据不可导出</span></div>
       <article class="panel">
-        <div class="legend"><span><i style="background:#183f5b"></i>总周期</span><span><i style="background:#62a8e5"></i>初样阶段</span><span><i style="background:#31aaa1"></i>正样阶段</span></div>
+        <div class="legend"><span><i style="background:#0f62fe"></i>总周期</span><span><i style="background:#0f62fe"></i>初样阶段</span><span><i style="background:#0f62fe"></i>正样阶段</span></div>
         <div class="cycle-chart" id="cycleChart"></div>
       </article>
     </section>
@@ -267,7 +277,7 @@
 
 <script>
   const DOMAIN_KEYS=["软件","硬件","机械","通信","安规","可靠性","EMC"];
-  const DOMAIN_COLORS=["#2b68c5","#0b8c92","#7257b4","#2d90c4","#b77506","#bd5858","#27855d"];
+  const DOMAIN_COLORS=["#0f62fe","#0f62fe","#0f62fe","#0f62fe","#0f62fe","#0f62fe","#0f62fe"];
   const projects=[
     {id:"P01",center:"产品质量测试中心",dept:"软件测试部",name:"智能支付平台 V2.0",status:"研发中",version:"V",date:18,effective:286,newD:64,unresolved:91,fixed:58,reopen:4.8,density:0.72,resolveCycle:8.6,closeCycle:13.2,rounds:19,totalCycle:64,throughput:128,changeD:27,major:3,market:18,itr:12,manufacture:6,domain:[174,31,8,24,16,5,28],dRounds:[8,2,1,3,2,1,2],dCycles:[28,10,4,8,5,2,7],sample:[17,7,3,6,4,2,5],formal:[11,3,1,2,1,1,2]},
     {id:"P02",center:"产品质量测试中心",dept:"软件测试部",name:"移动办公App R1.3",status:"测试中",version:"R",date:42,effective:154,newD:29,unresolved:36,fixed:40,reopen:3.1,density:0.48,resolveCycle:6.4,closeCycle:9.7,rounds:14,totalCycle:48,throughput:76,changeD:11,major:1,market:11,itr:8,manufacture:3,domain:[102,18,4,10,7,3,10],dRounds:[6,2,1,2,1,1,1],dCycles:[21,7,2,5,3,2,5],sample:[13,5,2,3,2,1,3],formal:[8,2,0,2,1,1,2]},
@@ -350,14 +360,14 @@
     const defectTrend=[.78,.88,.94,1.08,1.03,1].map(x=>Math.round(defectTotal*x));
     const reopenTrend=[.84,.9,1.08,.98,1.04,1].map(x=>(reopen*x).toFixed(1));
     const leakTrend=[.72,.86,.9,1.14,1.04,1].map(x=>Math.round(leakTotal*x));
-    $("#marketFocusMetrics").innerHTML=focusMetric("市场问题数",fmt(marketTotal),"个","较前期 +6.2%","trend-up","#b77506",marketTrend);
-    $("#marketFocusMetrics").innerHTML+=focusMetric("近6期趋势",marketTrend[marketTrend.length-1],"个","当前周期","trend-up","#b77506",marketTrend);
+    $("#marketFocusMetrics").innerHTML=focusMetric("市场问题数",fmt(marketTotal),"个","较前期 +6.2%","trend-up","#0f62fe",marketTrend);
+    $("#marketFocusMetrics").innerHTML+=focusMetric("近6期趋势",marketTrend[marketTrend.length-1],"个","当前周期","trend-up","#0f62fe",marketTrend);
     const productRows=filtered.map(x=>[x.name,x.market]).sort((a,b)=>b[1]-a[1]);
     const productMax=Math.max(1,...productRows.map(x=>x[1]));
     $("#marketProductDistribution").innerHTML=productRows.map(([name,value])=>`<div class="product-row"><span>${name}</span><span>${value}</span><div class="product-track"><i style="width:${value/productMax*100}%"></i></div></div>`).join("")||'<div class="empty">暂无市场问题数据</div>';
-    $("#projectFocusMetrics").innerHTML=focusMetric("缺陷数量",fmt(defectTotal),"个","较前期 +4.8%","trend-up","#2b68c5",defectTrend);
-    $("#projectFocusMetrics").innerHTML+=focusMetric("Reopen率",reopen.toFixed(1),"%","较前期 -0.6 个百分点","trend-down","#7257b4",reopenTrend);
-    $("#projectFocusMetrics").innerHTML+=focusMetric("漏测数",fmt(leakTotal),"个","较前期 -2.1%","trend-down","#bd4545",leakTrend);
+    $("#projectFocusMetrics").innerHTML=focusMetric("缺陷数量",fmt(defectTotal),"个","较前期 +4.8%","trend-up","#0f62fe",defectTrend);
+    $("#projectFocusMetrics").innerHTML+=focusMetric("Reopen率",reopen.toFixed(1),"%","较前期 -0.6 个百分点","trend-down","#0f62fe",reopenTrend);
+    $("#projectFocusMetrics").innerHTML+=focusMetric("漏测数",fmt(leakTotal),"个","较前期 -2.1%","trend-down","#0f62fe",leakTrend);
   }
   function renderMetrics(){
     const data=[
@@ -384,7 +394,7 @@
     const sample=DOMAIN_KEYS.map((_,i)=>filtered.length?filtered.reduce((a,r)=>a+r.sample[i],0)/filtered.length:0);
     const formal=DOMAIN_KEYS.map((_,i)=>filtered.length?filtered.reduce((a,r)=>a+r.formal[i],0)/filtered.length:0);
     const total=sample.map((x,i)=>x+formal[i]),max=Math.max(1,...total);
-    $("#cycleChart").innerHTML=DOMAIN_KEYS.map((x,i)=>`<div class="cycle-row"><b>${x}</b><div class="cycle-cell total"><i style="width:${total[i]/max*100}%;--fill:#183f5b"></i><b>总计 ${total[i].toFixed(1)}天</b></div><div class="cycle-cell"><i style="width:${sample[i]/max*100}%;--fill:#62a8e5"></i><b>初样 ${sample[i].toFixed(1)}天</b></div><div class="cycle-cell"><i style="width:${formal[i]/max*100}%;--fill:#31aaa1"></i><b>正样 ${formal[i].toFixed(1)}天</b></div></div>`).join("");
+    $("#cycleChart").innerHTML=DOMAIN_KEYS.map((x,i)=>`<div class="cycle-row"><b>${x}</b><div class="cycle-cell total"><i style="width:${total[i]/max*100}%;--fill:#0f62fe"></i><b>总计 ${total[i].toFixed(1)}天</b></div><div class="cycle-cell"><i style="width:${sample[i]/max*100}%;--fill:#0f62fe"></i><b>初样 ${sample[i].toFixed(1)}天</b></div><div class="cycle-cell"><i style="width:${formal[i]/max*100}%;--fill:#0f62fe"></i><b>正样 ${formal[i].toFixed(1)}天</b></div></div>`).join("");
   }
   function scopedTickets(){const ids=new Set(filtered.map(x=>x.id));return tickets.filter(x=>ids.has(x.project))}
   function ticketMatches(t,rule){
@@ -442,8 +452,8 @@
     const ts=scopedTickets().filter(x=>x.source==="ITR"),c=counts(ts,"cause");
     const scene=c.find(x=>x[0]==="场景引入")?.[1]||0,change=c.find(x=>x[0]==="变更引入")?.[1]||0,leak=ts.filter(x=>x.leak==="漏测").length,total=Math.max(1,ts.length);
     $("#causeDonut").style.background=`conic-gradient(var(--cyan) 0 ${scene/total*100}%,var(--blue) ${scene/total*100}% ${(scene+change)/total*100}%,var(--amber) ${(scene+change)/total*100}% 100%)`;
-    $("#causeLegend").innerHTML=[[`场景引入`,scene,"#0b8c92"],["变更引入",change,"#2b68c5"],["归属漏测",leak,"#b77506"]].map(x=>`<div><span><i style="background:${x[2]}"></i>${x[0]}</span><b>${x[1]}</b></div>`).join("");
-    $("#featureBars").innerHTML=barHTML(counts(ts,"feature"),"#2b68c5");$("#qualityBars").innerHTML=barHTML(counts(ts,"quality"),"#7257b4");
+    $("#causeLegend").innerHTML=[[`场景引入`,scene,"#0f62fe"],["变更引入",change,"#0f62fe"],["归属漏测",leak,"#0f62fe"]].map(x=>`<div><span><i style="background:${x[2]}"></i>${x[0]}</span><b>${x[1]}</b></div>`).join("");
+    $("#featureBars").innerHTML=barHTML(counts(ts,"feature"),"#0f62fe");$("#qualityBars").innerHTML=barHTML(counts(ts,"quality"),"#0f62fe");
   }
   function renderTable(){
     const rows=[...filtered].sort((a,b)=>sortKey?(Number(a[sortKey])-Number(b[sortKey]))*sortDir:0);
