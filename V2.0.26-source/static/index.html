@@ -940,14 +940,16 @@ function rowTeamName(row,source=configData){return teamNameById(rowTeamId(row,so
 function rowMatchesTeam(row,teamName,source=configData){return rowTeamName(row,source)===teamName}
 function bindCapabilityTeamIds(persistable=false){
   if(!configData?.teams||!Array.isArray(data))return;
+  let changedAny=false;
   data.forEach(x=>{
     const id=rowTeamId(x);
     if(!id)return;
     const name=teamNameById(id);
     const changed=x.teamId!==id||(name&&x.team!==name);
     x.teamId=id;if(name)x.team=name;
-    if(persistable&&changed)markRowFields(x,['teamId','team']);
+    if(persistable&&changed){markRowFields(x,['teamId','team']);changedAny=true}
   });
+  if(persistable&&changedAny)dirtyMeta.replaceData=true;
 }
 function relationNamesFor(x,kind,source=configData){
   if(!source)return[];const teamId=rowTeamId(x,source);if(!teamId)return[];
@@ -2330,7 +2332,7 @@ function showLoginGate(onSuccess){
       const out=await res.json().catch(()=>({}));
       if(!res.ok)throw Error(out.error||'登录失败');
       currentUser=out.user;gate.remove();applyRoleVisibility();
-      await loadPersist();ensureConfig();bindCapabilityTeamIds(true);if(typeof hasLocalDirty==='function'&&hasLocalDirty())await persist();await loadMaturityMetricPayload();loadComparisonSelections();renderComparisonDomainOptions();setComparisonScopeMode(comparisonScopeMode);buildFilters();render();serverReady=true;startLiveRefresh();
+      await loadPersist();ensureConfig();serverReady=true;bindCapabilityTeamIds(true);if(hasLocalDirty())await persist();await loadMaturityMetricPayload();loadComparisonSelections();renderComparisonDomainOptions();setComparisonScopeMode(comparisonScopeMode);buildFilters();render();startLiveRefresh();
       onSuccess&&onSuccess();
     }catch(e){$('lgErr').textContent=e.message;btn.disabled=false;btn.textContent='登 录'}
   };
@@ -2766,7 +2768,7 @@ async function bootOnlineApp(){
     const me=await fetch('/api/auth/me',{cache:'no-store'}).then(r=>r.json()).catch(()=>({user:null}));
     currentUser=me.user||null;
     applyRoleVisibility();
-    await loadPersist();ensureConfig();await loadMaturityMetricPayload();loadComparisonSelections();renderComparisonDomainOptions();setComparisonScopeMode(comparisonScopeMode);buildFilters();render();serverReady=true;startLiveRefresh();
+    await loadPersist();ensureConfig();serverReady=true;bindCapabilityTeamIds(true);if(hasLocalDirty())await persist();await loadMaturityMetricPayload();loadComparisonSelections();renderComparisonDomainOptions();setComparisonScopeMode(comparisonScopeMode);buildFilters();render();startLiveRefresh();
     const initialParams=new URLSearchParams(location.search),view=initialParams.get('view');
     if(view==='config')ensureAuthThen(()=>openConfig(initialParams.get('tab')||'teams'));else if(view==='dictionary')openDictionary();else if(view==='versions')openVersionHistory();else if(view==='gap')ensureAuthThen(()=>openGapNotes());else if(view==='logs')openLogs()
   }catch(error){document.body.innerHTML=`<main style="max-width:720px;margin:15vh auto;padding:32px;font-family:Arial,sans-serif"><h1 style="font-size:24px">V2.0.26 服务连接失败</h1><p>${esc(error.message)}</p><p>请确认 start.bat 窗口仍在运行，然后刷新页面。</p></main>`}}
