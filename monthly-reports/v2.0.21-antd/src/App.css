@@ -1,0 +1,13 @@
+html, body, #root { margin: 0; background: #e8edf2; }
+.page { max-width: 1180px; margin: 0 auto; padding: 12px 12px 24px; }
+.page .ant-card { margin-bottom: 10px; }
+.page .ant-card-head { min-height: 40px; padding: 0 12px; }
+.page .ant-card-body { padding: 12px; }
+.page .ant-table { font-size: 12px; }
+.page .ant-statistic-content { font-size: 22px; }
+.barline { display: flex; align-items: center; gap: 8px; }
+.barline .track { flex: 1; height: 8px; background: #e4e9ee; border-radius: 2px; overflow: hidden; }
+.barline .track i { display: block; height: 100%; border-radius: 2px; }
+.barline b { width: 42px; text-align: right; font-variant-numeric: tabular-nums; }
+.cell-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.muted { color: #8a96a3; }
