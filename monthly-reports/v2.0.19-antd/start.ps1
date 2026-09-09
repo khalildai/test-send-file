@@ -1,14 +1,8 @@
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
-Write-Host 'Checking Node.js...'
-$node = Get-Command node -ErrorAction SilentlyContinue
-if (-not $node) { throw 'Need Node.js 18+ in PATH.' }
-if (-not (Test-Path 'node_modules')) {
-    Write-Host 'npm install...'
-    npm install
-    if ($LASTEXITCODE -ne 0) { throw 'npm install failed.' }
+$html = Join-Path $PSScriptRoot '测试能力成熟度月报.html'
+if (-not (Test-Path -LiteralPath $html)) {
+    $html = Join-Path $PSScriptRoot 'dist\index.html'
 }
-Write-Host 'Local URL: http://127.0.0.1:5174'
-Write-Host 'Keep this window open. Ctrl+C to stop.'
-npm run dev
-exit $LASTEXITCODE
+if (-not (Test-Path -LiteralPath $html)) { throw 'Missing 测试能力成熟度月报.html' }
+Start-Process $html

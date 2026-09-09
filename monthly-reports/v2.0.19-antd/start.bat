@@ -1,11 +1,13 @@
 @echo off
 cd /d "%~dp0"
-echo Starting monthly report (antd)...
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0start.ps1"
-set "EXIT_CODE=%ERRORLEVEL%"
-if not "%EXIT_CODE%"=="0" (
-  echo.
-  echo Startup failed.
-  pause
+if exist "测试能力成熟度月报.html" (
+  start "" "测试能力成熟度月报.html"
+  exit /b 0
 )
-exit /b %EXIT_CODE%
+if exist "dist\index.html" (
+  start "" "dist\index.html"
+  exit /b 0
+)
+echo Missing 测试能力成熟度月报.html
+pause
+exit /b 1
