@@ -143,6 +143,56 @@ def parse_json(value, fallback):
         return fallback
 
 
+TEAM_NAME_ALIASES = {
+    "大型传动": "大型传动测试组",
+    "人形机器人测试组": "人形机器人产品测试组",
+    "视觉测试组": "视觉解决方案及产品测试组",
+}
+
+
+def bind_capability_team_ids(rows: list, teams: list) -> int:
+    """Associate capabilities by team ID. Display names come from org config, not the other way around."""
+    by_id = {str(team.get("id")): team for team in teams if team.get("id")}
+    by_name = {str(team.get("name")): team for team in teams if team.get("name")}
+    changed = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        team = by_id.get(str(row.get("teamId") or "").strip())
+        if team is None:
+            raw_name = str(row.get("team") or "").strip()
+            aliased = TEAM_NAME_ALIASES.get(raw_name, raw_name)
+            team = by_name.get(aliased) or by_name.get(raw_name)
+        if team is None:
+            continue
+        new_id = str(team["id"])
+        new_name = str(team["name"])
+        if row.get("teamId") != new_id or row.get("team") != new_name:
+            row["teamId"] = new_id
+            row["team"] = new_name
+            changed += 1
+    return changed
+
+
+def migrate_capability_team_ids() -> None:
+    with WRITE_LOCK:
+        with connect() as db:
+            initialized = db.execute("SELECT value FROM app_meta WHERE key='initialized'").fetchone()
+            if not initialized or initialized["value"] != "1":
+                return
+            teams = [{"id": row["id"], "name": row["name"]} for row in db.execute("SELECT id, name FROM teams")]
+            cap_rows = list(db.execute("SELECT id, payload FROM capabilities ORDER BY rowid"))
+            parsed = [(row["id"], parse_json(row["payload"], {})) for row in cap_rows]
+            changed = bind_capability_team_ids([payload for _, payload in parsed], teams)
+            if not changed:
+                return
+            db.execute("BEGIN IMMEDIATE")
+            for cap_id, payload in parsed:
+                db.execute("UPDATE capabilities SET payload=? WHERE id=?", (json_value(payload), cap_id))
+            db.execute("UPDATE app_meta SET value=? WHERE key='revision'", (str(current_revision(db) + 1),))
+            db.commit()
+
+
 def current_revision(db: sqlite3.Connection) -> int:
     row = db.execute("SELECT value FROM app_meta WHERE key='revision'").fetchone()
     return int(row["value"] if row else 0)
@@ -173,6 +223,7 @@ def load_state(db: sqlite3.Connection) -> dict:
         ],
     }
     initialized = db.execute("SELECT value FROM app_meta WHERE key='initialized'").fetchone()["value"] == "1"
+    config["retiredTeamIds"] = settings.get("retiredTeamIds") or []
     return {
         "initialized": initialized,
         "revision": current_revision(db),
@@ -200,9 +251,10 @@ def maturity_metric_results(state: dict) -> dict:
     dimensions = sorted({str(row.get("dimension") or "") for row in rows if row.get("dimension")})
 
     def team_score(team: dict, domain: str, dimension: str):
+        team_id = str(team.get("id") or "")
         matching = [
             row for row in rows
-            if row.get("team") == team.get("name")
+            if str(row.get("teamId") or "") == team_id
             and row.get("domain") == domain
             and row.get("dimension") == dimension
             and row.get("level") in METRIC_WEIGHTS
@@ -311,6 +363,9 @@ def validate_state(payload: dict) -> None:
     if any(not item for item in names) or len(names) != len(set(names)):
         raise ValueError("科组名称为空或重复")
     valid_ids = set(ids)
+    retired = {str(item).strip() for item in (config.get("retiredTeamIds") or []) if str(item).strip()}
+    if any(item in retired for item in ids):
+        raise ValueError("科组 ID 不能复用已删除的 ID")
     for kind in ("departments", "businesses"):
         for unit in config[kind]:
             if not str(unit.get("id", "")).strip() or not str(unit.get("name", "")).strip():
@@ -352,6 +407,7 @@ def replace_state(db: sqlite3.Connection, payload: dict, new_revision: int) -> N
         key: payload.get(key)
         for key in ("asOf", "insightLock", "insightTexts", "tipEdits", "rawColumnLabels", "comparison")
     }
+    settings["retiredTeamIds"] = config.get("retiredTeamIds") or []
     db.executemany(
         "INSERT INTO app_settings(key, value) VALUES (?, ?)",
         [(key, json_value(value)) for key, value in settings.items()],
@@ -370,7 +426,7 @@ ROLE_FIELD_PERMS = {
 }
 CAPABILITY_FIELDS = {"domain", "owner", "dimension", "sub", "description", "delivered", "due", "level", "stage", "digital"}
 ACHIEVEMENT_FIELDS = {"achieved", "plannedMonth", "expectedSep", "expectedDec"}
-SERVER_OWNED_FIELDS = {"achievedAt", "plannedMonthUpdatedAt"}
+SERVER_OWNED_FIELDS = {"achievedAt", "plannedMonthUpdatedAt", "teamId", "team"}
 
 
 def apply_server_timestamps(old_rows: list, new_rows: list) -> None:
@@ -581,7 +637,7 @@ AUDIT_FIELD_LABELS = {
     "riskOverride": "风险手工修正", "yearData": "年度数据",
     "configLabels": "列名/标签配置",
 }
-AUDIT_IGNORE_FIELDS = {"id", "achievedAt", "plannedMonthUpdatedAt"}
+AUDIT_IGNORE_FIELDS = {"id", "achievedAt", "plannedMonthUpdatedAt", "teamId"}
 
 
 def _audit_value(v):
@@ -692,6 +748,7 @@ def put_state():
                 "SELECT o.name, (SELECT json_group_array(rt.team_id) FROM org_team_relations rt WHERE rt.org_id=o.id) FROM org_units o WHERE o.kind='business'")]
             old_config["teams"] = [dict(name=n, teamIds=[]) for (n,) in db.execute("SELECT name FROM teams")]
             new_revision = actual + 1
+            bind_capability_team_ids(payload.get("data") or [], (payload.get("configData") or {}).get("teams") or [])
             try:
                 apply_server_timestamps(old_rows, payload.get("data", []))
             except ValueError as error:
@@ -861,6 +918,7 @@ def clear_audit_logs():
 
 
 init_db()
+migrate_capability_team_ids()
 
 
 if __name__ == "__main__":
