@@ -1,0 +1,36 @@
+/** 数字与章节口径锁定 V2.0.18 正式稿，禁止改数。 */
+export const report = {
+  period: '2026-09',
+  version: 'V2.0.18 口径',
+  target: 3.0,
+  full: 4.0,
+  center: 1.75,
+  gap: -1.25,
+  items: 1984,
+  teams: 38,
+  orgs: 10,
+  db: 'E:\\raft\\V2.0.18\\source\\data\\maturity.db',
+  domains: [
+    { name: '合规', score: 3.1 },
+    { name: '软件', score: 1.83 },
+    { name: '硬件', score: 1.71 },
+    { name: 'EMC', score: 1.58 },
+    { name: '环境可靠性', score: 1.43 },
+    { name: '机械', score: 1.12 },
+  ],
+  topBottom: [
+    { band: '前 5%', team: '安规测试组', score: 3.1, vs: 0.1 },
+    { band: '前 5%', team: '环境可靠性测试组', score: 2.87, vs: -0.13 },
+    { band: '后 5%', team: '工业电源测试组', score: 0.67, vs: -2.33 },
+    { band: '后 5%', team: '人形机器人测试组', score: 0.96, vs: -2.04 },
+  ],
+  dept: { name: '驱动产品测试部', score: 1.8, vsCenter: 0.05, vsTarget: -1.2 },
+  plan: [
+    { month: '9 月', n: 0 },
+    { month: '10 月', n: 2 },
+    { month: '11 月', n: 0 },
+    { month: '12 月', n: 1 },
+    { month: '未标记', n: 1166 },
+  ],
+  demoQuality: { defects: 3.2, reopen: 8.5 },
+}

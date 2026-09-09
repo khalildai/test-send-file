@@ -1,0 +1,5 @@
+html, body, #root { margin: 0; min-height: 100%; background: #e8edf2; }
+.page { max-width: 1180px; margin: 0 auto; padding: 20px 16px 32px; }
+.section-title { margin-bottom: 12px !important; }
+.chart-box { height: 260px; }
+.chart-box-sm { height: 220px; }
