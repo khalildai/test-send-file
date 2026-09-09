@@ -150,8 +150,14 @@ TEAM_NAME_ALIASES = {
 }
 
 
-def bind_capability_team_ids(rows: list, teams: list) -> int:
-    """Associate capabilities by team ID. Display names come from org config, not the other way around."""
+def _unit_has_team(unit: dict, team_id: str) -> bool:
+    return team_id in {str(item) for item in (unit.get("teamIds") or [])}
+
+
+def bind_capability_team_ids(rows: list, teams: list, departments: list | None = None, businesses: list | None = None) -> int:
+    """Associate capabilities by org IDs. Display names come from org config, never used as keys."""
+    departments = departments or []
+    businesses = businesses or []
     by_id = {str(team.get("id")): team for team in teams if team.get("id")}
     by_name = {str(team.get("name")): team for team in teams if team.get("name")}
     changed = 0
@@ -167,11 +173,50 @@ def bind_capability_team_ids(rows: list, teams: list) -> int:
             continue
         new_id = str(team["id"])
         new_name = str(team["name"])
-        if row.get("teamId") != new_id or row.get("team") != new_name:
-            row["teamId"] = new_id
-            row["team"] = new_name
-            changed += 1
+        dept = next((item for item in departments if _unit_has_team(item, new_id)), None)
+        dept_id = str(dept.get("id") or "") if dept else ""
+        dept_name = str(dept.get("name") or "") if dept else ""
+        business_ids = [str(item.get("id")) for item in businesses if item.get("id") and _unit_has_team(item, new_id)]
+        org = f"{dept_name}：{new_name}" if dept_name else new_name
+        next_row = {
+            "teamId": new_id,
+            "team": new_name,
+            "deptId": dept_id,
+            "dept": dept_name,
+            "org": org,
+            "businessIds": business_ids,
+        }
+        if dept_id == "":
+            next_row.pop("deptId")
+            next_row["dept"] = row.get("dept") or ""
+            next_row["org"] = f"{next_row['dept']}：{new_name}" if next_row["dept"] else new_name
+        dirty = False
+        for key, value in next_row.items():
+            if row.get(key) != value:
+                dirty = True
+                break
+        if not dirty:
+            continue
+        row.update(next_row)
+        changed += 1
     return changed
+
+
+def _load_org_units(db: sqlite3.Connection) -> tuple[list, list, list]:
+    teams = [{"id": row["id"], "name": row["name"]} for row in db.execute("SELECT id, name FROM teams")]
+    units = list(db.execute("SELECT id, kind, name FROM org_units ORDER BY rowid"))
+    relations = {}
+    for row in db.execute("SELECT org_id, team_id FROM org_team_relations ORDER BY rowid"):
+        relations.setdefault(row["org_id"], []).append(row["team_id"])
+    departments = [
+        {"id": row["id"], "name": row["name"], "teamIds": relations.get(row["id"], [])}
+        for row in units if row["kind"] == "department"
+    ]
+    businesses = [
+        {"id": row["id"], "name": row["name"], "teamIds": relations.get(row["id"], [])}
+        for row in units if row["kind"] == "business"
+    ]
+    return teams, departments, businesses
 
 
 def migrate_capability_team_ids() -> None:
@@ -180,10 +225,10 @@ def migrate_capability_team_ids() -> None:
             initialized = db.execute("SELECT value FROM app_meta WHERE key='initialized'").fetchone()
             if not initialized or initialized["value"] != "1":
                 return
-            teams = [{"id": row["id"], "name": row["name"]} for row in db.execute("SELECT id, name FROM teams")]
+            teams, departments, businesses = _load_org_units(db)
             cap_rows = list(db.execute("SELECT id, payload FROM capabilities ORDER BY rowid"))
             parsed = [(row["id"], parse_json(row["payload"], {})) for row in cap_rows]
-            changed = bind_capability_team_ids([payload for _, payload in parsed], teams)
+            changed = bind_capability_team_ids([payload for _, payload in parsed], teams, departments, businesses)
             if not changed:
                 return
             db.execute("BEGIN IMMEDIATE")
@@ -224,6 +269,8 @@ def load_state(db: sqlite3.Connection) -> dict:
     }
     initialized = db.execute("SELECT value FROM app_meta WHERE key='initialized'").fetchone()["value"] == "1"
     config["retiredTeamIds"] = settings.get("retiredTeamIds") or []
+    config["retiredDeptIds"] = settings.get("retiredDeptIds") or []
+    config["retiredBusinessIds"] = settings.get("retiredBusinessIds") or []
     return {
         "initialized": initialized,
         "revision": current_revision(db),
@@ -366,9 +413,18 @@ def validate_state(payload: dict) -> None:
     retired = {str(item).strip() for item in (config.get("retiredTeamIds") or []) if str(item).strip()}
     if any(item in retired for item in ids):
         raise ValueError("科组 ID 不能复用已删除的 ID")
-    for kind in ("departments", "businesses"):
+    for kind, retired_key, label in (
+        ("departments", "retiredDeptIds", "部门"),
+        ("businesses", "retiredBusinessIds", "业务线"),
+    ):
+        unit_ids = [str(unit.get("id", "")).strip() for unit in config[kind]]
+        if any(not item for item in unit_ids) or len(unit_ids) != len(set(unit_ids)):
+            raise ValueError(f"{label} ID 为空或重复")
+        retired_units = {str(item).strip() for item in (config.get(retired_key) or []) if str(item).strip()}
+        if any(item in retired_units for item in unit_ids):
+            raise ValueError(f"{label} ID 不能复用已删除的 ID")
         for unit in config[kind]:
-            if not str(unit.get("id", "")).strip() or not str(unit.get("name", "")).strip():
+            if not str(unit.get("name", "")).strip():
                 raise ValueError("部门或业务的 ID/名称不能为空")
             if any(team_id not in valid_ids for team_id in unit.get("teamIds", [])):
                 raise ValueError("组织关系引用了不存在的科组")
@@ -408,6 +464,8 @@ def replace_state(db: sqlite3.Connection, payload: dict, new_revision: int) -> N
         for key in ("asOf", "insightLock", "insightTexts", "tipEdits", "rawColumnLabels", "comparison")
     }
     settings["retiredTeamIds"] = config.get("retiredTeamIds") or []
+    settings["retiredDeptIds"] = config.get("retiredDeptIds") or []
+    settings["retiredBusinessIds"] = config.get("retiredBusinessIds") or []
     db.executemany(
         "INSERT INTO app_settings(key, value) VALUES (?, ?)",
         [(key, json_value(value)) for key, value in settings.items()],
@@ -426,7 +484,7 @@ ROLE_FIELD_PERMS = {
 }
 CAPABILITY_FIELDS = {"domain", "owner", "dimension", "sub", "description", "delivered", "due", "level", "stage", "digital"}
 ACHIEVEMENT_FIELDS = {"achieved", "plannedMonth", "expectedSep", "expectedDec"}
-SERVER_OWNED_FIELDS = {"achievedAt", "plannedMonthUpdatedAt", "teamId", "team"}
+SERVER_OWNED_FIELDS = {"achievedAt", "plannedMonthUpdatedAt", "teamId", "team", "deptId", "dept", "org", "businessIds"}
 
 
 def apply_server_timestamps(old_rows: list, new_rows: list) -> None:
@@ -637,7 +695,7 @@ AUDIT_FIELD_LABELS = {
     "riskOverride": "风险手工修正", "yearData": "年度数据",
     "configLabels": "列名/标签配置",
 }
-AUDIT_IGNORE_FIELDS = {"id", "achievedAt", "plannedMonthUpdatedAt", "teamId"}
+AUDIT_IGNORE_FIELDS = {"id", "achievedAt", "plannedMonthUpdatedAt", "teamId", "deptId", "businessIds"}
 
 
 def _audit_value(v):
@@ -748,7 +806,13 @@ def put_state():
                 "SELECT o.name, (SELECT json_group_array(rt.team_id) FROM org_team_relations rt WHERE rt.org_id=o.id) FROM org_units o WHERE o.kind='business'")]
             old_config["teams"] = [dict(name=n, teamIds=[]) for (n,) in db.execute("SELECT name FROM teams")]
             new_revision = actual + 1
-            bind_capability_team_ids(payload.get("data") or [], (payload.get("configData") or {}).get("teams") or [])
+            cfg = payload.get("configData") or {}
+            bind_capability_team_ids(
+                payload.get("data") or [],
+                cfg.get("teams") or [],
+                cfg.get("departments") or [],
+                cfg.get("businesses") or [],
+            )
             try:
                 apply_server_timestamps(old_rows, payload.get("data", []))
             except ValueError as error:
