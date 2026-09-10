@@ -165,6 +165,36 @@ def main() -> int:
     if leaked:
         failed.append(f"selected {software_team} still paints {leaked} 人形 groups")
 
+    # Simulate chip click: value=teamId, label=name. 整机 must not show 软件组.
+    zhengji = "工业机器人整机产品测试组"
+    ruanjian = "工业机器人软件测试组"
+    zid = team_id_by_name(zhengji)
+    rid = team_id_by_name(ruanjian)
+    if not zid or not rid or zid == rid:
+        failed.append("整机/软件 teamId missing or collided")
+    else:
+        click_id = str(zid)  # chip data-v
+        click_name = next(t["name"] for t in teams_full if str(t["id"]) == click_id)
+        if click_name != zhengji:
+            failed.append(f"click id {click_id} resolved to {click_name} not {zhengji}")
+        matched = [c for c in caps if str(row_team_id(c) or "") == click_id]
+        leaked_soft = [c for c in matched if str(row_team_id(c) or "") == str(rid)]
+        names = {str(c.get("team") or "") for c in matched}
+        print(f"CLICK {zhengji} id={click_id} n={len(matched)} names={names}")
+        if leaked_soft:
+            failed.append(f"click 整机 leaked {len(leaked_soft)} 软件组 rows")
+        if ruanjian in names:
+            failed.append("click 整机 still shows 工业机器人软件测试组")
+        if click_name == ruanjian:
+            failed.append("chip id for 整机 bound to 软件组")
+        # every org team: click id -> only that team's bound rows
+        for t in teams_full:
+            tid = str(t["id"])
+            rows = [c for c in caps if str(row_team_id(c) or "") == tid]
+            other = {str(c.get("team") or "") for c in rows} - {t["name"]}
+            if other:
+                failed.append(f"click {t['name']} leaked {other}")
+
     if failed:
         print("SELFCHECK FAIL")
         for item in failed:
