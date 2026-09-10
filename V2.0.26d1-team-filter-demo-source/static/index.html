@@ -291,7 +291,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 <div class="layout">
   <aside class="side">
     <div class="brand"><span>TM</span>测试成熟度中心</div>
-    <div class="side-version">当前版本 <b>V2.0.26d5 临时demo</b></div>
+    <div class="side-version">当前版本 <b>V2.0.26d6 临时demo</b></div>
     <div id="userBox" style="margin:0 10px 14px;padding:8px 10px;border:1px solid #315574;border-radius:8px;background:#1d3a56;color:#cfe0f2;font-size:12px;display:none">
       <div id="userLine">—</div>
       <div style="display:flex;gap:8px;margin-top:6px"><button id="loginBtn" onclick="showLoginGate()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">登录</button><button id="userMgrBtn" onclick="openUserMgr()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">角色密码管理</button><button id="logoutBtn" onclick="doLogout()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#3b556e;color:#dbe7f4;font:inherit;font-size:11.5px;cursor:pointer">退出</button></div>
@@ -316,7 +316,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <div class="crumb">测试业务 / 能力成熟度评估</div>
         <div class="title-row">
           <h1>测试能力成熟度看板</h1>
-          <span class="version-badge">V2.0.26d5 临时demo</span>
+          <span class="version-badge">V2.0.26d6 临时demo</span>
           <div class="filter-summary" id="filterSummary"></div>
         </div>
         <div class="muted">统一目标集 2026-V1.0 · 领域内固定能力分母；科组先关联领域，再按领域独立计分并平均。数据截至 <span id="asOfText">—</span></div>
@@ -687,7 +687,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
   <main style="max-width:1280px;margin:18px auto">
     <section class="card">
       <div class="version-summary">
-        <div class="item"><span>当前版本</span><b>V2.0.26d5 临时demo</b></div>
+        <div class="item"><span>当前版本</span><b>V2.0.26d6 临时demo</b></div>
         <div class="item"><span>发布日期</span><b>2026-09-08</b></div>
         <div class="item"><span>版本类型</span><b>V2.0 正式版本</b></div>
       </div>
@@ -695,7 +695,8 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <table class="version-table">
           <thead><tr><th>版本号</th><th>发布日期</th><th>变更摘要</th></tr></thead>
           <tbody>
-            <tr><td>V2.0.26d5 临时demo <span class="version-current">当前</span></td><td>2026-09-10</td><td>组织关系科组可上移下移，保存后筛选芯片和达成表列顺序跟着变。筛选仍是芯片。5000 不动。</td></tr>
+            <tr><td>V2.0.26d6 临时demo <span class="version-current">当前</span></td><td>2026-09-10</td><td>组织关系里设置的科组关联领域不再被能力数据覆盖，硬件能保存住。筛选仍是芯片。5000 不动。</td></tr>
+            <tr><td>V2.0.26d5 临时demo</td><td>2026-09-10</td><td>组织关系科组可上移下移，保存后筛选芯片和达成表列顺序跟着变。筛选仍是芯片。5000 不动。</td></tr>
             <tr><td>V2.0.26d3 临时demo</td><td>2026-09-10</td><td>科组筛选按 ID 绑定，选整机产品组不再画出软件测试组。科组关联领域跟能力数据对齐。5000 不动。</td></tr>
             <tr><td>V2.0.26d2 临时demo</td><td>2026-09-10</td><td>未挂科组的能力按科组关联领域显示。筛选软件时，关联软件的科组能看到 2 条软件领域场景化测试；Owner×部门交叉不再把这些行筛空。空科组仍不串到别组。5000 不动。</td></tr>
             <tr><td>V2.0.26d1 临时demo</td><td>2026-09-10</td><td>独立端口 5001，不动 5000。筛选按科组 ID，空科组显示空；无 ID 项可筛出。归位：机器人平台软件测试组→工业机器人软件测试组、电柜及整机性能测试组→电柜测试及系统架构能力组、工艺及解决方案测试组→工业机器人整机产品测试组。删除四关节/六关节测试组数据。未关联科组保留。</td></tr>
@@ -984,10 +985,6 @@ function bindCapabilityTeamIds(persistable=false){
     if(dept){x.deptId=dept.id;x.dept=dept.name}
     x.org=org;x.businessIds=bizIds;
     if(persistable&&changed){markRowFields(x,['teamId','team','deptId','dept','org','businessIds']);changedAny=true}
-  });
-  (configData.teams||[]).forEach(t=>{
-    const domains=unique(data.filter(x=>rowMatchesTeam(x,t.id)).map(x=>capabilityDomainCategory(x.domain))).filter(Boolean);
-    if(domains.length)t.domains=domains;
   });
   if(persistable&&changedAny)dirtyMeta.replaceData=true;
 }

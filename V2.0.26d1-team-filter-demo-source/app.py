@@ -681,7 +681,7 @@ def health():
     with connect() as db:
         revision = current_revision(db)
         user = current_user(db)
-    return jsonify({"ok": True, "version": "V2.0.26d5", "revision": revision, "user": user})
+    return jsonify({"ok": True, "version": "V2.0.26d6", "revision": revision, "user": user})
 
 
 @app.get("/api/state")
