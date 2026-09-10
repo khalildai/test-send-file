@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import secrets
+import shutil
 import sqlite3
 import threading
 from datetime import datetime, timedelta
@@ -695,6 +696,34 @@ def get_state():
         return jsonify(load_state(db))
 
 
+def backup_database(reason: str = "manual") -> dict:
+    backup_dir = DATA_DIR / "backups"
+    backup_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    dest = backup_dir / f"maturity-{stamp}.db"
+    with WRITE_LOCK:
+        if not DB_PATH.exists():
+            raise FileNotFoundError("当前库不存在")
+        with connect() as db:
+            db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        shutil.copy2(DB_PATH, dest)
+    return {"ok": True, "path": str(dest), "file": dest.name, "reason": reason}
+
+
+@app.post("/api/backup")
+def post_backup():
+    with connect() as db:
+        user = current_user(db)
+    if not user:
+        return jsonify({"error": "未登录，请先登录后再备份"}), 401
+    if user["role"] != "admin":
+        return jsonify({"error": "仅管理员可备份当前库"}), 403
+    try:
+        return jsonify(backup_database("data-admin"))
+    except Exception as error:
+        return jsonify({"error": str(error)}), 500
+
+
 @app.get("/api/metrics/maturity")
 def get_maturity_metrics():
     with connect() as db:
@@ -780,6 +809,17 @@ def compute_audit_entries(old_rows: list, new_rows: list, old_config: dict, new_
                 added = ",".join(sorted(set(n) - set(o))) or "无"
                 removed = ",".join(sorted(set(o) - set(n))) or "无"
                 entries.append((f"组织关系配置 · {kind} · {name}", "关联科组变化", f"移除: {removed}", f"新增: {added}"))
+    def _domain_snapshot(config: dict) -> dict:
+        return {str(x.get("name")): sorted(str(d) for d in (x.get("domains") or [])) for x in (config.get("teams") or [])}
+    old_dom, new_dom = _domain_snapshot(old_config or {}), _domain_snapshot(new_config or {})
+    for name in sorted(set(old_dom) & set(new_dom)):
+        if old_dom[name] != new_dom[name]:
+            entries.append((
+                f"数据维护 · 科组 · {name}",
+                "关联领域",
+                "、".join(old_dom[name]) or "无",
+                "、".join(new_dom[name]) or "无",
+            ))
     return entries
 
 
@@ -820,7 +860,7 @@ def put_state():
                 "SELECT o.name, (SELECT json_group_array(rt.team_id) FROM org_team_relations rt WHERE rt.org_id=o.id) FROM org_units o WHERE o.kind='department'")]
             old_config["businesses"] = [dict(name=n, teamIds=json.loads(rel or "[]")) for n, rel in db.execute(
                 "SELECT o.name, (SELECT json_group_array(rt.team_id) FROM org_team_relations rt WHERE rt.org_id=o.id) FROM org_units o WHERE o.kind='business'")]
-            old_config["teams"] = [dict(name=n, teamIds=[]) for (n,) in db.execute("SELECT name FROM teams")]
+            old_config["teams"] = [dict(name=n, domains=parse_json(d, []), teamIds=[]) for n, d in db.execute("SELECT name, domains FROM teams")]
             new_revision = actual + 1
             cfg = payload.get("configData") or {}
             bind_capability_team_ids(
