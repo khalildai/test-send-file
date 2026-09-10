@@ -284,6 +284,14 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 #gapView .gap-empty strong{display:block;color:#203246;font-size:15px;margin-bottom:6px}
 @media(max-width:980px){#gapView .gap-filters,#gapView .gap-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#gapView .gap-head{flex-direction:column;align-items:flex-start}}
 @media(max-width:560px){#gapView .gap-filters,#gapView .gap-stats{grid-template-columns:1fr 1fr}#gapView .gap-table-wrap{max-height:none}#gapView table.gap-table thead{display:none}#gapView table.gap-table,#gapView table.gap-table tbody,#gapView table.gap-table tr{display:block;width:100%;min-width:0}#gapView .gap-note-cell{width:auto;min-width:0}}
+#dataAdminView .da-table{width:100%;border-collapse:collapse;background:#fff}
+#dataAdminView .da-table th{background:#f4f7fb;text-align:left;padding:10px 12px;border-bottom:1px solid #e3ebf4;font-size:13px;white-space:nowrap}
+#dataAdminView .da-table th.da-check,#dataAdminView .da-table td.da-check{text-align:center;width:88px}
+#dataAdminView .da-table td{padding:10px 12px;border-bottom:1px solid #eef2f6;vertical-align:middle}
+#dataAdminView .da-table tr.da-mismatch{background:#fff4d6}
+#dataAdminView .da-warn{color:#b87600;font-size:12px;margin-top:4px}
+#dataAdminView .da-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;flex-wrap:wrap}
+#dataAdminView .da-backup{display:flex;align-items:center;gap:6px;color:#35506f;font-size:13px}
 </style>
 
 </head>
@@ -304,6 +312,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
       <a href="#data" onclick="event.preventDefault();openRaw()">能力成熟度达成情况</a>
       <a href="#gap" onclick="event.preventDefault();openGapNotes()">本月未达成编辑</a>
       <a href="#config" data-role-need="owner" onclick="event.preventDefault();openConfig()">组织关系配置</a>
+      <a href="#data-admin" data-role-need="admin" onclick="event.preventDefault();openDataAdmin()">数据维护</a>
       <a href="#dictionary" onclick="event.preventDefault();openDictionary()">字段与关系字典</a>
       <a href="#logs" onclick="event.preventDefault();openLogs()">修改记录</a>
       <small>系统</small>
@@ -643,6 +652,29 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
   </main>
 </section>
 
+<section id="dataAdminView" class="rawview">
+  <header class="head" style="max-width:1680px;margin:auto">
+    <div>
+      <div class="crumb">数据管理 / 数据维护</div>
+      <h1>数据维护 | 科组关联领域</h1>
+      <div class="muted">按科组勾选关联领域。关联领域与能力实际领域不一致的行会标黄。仅管理员可进入；保存只改科组关联领域，并写入审计。</div>
+    </div>
+    <div class="actions">
+      <span class="save-state" id="dataAdminSaved">已保存</span>
+      <button class="btn" onclick="closeDataAdmin()">返回看板</button>
+    </div>
+  </header>
+  <main style="max-width:1680px;margin:18px auto">
+    <section class="card">
+      <div class="tablewrap" id="dataAdminTable"></div>
+      <div class="da-footer">
+        <label class="da-backup"><input id="dataAdminBackup" type="checkbox" checked> 保存前自动备份当前库</label>
+        <button class="btn primary" id="dataAdminSaveBtn" onclick="saveDataAdminDomains()">保存关联领域</button>
+      </div>
+    </section>
+  </main>
+</section>
+
 <section id="dictionaryView" class="rawview">
   <header class="head" style="max-width:1760px;margin:auto">
     <div>
@@ -877,6 +909,7 @@ function renderAfterSilentRefresh(){
   if($('logsView')?.classList.contains('show')){fillLogsTable(true);return}
   else if($('rawView')?.classList.contains('show'))renderRaw();
   else if($('configView')?.classList.contains('show')){/* keep configDraft */}
+  else if($('dataAdminView')?.classList.contains('show')){/* keep dataAdminDraft */}
   else if($('gapView')?.classList.contains('show')){/* gap has own API */}
   else{render()}
 }
@@ -907,11 +940,11 @@ function startLiveRefresh(){
   liveRefreshTimer=window.setInterval(silentRefreshFromServer,LIVE_REFRESH_MS);
   resetStalePageTimer();
 }
-function hideAppSubviews(){['rawView','configView','dictionaryView','versionView','gapView','logsView'].forEach(id=>{const n=$(id);if(n)n.classList.remove('show')})}
+function hideAppSubviews(){['rawView','configView','dataAdminView','dictionaryView','versionView','gapView','logsView'].forEach(id=>{const n=$(id);if(n)n.classList.remove('show')})}
 function sharedStatePayload(){return{data,changeLogs,asOf,insightLock,insightTexts,tipEdits,configData,rawColumnLabels,comparison:{mode:comparisonScopeMode,selections:comparisonSelections,domains:comparisonDomainSelection}}}
 function applySharedState(s){if(s?.data?.length)data=s.data;if(Array.isArray(s?.changeLogs))changeLogs=s.changeLogs;if(s?.asOf)asOf=s.asOf;insightLock=!!s?.insightLock;insightTexts=s?.insightTexts||[];tipEdits=s?.tipEdits||{dept:{},team:{}};if(s?.configData?.teams)configData=s.configData;if(Array.isArray(s?.configData?.retiredTeamIds))configData.retiredTeamIds=s.configData.retiredTeamIds;if(Array.isArray(s?.configData?.retiredDeptIds))configData.retiredDeptIds=s.configData.retiredDeptIds;if(Array.isArray(s?.configData?.retiredBusinessIds))configData.retiredBusinessIds=s.configData.retiredBusinessIds;if(s?.rawColumnLabels)rawColumnLabels={...RAW_LABEL_DEFAULTS,...s.rawColumnLabels};if(s?.comparison)applyComparisonState(s.comparison);serverRevision=Number(s?.revision)||0;bindCapabilityTeamIds()}
 async function loadPersist(){const response=await fetch('/api/state',{cache:'no-store'});if(!response.ok)throw Error(`服务端数据读取失败（HTTP ${response.status}）`);const state=await response.json();if(!state.initialized){ensureConfig();const created=await fetch('/api/state',{method:'PUT',headers:{'Content-Type':'application/json','If-Match':String(state.revision||0)},body:JSON.stringify(sharedStatePayload())});if(created.status===409)return loadPersist();if(!created.ok)throw Error(`初始数据写入失败（HTTP ${created.status}）`);serverRevision=Number((await created.json()).revision)||1;return}applySharedState(state)}
-function persist(){if(!serverReady)return Promise.resolve();serverSaveQueue=serverSaveQueue.then(async()=>{persistInFlight=true;const inflight=snapshotDirty();try{for(let attempt=0;attempt<6;attempt++){const latest=await fetch('/api/state',{cache:'no-store'});if(!latest.ok)throw Error(`服务端数据读取失败（HTTP ${latest.status}）`);const remote=await latest.json();const payload=overlayLocalPatches(remote);const response=await fetch('/api/state',{method:'PUT',headers:{'Content-Type':'application/json','If-Match':String(remote.revision||0)},body:JSON.stringify(payload)});const result=await response.json().catch(()=>({}));if(response.status===409)continue;if(!response.ok)throw Error(result.error||`保存失败（HTTP ${response.status}）`);serverRevision=Number(result.revision)||serverRevision+1;serverConflictShown=false;clearDirtySubset(inflight);applyRemotePreserveDirty({...payload,initialized:true,revision:serverRevision});try{await loadMaturityMetricPayload()}catch(error){maturityMetricPayload=null;console.error(error);showImportStatus('error','度量指标刷新失败',error.message)}renderMetricOverview();return}throw Error('数据已被其他用户更新，请稍后重试')}finally{persistInFlight=false}}).catch(error=>{console.error(error);showImportStatus('error','共享数据保存失败',error.message)});return serverSaveQueue}
+function persist(opts){if(!serverReady)return Promise.resolve();const task=serverSaveQueue.then(async()=>{persistInFlight=true;const inflight=snapshotDirty();try{for(let attempt=0;attempt<6;attempt++){const latest=await fetch('/api/state',{cache:'no-store'});if(!latest.ok)throw Error(`服务端数据读取失败（HTTP ${latest.status}）`);const remote=await latest.json();const payload=overlayLocalPatches(remote);const response=await fetch('/api/state',{method:'PUT',headers:{'Content-Type':'application/json','If-Match':String(remote.revision||0)},body:JSON.stringify(payload)});const result=await response.json().catch(()=>({}));if(response.status===409)continue;if(!response.ok)throw Error(result.error||`保存失败（HTTP ${response.status}）`);serverRevision=Number(result.revision)||serverRevision+1;serverConflictShown=false;clearDirtySubset(inflight);applyRemotePreserveDirty({...payload,initialized:true,revision:serverRevision});try{await loadMaturityMetricPayload()}catch(error){maturityMetricPayload=null;console.error(error);showImportStatus('error','度量指标刷新失败',error.message)}renderMetricOverview();return}throw Error('数据已被其他用户更新，请稍后重试')}finally{persistInFlight=false}}).catch(error=>{console.error(error);showImportStatus('error','共享数据保存失败',error.message);if(opts&&opts.throwOnError)throw error});serverSaveQueue=task.catch(()=>{});return task}
 
 function unique(arr){return [...new Set(arr)].filter(Boolean)}
 function capabilityDomainCategory(domain){if(/安规|合规|认证/.test(domain))return'合规';if(/可靠性|环境/.test(domain))return'环境可靠性';return CAPABILITY_DOMAINS.includes(domain)?domain:domain}
@@ -1767,6 +1800,68 @@ function openConfig(tab=configTab){
   hideAppSubviews();$('configView').classList.add('show');silentRefreshFromServer();renderConfig();
 }
 function closeConfig(){$('configView').classList.remove('show');configDraft=null;buildFilters();render()}
+let dataAdminDraft=null;
+function actualDomainsForTeam(name){return unique((data||[]).filter(x=>x.team===name).map(x=>capabilityDomainCategory(x.domain))).filter(x=>CAPABILITY_DOMAINS.includes(x)).sort()}
+function domainsEqual(a,b){const x=unique(a||[]).filter(d=>CAPABILITY_DOMAINS.includes(d)).sort();const y=unique(b||[]).filter(d=>CAPABILITY_DOMAINS.includes(d)).sort();return x.length===y.length&&x.every((v,i)=>v===y[i])}
+function openDataAdmin(){
+  if(!currentUser){ensureAuthThen(openDataAdmin);return}
+  if(currentUser.role!=='admin'){alert('数据维护仅管理员可用');return}
+  ensureConfig();dataAdminDraft=cloneConfig(configData);
+  hideAppSubviews();$('dataAdminView').classList.add('show');
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('on'));
+  const link=document.querySelector('a[href="#data-admin"]');if(link)link.classList.add('on');
+  silentRefreshFromServer();renderDataAdmin();
+}
+function closeDataAdmin(){
+  $('dataAdminView').classList.remove('show');dataAdminDraft=null;
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('on'));
+  const home=document.querySelector('.nav a[href="#top"]');if(home)home.classList.add('on');
+  buildFilters();render();
+}
+function toggleDataAdminDomain(teamId,domain,checked){
+  const t=dataAdminDraft?.teams?.find(x=>String(x.id)===String(teamId));if(!t)return;
+  const set=new Set(t.domains||[]);
+  if(checked)set.add(domain);else set.delete(domain);
+  t.domains=unique([...set]).filter(d=>CAPABILITY_DOMAINS.includes(d));
+  renderDataAdmin();
+}
+function renderDataAdmin(){
+  const teams=dataAdminDraft?.teams||[];
+  const body=teams.map(t=>{
+    const selected=new Set(t.domains||[]);
+    const mismatch=!domainsEqual(t.domains,actualDomainsForTeam(t.name));
+    const checks=CAPABILITY_DOMAINS.map(d=>`<td class="da-check"><input type="checkbox" ${selected.has(d)?'checked':''} onchange="toggleDataAdminDomain('${esc(t.id)}','${d}',this.checked)"></td>`).join('');
+    const warn=mismatch?'<div class="da-warn">关联领域与能力实际领域不一致</div>':'';
+    return `<tr class="${mismatch?'da-mismatch':''}"><td><b>${esc(t.name)}</b>${warn}</td>${checks}</tr>`;
+  }).join('');
+  $('dataAdminTable').innerHTML=`<table class="table da-table"><thead><tr><th>科组</th>${CAPABILITY_DOMAINS.map(d=>`<th class="da-check">${esc(d)}</th>`).join('')}</tr></thead><tbody>${body||'<tr><td colspan="7" class="muted" style="text-align:center">暂无科组</td></tr>'}</tbody></table>`;
+}
+async function saveDataAdminDomains(){
+  if(!currentUser||currentUser.role!=='admin'){alert('数据维护仅管理员可用');return}
+  if(!dataAdminDraft)return;
+  const btn=$('dataAdminSaveBtn');
+  if(btn){btn.disabled=true;btn.textContent='保存中…'}
+  try{
+    if($('dataAdminBackup')?.checked){
+      const res=await fetch('/api/backup',{method:'POST'});
+      const out=await res.json().catch(()=>({}));
+      if(!res.ok)throw Error(out.error||'备份失败');
+    }
+    const next=cloneConfig(configData);
+    const byId=new Map((dataAdminDraft.teams||[]).map(t=>[String(t.id),unique(t.domains||[]).filter(d=>CAPABILITY_DOMAINS.includes(d))]));
+    (next.teams||[]).forEach(t=>{if(byId.has(String(t.id)))t.domains=byId.get(String(t.id))});
+    configData=next;
+    dataAdminDraft=cloneConfig(configData);
+    bindCapabilityTeamIds();
+    changeLogs.unshift({time:new Date().toISOString().replace('T',' ').slice(0,19),action:'保存关联领域',changes:[`科组 ${configData.teams.length}`],target:'数据维护'});
+    markMetaDirty('config');markMetaDirty('logs');
+    await persist({throwOnError:true});
+    const saved=$('dataAdminSaved');
+    if(saved){saved.textContent=`已保存 ${new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})}`;saved.classList.add('show')}
+    renderDataAdmin();
+  }catch(e){alert(e.message||'保存失败')}
+  finally{if(btn){btn.disabled=false;btn.textContent='保存关联领域'}}
+}
 const FIELD_DICTIONARY=[
 ['能力数据','领域','data[].domain / capabilities.payload.domain','capabilities.payload (JSON)','能力所属领域；与科组关联领域匹配后决定适用范围。','参与唯一能力键；安规/合规/认证归为合规，可靠性/环境归为环境可靠性，再与 teams.domains 连接。'],
 ['能力数据','能力 Owner','data[].owner / capabilities.payload.owner','capabilities.payload (JSON)','能力责任人，也是首页筛选字段。','参与唯一能力键，不直接参与权重计算。'],
@@ -2486,6 +2581,8 @@ function applyRoleVisibility(){
   }
   // 访客可见入口（点击后触发登录）；能力Owner/管理员可见：编辑选中项、组织关系配置、导入导出
   document.querySelectorAll('[data-role-need="owner"]').forEach(el=>el.style.display=isOwner?'':'none');
+  document.querySelectorAll('[data-role-need="admin"]').forEach(el=>el.style.display=role==='admin'?'':'none');
+  if(role!=='admin'&&$('dataAdminView')?.classList.contains('show'))closeDataAdmin();
 }
 
 
@@ -2892,7 +2989,7 @@ async function bootOnlineApp(){
     applyRoleVisibility();
     await loadPersist();ensureConfig();serverReady=true;bindCapabilityTeamIds(true);if(hasLocalDirty())await persist();await loadMaturityMetricPayload();loadComparisonSelections();renderComparisonDomainOptions();setComparisonScopeMode(comparisonScopeMode);buildFilters();render();startLiveRefresh();
     const initialParams=new URLSearchParams(location.search),view=initialParams.get('view');
-    if(view==='config')ensureAuthThen(()=>openConfig(initialParams.get('tab')||'teams'));else if(view==='dictionary')openDictionary();else if(view==='versions')openVersionHistory();else if(view==='gap')ensureAuthThen(()=>openGapNotes());else if(view==='logs')openLogs()
+    if(view==='config')ensureAuthThen(()=>openConfig(initialParams.get('tab')||'teams'));else if(view==='data-admin')ensureAuthThen(openDataAdmin);else if(view==='dictionary')openDictionary();else if(view==='versions')openVersionHistory();else if(view==='gap')ensureAuthThen(()=>openGapNotes());else if(view==='logs')openLogs()
   }catch(error){document.body.innerHTML=`<main style="max-width:720px;margin:15vh auto;padding:32px;font-family:Arial,sans-serif"><h1 style="font-size:24px">V2.0.30 服务连接失败</h1><p>${esc(error.message)}</p><p>请确认 start.bat 窗口仍在运行（端口 5000），然后刷新页面。</p></main>`}}
 bootOnlineApp();
 document.addEventListener('pointerdown',event=>{const scopePicker=$('scopeComparePicker'),domainPicker=$('scopeDomainPicker');if(scopePicker?.open&&!scopePicker.contains(event.target)){discardComparisonDraft();closeComparisonPicker('scopeComparePicker');renderComparisonScopeOptions()}if(domainPicker?.open&&!domainPicker.contains(event.target)){comparisonDomainDraftSelection=null;closeComparisonPicker('scopeDomainPicker');renderComparisonDomainOptions()}},true);
