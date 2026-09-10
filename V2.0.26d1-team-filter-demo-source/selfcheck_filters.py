@@ -1,7 +1,8 @@
-"""Filter self-check for V2.0.26d1 temp demo. Run after migrate with a copied V2.0.26 db."""
+"""Filter self-check for V2.0.26d2 temp demo. Run after migrate with a copied V2.0.26 db."""
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 from collections import Counter
 from pathlib import Path
@@ -20,6 +21,15 @@ REMAPPED = {
     "工业机器人整机产品测试组": "工艺及解决方案测试组",
     "电柜测试及系统架构能力组": "电柜及整机性能测试组",
 }
+ALIASES = {
+    "大型传动": "大型传动测试组",
+    "人形机器人测试组": "人形机器人产品测试组",
+    "视觉测试组": "视觉解决方案及产品测试组",
+    "机器人平台软件测试组": "工业机器人软件测试组",
+    "电柜及整机性能测试组": "电柜测试及系统架构能力组",
+    "工艺及解决方案测试组": "工业机器人整机产品测试组",
+}
+CAPABILITY_DOMAINS = ["软件", "硬件", "机械", "环境可靠性", "安规准入", "EMC"]
 
 
 def load_caps(conn: sqlite3.Connection) -> list[dict]:
@@ -68,6 +78,93 @@ def main() -> int:
 
     unassigned = [c for c in caps if not c.get("teamId") and str(c.get("team") or "") == "未关联科组"]
     print(f"caps={len(caps)} scene={len(scene)} fan={len(fan)} unassigned={len(unassigned)}")
+
+    teams_full = [
+        {"id": row["id"], "name": row["name"], "domains": json.loads(row["domains"])}
+        for row in conn.execute("SELECT id, name, domains FROM teams")
+    ]
+    units = list(conn.execute("SELECT id, kind, name FROM org_units"))
+    rel = {}
+    for row in conn.execute("SELECT org_id, team_id FROM org_team_relations"):
+        rel.setdefault(row["org_id"], []).append(row["team_id"])
+    departments = [
+        {"id": row["id"], "name": row["name"], "teamIds": rel.get(row["id"], [])}
+        for row in units if row["kind"] == "department"
+    ]
+    config = {"teams": teams_full, "departments": departments}
+
+    def team_id_by_name(name):
+        for t in teams_full:
+            if t["name"] == name:
+                return t["id"]
+        return None
+
+    def row_team_id(row):
+        raw = "" if row.get("teamId") in (None, "") else str(row.get("teamId"))
+        if raw and any(str(t["id"]) == raw for t in teams_full):
+            return raw
+        aliased = ALIASES.get(row.get("team"), row.get("team"))
+        return team_id_by_name(aliased) or team_id_by_name(row.get("team")) or raw or None
+
+    def domain_cat(domain):
+        domain = domain or ""
+        if re.search(r"安规|合规|认证", domain):
+            return "合规"
+        if re.search(r"可靠性|环境", domain):
+            return "环境可靠性"
+        return domain if domain in CAPABILITY_DOMAINS else domain
+
+    def applies(group_items, team_name, team_filter_all):
+        want_id = team_id_by_name(team_name)
+        if any((row_team_id(item) and want_id and str(row_team_id(item)) == str(want_id)) for item in group_items):
+            return True
+        unassigned_group = all(not row_team_id(item) for item in group_items)
+        if not unassigned_group and not team_filter_all:
+            return False
+        team = next(t for t in teams_full if t["name"] == team_name)
+        return domain_cat(group_items[0].get("domain")) in (team.get("domains") or [])
+
+    def groups_of(rows):
+        grouped = {}
+        for row in rows:
+            key = "||".join(str(row.get(k) or "").strip() for k in ("domain", "owner", "dimension", "sub"))
+            grouped.setdefault(key, []).append(row)
+        return grouped
+
+    alpha = next(d for d in departments if "α实验室" in d["name"])
+    alpha_teams = [t["name"] for t in teams_full if t["id"] in set(alpha["teamIds"])]
+    fan_groups = groups_of(fan)
+    visible = [
+        key for key, items in fan_groups.items()
+        if any(applies(items, team, True) for team in alpha_teams)
+    ]
+    print(f"FAN x ALPHA visible groups={len(visible)} {visible}")
+    if len(visible) != 2:
+        failed.append(f"范方旭×α实验室 should show 2 software 场景化测试, got {len(visible)}")
+    if any("软件" not in key for key in visible):
+        failed.append(f"范方旭×α实验室 leaked non-software {visible}")
+
+    software_unassigned = [c for c in unassigned if c.get("domain") == "软件" and c.get("dimension") == "场景化测试"]
+    software_teams = [t["name"] for t in teams_full if "软件" in (t.get("domains") or [])]
+    soft_groups = groups_of(software_unassigned)
+    seen = [
+        key for key, items in soft_groups.items()
+        if any(applies(items, team, False) for team in software_teams)
+    ]
+    print(f"domain=软件 unassigned 场景化测试 groups={len(seen)}")
+    if len(seen) != 2:
+        failed.append(f"筛选软件 场景化测试 should be 2, got {len(seen)}")
+
+    human = "人形机器人产品测试组"
+    software_team = "工业机器人软件测试组"
+    human_rows = [c for c in caps if str(c.get("team") or "") == human]
+    leaked = 0
+    for items in groups_of(human_rows).values():
+        if applies(items, software_team, False):
+            leaked += 1
+    if leaked:
+        failed.append(f"selected {software_team} still paints {leaked} 人形 groups")
+
     if failed:
         print("SELFCHECK FAIL")
         for item in failed:

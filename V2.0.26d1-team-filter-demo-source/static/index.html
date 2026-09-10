@@ -291,7 +291,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 <div class="layout">
   <aside class="side">
     <div class="brand"><span>TM</span>测试成熟度中心</div>
-    <div class="side-version">当前版本 <b>V2.0.26d1 临时demo</b></div>
+    <div class="side-version">当前版本 <b>V2.0.26d2 临时demo</b></div>
     <div id="userBox" style="margin:0 10px 14px;padding:8px 10px;border:1px solid #315574;border-radius:8px;background:#1d3a56;color:#cfe0f2;font-size:12px;display:none">
       <div id="userLine">—</div>
       <div style="display:flex;gap:8px;margin-top:6px"><button id="loginBtn" onclick="showLoginGate()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">登录</button><button id="userMgrBtn" onclick="openUserMgr()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">角色密码管理</button><button id="logoutBtn" onclick="doLogout()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#3b556e;color:#dbe7f4;font:inherit;font-size:11.5px;cursor:pointer">退出</button></div>
@@ -316,7 +316,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <div class="crumb">测试业务 / 能力成熟度评估</div>
         <div class="title-row">
           <h1>测试能力成熟度看板</h1>
-          <span class="version-badge">V2.0.26d1 临时demo</span>
+          <span class="version-badge">V2.0.26d2 临时demo</span>
           <div class="filter-summary" id="filterSummary"></div>
         </div>
         <div class="muted">统一目标集 2026-V1.0 · 领域内固定能力分母；科组先关联领域，再按领域独立计分并平均。数据截至 <span id="asOfText">—</span></div>
@@ -687,7 +687,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
   <main style="max-width:1280px;margin:18px auto">
     <section class="card">
       <div class="version-summary">
-        <div class="item"><span>当前版本</span><b>V2.0.26d1 临时demo</b></div>
+        <div class="item"><span>当前版本</span><b>V2.0.26d2 临时demo</b></div>
         <div class="item"><span>发布日期</span><b>2026-09-08</b></div>
         <div class="item"><span>版本类型</span><b>V2.0 正式版本</b></div>
       </div>
@@ -695,7 +695,8 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <table class="version-table">
           <thead><tr><th>版本号</th><th>发布日期</th><th>变更摘要</th></tr></thead>
           <tbody>
-            <tr><td>V2.0.26d1 临时demo <span class="version-current">当前</span></td><td>2026-09-10</td><td>独立端口 5001，不动 5000。筛选按科组 ID，空科组显示空；无 ID 项可筛出。归位：机器人平台软件测试组→工业机器人软件测试组、电柜及整机性能测试组→电柜测试及系统架构能力组、工艺及解决方案测试组→工业机器人整机产品测试组。删除四关节/六关节测试组数据。未关联科组保留。</td></tr>
+            <tr><td>V2.0.26d2 临时demo <span class="version-current">当前</span></td><td>2026-09-10</td><td>未挂科组的能力按科组关联领域显示。筛选软件时，关联软件的科组能看到 2 条软件领域场景化测试；Owner×部门交叉不再把这些行筛空。空科组仍不串到别组。5000 不动。</td></tr>
+            <tr><td>V2.0.26d1 临时demo</td><td>2026-09-10</td><td>独立端口 5001，不动 5000。筛选按科组 ID，空科组显示空；无 ID 项可筛出。归位：机器人平台软件测试组→工业机器人软件测试组、电柜及整机性能测试组→电柜测试及系统架构能力组、工艺及解决方案测试组→工业机器人整机产品测试组。删除四关节/六关节测试组数据。未关联科组保留。</td></tr>
             <tr><td>V2.0.26</td><td>2026-09-09</td><td>科组、部门、业务按 ID 关联（页面只显示名称）；服务启动和保存时把 ID 写进库，不按名称存归属。已映射：大型传动→大型传动测试组、人形机器人测试组→人形机器人产品测试组、视觉测试组→视觉解决方案及产品测试组。业务数据自 V2.0.25 完整迁移。</td></tr><tr><td>V2.0.25</td><td>2026-09-09</td><td>总表「交付」列按该能力项自己的「是否已交付」显示，与编辑弹窗同一字段。业务数据自 V2.0.24 完整迁移。</td></tr><tr><td>V2.0.24</td><td>2026-09-09</td><td>达成情况页顶部按钮下滚仍可点；选中行颜色加深；管理员/能力 Owner 双击能力信息打开编辑选中项（原按钮路径保留）；编辑选中项保存时同步整组能力行；静默刷新不再用更旧的库把刚保存的格子画回去。业务数据自 V2.0.23 完整迁移。</td></tr><tr><td>V2.0.23</td><td>2026-09-08</td><td>修复修改记录页反复刷新；记录增加来源列（页面修改 / 导入 Excel）。业务数据自 V2.0.22 完整迁移。</td></tr><tr><td>V2.0.22</td><td>2026-09-08</td><td>修改记录表去掉访问 IP 列；默认列宽按文字完整显示（不换行、不够则横向滚动）；表头可拖调节列宽并记住。业务数据自 V2.0.21 完整迁移。</td></tr><tr><td>V2.0.21</td><td>2026-09-08</td><td>保存按单元格合并（只提交本机本次改过的格）；修改记录改为独立页面并记录改数据请求 IP；每 5 分钟及页面切换时静默拉库（未保存格不覆盖）；停留 2 小时提示 Ctrl+F5。业务数据自 V2.0.20 完整迁移。</td></tr><tr><td>V2.0.20</td><td>2026-09-07</td><td>能力成熟度达成情况页增加新建行/删除行（管理员与能力 Owner）：可新增能力主项、删除选中能力及其全部科组达成记录。业务数据自 V2.0.19 完整迁移。</td></tr><tr><td>V2.0.19</td><td>2026-09-04</td><td>组织能力概览「各领域评估维度得分」增加 2/3/4 级能力达成情况三列（已达成/总数），并调整弹窗表格排版。业务数据自 V2.0.18 完整迁移。</td></tr><tr><td>V2.0.18</td><td>2026-09-04</td><td>统一得分口径：科组=各涉及领域得分平均；部门/业务线/多科组范围=各科组得分等权平均。首页顶部、概览、趋势、雷达、对比与此一致。修复概览按领域筛选把领域名拆成单字；启动横幅随版本号同步。业务数据自 V2.0.17 完整迁移。</td></tr><tr><td>V2.0.17</td><td>2026-09-04</td><td>达成情况页移除风险筛选下拉框与「清空全部筛选」按钮；修复本月未达成编辑页进入与展开筛选的卡顿（单次构建+缓存查找）；首页选择的科组/部门/业务线与年度成熟度趋势图联动。业务数据自 V2.0.16 完整迁移。</td></tr>
             <tr><td>V2.0.16</td><td>2026-09-04</td><td>筛选升级：能力成熟度达成情况页与本月未达成项编辑页的筛选条件与首页一模一样（领域/评估维度/能力 Owner/业务线/三级部门/科组/等级/目标），并支持整体展开/收起；本月未达成项编辑页新增预计达成时间编辑，与达成情况页同一字段、同一保存链路与权限，数据双向联通。V2.0.15 业务数据完整迁移。</td></tr>
             <tr><td>V2.0.15</td><td>2026-09-04</td><td>正式版：将 V2.0.14-1「本月未达成项」功能合入主线——达成情况编辑（0/1 写回业务库）、未达成情况记录、领域/评估维度/部门/科组四联动筛选、按月封存（当前月实时、历史月封存、未来月不可选）；保留 V2.0.14 全部功能，Excel 模板与数据口径不变。</td></tr>
@@ -1019,15 +1020,16 @@ function toggleRawFilterPanel(){
   $('rawFilterPanel').classList.toggle('collapsed');
   fillRawFilterSummary();
 }
+function isUnassignedRow(row){return !rowTeamId(row)}
 function subset(ignoreKey=''){
   return data.filter(x=>
     (ignoreKey==='domain'||filters.domain==='all'||x.domain===filters.domain)&&
     (ignoreKey==='dimension'||filters.dimension==='all'||x.dimension===filters.dimension)&&
     (ignoreKey==='owner'||filters.owner==='all'||x.owner===filters.owner)&&
     (ignoreKey==='sub'||filters.sub==='all'||x.sub===filters.sub)&&
-    (ignoreKey==='business'||filters.business==='all'||businessNamesFor(x).includes(filters.business))&&
-    (ignoreKey==='dept'||filters.dept==='all'||rowMatchesDept(x,filters.dept))&&
-    (ignoreKey==='team'||filters.team==='all'||rowMatchesTeam(x,filters.team))&&
+    (ignoreKey==='business'||filters.business==='all'||businessNamesFor(x).includes(filters.business)||isUnassignedRow(x))&&
+    (ignoreKey==='dept'||filters.dept==='all'||rowMatchesDept(x,filters.dept)||isUnassignedRow(x))&&
+    (ignoreKey==='team'||filters.team==='all'||rowMatchesTeam(x,filters.team)||isUnassignedRow(x))&&
     (ignoreKey==='level'||filters.level==='all'||x.level===filters.level)&&
     (ignoreKey==='stage'||filters.stage==='all'||x.stage===filters.stage)
   );
@@ -1924,6 +1926,7 @@ function rawFiltered(){
 }
 function rawCapabilityKey(x){return[x.domain,x.owner,x.dimension,x.sub].map(v=>String(v||'').trim()).join('||')}
 function rawCapabilityGroups(items){const map=new Map();items.forEach(x=>{const key=rawCapabilityKey(x);if(!map.has(key))map.set(key,{key,items:[]});map.get(key).items.push(x)});return[...map.values()].sort((a,b)=>a.items[0].domain.localeCompare(b.items[0].domain,'zh-CN')||a.items[0].dimension.localeCompare(b.items[0].dimension,'zh-CN')||a.items[0].sub.localeCompare(b.items[0].sub,'zh-CN'))}
+function rawVisibleGroups(layout=rawTeamLayout()){return rawCapabilityGroups(rawFiltered()).filter(group=>layout.teams.some(team=>rawGroupAppliesToTeam(group,team)))}
 function homepageCapabilityGroups(){return rawCapabilityGroups(scoringTargetItems())}
 function homepageScopeIsAllOrganizations(){return filters.business==='all'&&filters.dept==='all'&&filters.team==='all'}
 function homepageAttainmentMetric(groups=homepageCapabilityGroups()){
@@ -1945,7 +1948,8 @@ function rawTeamLayout(){const names=filters.team!=='all'?[filters.team]:allTeam
 function rawTeamDomains(team){return configData?.teams?.find(x=>x.name===team)?.domains||[]}
 function rawGroupAppliesToTeam(group,team){
   if(group.items.some(item=>rowMatchesTeam(item,team)))return true;
-  if(filters.team!=='all')return false;
+  const unassigned=group.items.every(item=>isUnassignedRow(item));
+  if(!unassigned&&filters.team!=='all')return false;
   return rawTeamDomains(team).includes(capabilityDomainCategory(group.items[0].domain));
 }
 function rawTeamRangeRate(team,groups){const scope=groups.filter(g=>rawGroupAppliesToTeam(g,team)),done=scope.filter(g=>g.items.some(x=>rowMatchesTeam(x,team)&&achieved(x))).length;return{done,total:scope.length,rate:pct(done,scope.length),domains:rawTeamDomains(team)}}
@@ -2019,7 +2023,7 @@ function clearRawFilters(){rawFilters={};$('rawSearch').value='';filters={domain
 function setRawDensity(d){rawDensity=d;const v=$('rawView');v.classList.remove('density-compact','density-loose');if(d!=='normal')v.classList.add('density-'+d);document.querySelectorAll('#rawDensitySwitch button').forEach(b=>b.classList.toggle('on',b.dataset.d===d));renderRaw()}
 function toggleRawYear(year){rawVisibleYears[year]=!rawVisibleYears[year];if(!Object.values(rawVisibleYears).some(Boolean))rawVisibleYears[year]=true;document.querySelectorAll('#rawYearSwitch button').forEach(b=>b.classList.toggle('on',rawVisibleYears[Number(b.dataset.y)]));renderRaw()}
 function renderRaw(){
-  const groups=rawCapabilityGroups(rawFiltered()),layout=rawTeamLayout(),per=rawPer,pages=Math.max(1,Math.ceil(groups.length/per));$('rawCountChip').textContent=`筛选后 ${groups.length} / ${rawCapabilityGroups(data).length} 组`;
+  const layout=rawTeamLayout(),groups=rawVisibleGroups(layout),per=rawPer,pages=Math.max(1,Math.ceil(groups.length/per));$('rawCountChip').textContent=`筛选后 ${groups.length} / ${rawCapabilityGroups(data).length} 组`;
   rawPage=Math.min(Math.max(1,rawPage),pages);
   const view=groups.slice((rawPage-1)*per,rawPage*per),visibleYears=Object.entries(rawVisibleYears).filter(([,visible])=>visible).map(([year])=>year),fixed=9+visibleYears.length*3,totalCols=fixed+layout.teams.length;
   const roots=groups.map(group=>group.items[0]),rates=groups.map(group=>{const rate=rawCapabilityRangeRate(group);return rate.total?`${rate.done}/${rate.total} = ${rate.rate}%`:'— / 未配置'}),yearWidths=visibleYears.flatMap(year=>['level','stage','digital'].map(field=>rawMeasuredWidth([rawHeaderLabel(field,RAW_LABEL_DEFAULTS[field]),...roots.map(x=>rawYearData(x,year+'年')[field]||'')],field==='level'?72:100,field==='level'?90:140))),fixedWidths=[rawMeasuredWidth([rawHeaderLabel('domain',RAW_LABEL_DEFAULTS.domain),...roots.map(x=>x.domain)],90,150),rawMeasuredWidth([rawHeaderLabel('owner',RAW_LABEL_DEFAULTS.owner),...roots.map(x=>x.owner)],100,170),rawMeasuredWidth([rawHeaderLabel('dimension',RAW_LABEL_DEFAULTS.dimension),...roots.map(x=>x.dimension)],110,180),rawMeasuredWidth([rawHeaderLabel('sub',RAW_LABEL_DEFAULTS.sub),...roots.map(x=>x.sub)],140,220),rawMeasuredWidth([rawHeaderLabel('description',RAW_LABEL_DEFAULTS.description),...roots.map(x=>x.description)],180,280),...yearWidths],tailWidths=[rawMeasuredWidth([rawHeaderLabel('delivered',RAW_LABEL_DEFAULTS.delivered),'已交付','未交付'],100,130),rawMeasuredWidth([rawHeaderLabel('risk',RAW_LABEL_DEFAULTS.risk),'是','否'],80,110),rawMeasuredWidth([rawHeaderLabel('due',RAW_LABEL_DEFAULTS.due),...roots.map(x=>x.due)],120,150),rawMeasuredWidth([rawHeaderLabel('attainment',RAW_LABEL_DEFAULTS.attainment),...rates],120,170)],colWidths=[...fixedWidths,...tailWidths,...layout.teams.map(()=>60)];
@@ -2230,7 +2234,7 @@ function capabilityWorkbookRows(groups,includeSample=false){
   if(includeSample&&!body.length){const domain=CAPABILITY_DOMAINS.find(d=>layout.teams.some(t=>rawTeamDomains(t).includes(d)))||'软件',scopeN=layout.teams.filter(t=>rawTeamDomains(t).includes(domain)).length;body.push([domain,'示例 Owner','测试设计','示例细分能力','能力描述/规划/验收标准','未交付','2026-12-31',scopeN?`0/${scopeN} = 0%`:'— / 未配置','3级','全面落地','是','','','',...layout.teams.map(team=>rawTeamDomains(team).includes(domain)?0:'')])}return{r1,r2,body,layout};
 }
 function makeCapabilityWorkbook(groups,includeSample=false){const {r1,r2,body,layout}=capabilityWorkbookRows(groups,includeSample),ws=XLSX.utils.aoa_to_sheet([r1,r2,...body]),baseN=baseCols.length,yearStart=baseN,orgStart=baseN+6;ws['!merges']=[...baseCols.map((_,i)=>({s:{r:0,c:i},e:{r:1,c:i}})),{s:{r:0,c:yearStart},e:{r:0,c:yearStart+2}},{s:{r:0,c:yearStart+3},e:{r:0,c:yearStart+5}}];let offset=orgStart;layout.segments.forEach(s=>{if(s.teams.length>1)ws['!merges'].push({s:{r:0,c:offset},e:{r:0,c:offset+s.teams.length-1}});offset+=s.teams.length});ws['!cols']=[{wch:12},{wch:14},{wch:16},{wch:24},{wch:38},{wch:14},{wch:16},{wch:18},...Array(6).fill({wch:16}),...layout.teams.map(()=>({wch:18}))];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'能力成熟度达成情况');const orgRows=[['三级部门','科组','关联领域'],...layout.teams.map(team=>[layout.teamDept[team],team,rawTeamDomains(team).join('、')])],orgWs=XLSX.utils.aoa_to_sheet(orgRows);orgWs['!cols']=[{wch:30},{wch:32},{wch:42}];XLSX.utils.book_append_sheet(wb,orgWs,'本地组织配置');return wb}
-function exportRawExcel(){if(!window.XLSX){alert('Excel 组件未加载，请确认 xlsx.full.min.js 与 index.html 位于同一文件夹');return}XLSX.writeFile(makeCapabilityWorkbook(rawCapabilityGroups(rawFiltered())),'能力成熟度达成情况.xlsx')}
+function exportRawExcel(){if(!window.XLSX){alert('Excel 组件未加载，请确认 xlsx.full.min.js 与 index.html 位于同一文件夹');return}XLSX.writeFile(makeCapabilityWorkbook(rawVisibleGroups()),'能力成熟度达成情况.xlsx')}
 function downloadTemplate(){
   if(!window.XLSX){alert('Excel 组件未加载，请联网后重试');return}
   XLSX.writeFile(makeCapabilityWorkbook([],true),'能力成熟度导入模板.xlsx');
