@@ -195,6 +195,36 @@ def main() -> int:
             if other:
                 failed.append(f"click {t['name']} leaked {other}")
 
+    # Click-sim: every department -> only that dept's teams
+    team_by_id = {str(t["id"]): t for t in teams_full}
+    for d in departments:
+        expected = {team_by_id[str(tid)]["name"] for tid in d["teamIds"] if str(tid) in team_by_id}
+        cols = set()
+        for t in teams_full:
+            if t["name"] in expected:
+                cols.add(t["name"])
+        if cols != expected:
+            failed.append(f"click dept {d['name']} cols={cols} expected={expected}")
+        leaked = [c for c in caps if str(c.get("team") or "") not in expected and str(row_team_id(c) or "") in {str(tid) for tid in d["teamIds"]}]
+        print(f"CLICK dept {d['name']} teams={len(expected)}")
+
+    # Click-sim: each domain chip
+    for domain in ("软件", "硬件", "机械", "EMC", "安规准入", "环境可靠性"):
+        rows = [c for c in caps if c.get("domain") == domain]
+        if not rows:
+            failed.append(f"click domain {domain} has 0 rows")
+            continue
+        print(f"CLICK domain {domain} n={len(rows)}")
+
+    # Click-sim: 电柜组 must not show 软件组
+    cabinet = "电柜测试及系统架构能力组"
+    cid = team_id_by_name(cabinet)
+    if cid:
+        cab_rows = [c for c in caps if str(row_team_id(c) or "") == str(cid)]
+        if any(str(c.get("team") or "") == ruanjian for c in cab_rows):
+            failed.append("click 电柜组 leaked 软件组")
+        print(f"CLICK {cabinet} n={len(cab_rows)}")
+
     if failed:
         print("SELFCHECK FAIL")
         for item in failed:
