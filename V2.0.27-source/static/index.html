@@ -695,7 +695,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <table class="version-table">
           <thead><tr><th>版本号</th><th>发布日期</th><th>变更摘要</th></tr></thead>
           <tbody>
-            <tr><td>V2.0.27 <span class="version-current">当前</span></td><td>2026-09-10</td><td>合入 5001 筛选与归位：科组按 ID 筛选，选整机产品组不再画出软件测试组；未挂科组按关联领域显示；归位机器人平台软件测试组→工业机器人软件测试组、电柜及整机性能测试组→电柜测试及系统架构能力组、工艺及解决方案测试组→工业机器人整机产品测试组；删除四关节/六关节测试组数据；未关联科组保留。业务数据自 V2.0.26 完整迁移。</td></tr>
+            <tr><td>V2.0.27 <span class="version-current">当前</span></td><td>2026-09-10</td><td>合入 5001：科组按 ID 筛选；未挂科组按关联领域显示；组织关系科组可调序且筛选顺序跟着变；关联领域按配置保存不再被能力数据覆盖。归位机器人平台软件测试组→工业机器人软件测试组、电柜及整机性能测试组→电柜测试及系统架构能力组、工艺及解决方案测试组→工业机器人整机产品测试组；删除四关节/六关节测试组数据；未关联科组保留。业务数据自 V2.0.26 完整迁移。</td></tr>
             <tr><td>V2.0.26</td><td>2026-09-09</td><td>科组、部门、业务按 ID 关联（页面只显示名称）；服务启动和保存时把 ID 写进库，不按名称存归属。已映射：大型传动→大型传动测试组、人形机器人测试组→人形机器人产品测试组、视觉测试组→视觉解决方案及产品测试组。业务数据自 V2.0.25 完整迁移。</td></tr><tr><td>V2.0.25</td><td>2026-09-09</td><td>总表「交付」列按该能力项自己的「是否已交付」显示，与编辑弹窗同一字段。业务数据自 V2.0.24 完整迁移。</td></tr><tr><td>V2.0.24</td><td>2026-09-09</td><td>达成情况页顶部按钮下滚仍可点；选中行颜色加深；管理员/能力 Owner 双击能力信息打开编辑选中项（原按钮路径保留）；编辑选中项保存时同步整组能力行；静默刷新不再用更旧的库把刚保存的格子画回去。业务数据自 V2.0.23 完整迁移。</td></tr><tr><td>V2.0.23</td><td>2026-09-08</td><td>修复修改记录页反复刷新；记录增加来源列（页面修改 / 导入 Excel）。业务数据自 V2.0.22 完整迁移。</td></tr><tr><td>V2.0.22</td><td>2026-09-08</td><td>修改记录表去掉访问 IP 列；默认列宽按文字完整显示（不换行、不够则横向滚动）；表头可拖调节列宽并记住。业务数据自 V2.0.21 完整迁移。</td></tr><tr><td>V2.0.21</td><td>2026-09-08</td><td>保存按单元格合并（只提交本机本次改过的格）；修改记录改为独立页面并记录改数据请求 IP；每 5 分钟及页面切换时静默拉库（未保存格不覆盖）；停留 2 小时提示 Ctrl+F5。业务数据自 V2.0.20 完整迁移。</td></tr><tr><td>V2.0.20</td><td>2026-09-07</td><td>能力成熟度达成情况页增加新建行/删除行（管理员与能力 Owner）：可新增能力主项、删除选中能力及其全部科组达成记录。业务数据自 V2.0.19 完整迁移。</td></tr><tr><td>V2.0.19</td><td>2026-09-04</td><td>组织能力概览「各领域评估维度得分」增加 2/3/4 级能力达成情况三列（已达成/总数），并调整弹窗表格排版。业务数据自 V2.0.18 完整迁移。</td></tr><tr><td>V2.0.18</td><td>2026-09-04</td><td>统一得分口径：科组=各涉及领域得分平均；部门/业务线/多科组范围=各科组得分等权平均。首页顶部、概览、趋势、雷达、对比与此一致。修复概览按领域筛选把领域名拆成单字；启动横幅随版本号同步。业务数据自 V2.0.17 完整迁移。</td></tr><tr><td>V2.0.17</td><td>2026-09-04</td><td>达成情况页移除风险筛选下拉框与「清空全部筛选」按钮；修复本月未达成编辑页进入与展开筛选的卡顿（单次构建+缓存查找）；首页选择的科组/部门/业务线与年度成熟度趋势图联动。业务数据自 V2.0.16 完整迁移。</td></tr>
             <tr><td>V2.0.16</td><td>2026-09-04</td><td>筛选升级：能力成熟度达成情况页与本月未达成项编辑页的筛选条件与首页一模一样（领域/评估维度/能力 Owner/业务线/三级部门/科组/等级/目标），并支持整体展开/收起；本月未达成项编辑页新增预计达成时间编辑，与达成情况页同一字段、同一保存链路与权限，数据双向联通。V2.0.15 业务数据完整迁移。</td></tr>
             <tr><td>V2.0.15</td><td>2026-09-04</td><td>正式版：将 V2.0.14-1「本月未达成项」功能合入主线——达成情况编辑（0/1 写回业务库）、未达成情况记录、领域/评估维度/部门/科组四联动筛选、按月封存（当前月实时、历史月封存、未来月不可选）；保留 V2.0.14 全部功能，Excel 模板与数据口径不变。</td></tr>
@@ -981,10 +981,6 @@ function bindCapabilityTeamIds(persistable=false){
     if(dept){x.deptId=dept.id;x.dept=dept.name}
     x.org=org;x.businessIds=bizIds;
     if(persistable&&changed){markRowFields(x,['teamId','team','deptId','dept','org','businessIds']);changedAny=true}
-  });
-  (configData.teams||[]).forEach(t=>{
-    const domains=unique(data.filter(x=>rowMatchesTeam(x,t.id)).map(x=>capabilityDomainCategory(x.domain))).filter(Boolean);
-    if(domains.length)t.domains=domains;
   });
   if(persistable&&changedAny)dirtyMeta.replaceData=true;
 }
@@ -1796,6 +1792,23 @@ function removeConfigRow(kind,id){
   }
   markConfigDirty();renderConfig();
 }
+function moveConfigTeam(id,dir){
+  const list=configDraft.teams||[];
+  const i=list.findIndex(t=>String(t.id)===String(id));
+  const j=i+dir;
+  if(i<0||j<0||j>=list.length)return;
+  [list[i],list[j]]=[list[j],list[i]];
+  markConfigDirty();renderConfig();
+}
+function syncOrgTeamOrder(draft){
+  const order=(draft.teams||[]).map(t=>String(t.id));
+  const sortIds=ids=>[...ids].sort((a,b)=>{
+    const ia=order.indexOf(String(a)),ib=order.indexOf(String(b));
+    return (ia<0?999:ia)-(ib<0?999:ib);
+  });
+  (draft.departments||[]).forEach(row=>row.teamIds=sortIds(row.teamIds||[]));
+  (draft.businesses||[]).forEach(row=>row.teamIds=sortIds(row.teamIds||[]));
+}
 function addConfigRow(){
   const prefix={teams:'team',departments:'dept',businesses:'biz'}[configTab];
   let newId=`${prefix}-new-${Date.now()}-${configIdSeq++}`;
@@ -1830,7 +1843,7 @@ function renderConfig(){
   $('configCount').textContent=`${filtered.length} / ${allRows.length} 条`;
   $('configPager').innerHTML=`<button class="btn" onclick="setConfigPage(${configPage-1})" ${configPage<=1?'disabled':''}>上一页</button> <span class="muted">第 ${configPage}/${pages} 页</span> <button class="btn" onclick="setConfigPage(${configPage+1})" ${configPage>=pages?'disabled':''}>下一页</button>`;
   if(configTab==='teams'){
-    $('configTable').innerHTML=rows.length?`<table class="table config-table"><thead><tr><th style="width:64px">序号</th><th>科组名称</th><th>关联领域（可多选）</th><th>关联状态</th><th style="width:90px">操作</th></tr></thead><tbody>${rows.map((r,i)=>{const dc=configDraft.departments.filter(x=>(x.teamIds||[]).includes(r.id)).length,bc=configDraft.businesses.filter(x=>(x.teamIds||[]).includes(r.id)).length,selected=new Set(r.domains||[]);return `<tr><td>${(configPage-1)*per+i+1}</td><td><input type="text" value="${esc(r.name)}" oninput="setConfigName('teams','${r.id}',this.value)" placeholder="输入科组名称"></td><td><div class="domain-picker">${CAPABILITY_DOMAINS.map(d=>`<label class="${selected.has(d)?'on':''}"><input type="checkbox" ${selected.has(d)?'checked':''} onchange="toggleTeamDomain('${r.id}','${d}',this.checked)">${d}</label>`).join('')}</div></td><td><span class="tag lv">${dc} 个部门</span> <span class="tag done">${bc} 条业务线</span><br><span class="muted">${selected.size?`适用 ${selected.size} 个领域`:'未关联领域'}</span></td><td><button class="btn" onclick="removeConfigRow('teams','${r.id}')">删除</button></td></tr>`}).join('')}</tbody></table>`:'<div class="config-empty">当前搜索无科组数据</div>';
+    $('configTable').innerHTML=rows.length?`<table class="table config-table"><thead><tr><th style="width:64px">序号</th><th>科组名称</th><th>关联领域（可多选）</th><th>关联状态</th><th style="width:168px">操作</th></tr></thead><tbody>${rows.map((r,i)=>{const dc=configDraft.departments.filter(x=>(x.teamIds||[]).includes(r.id)).length,bc=configDraft.businesses.filter(x=>(x.teamIds||[]).includes(r.id)).length,selected=new Set(r.domains||[]),idx=configDraft.teams.findIndex(t=>String(t.id)===String(r.id));return `<tr><td>${(configPage-1)*per+i+1}</td><td><input type="text" value="${esc(r.name)}" oninput="setConfigName('teams','${r.id}',this.value)" placeholder="输入科组名称"></td><td><div class="domain-picker">${CAPABILITY_DOMAINS.map(d=>`<label class="${selected.has(d)?'on':''}"><input type="checkbox" ${selected.has(d)?'checked':''} onchange="toggleTeamDomain('${r.id}','${d}',this.checked)">${d}</label>`).join('')}</div></td><td><span class="tag lv">${dc} 个部门</span> <span class="tag done">${bc} 条业务线</span><br><span class="muted">${selected.size?`适用 ${selected.size} 个领域`:'未关联领域'}</span></td><td><button class="btn" onclick="moveConfigTeam('${r.id}',-1)" ${idx<=0?'disabled':''}>上移</button> <button class="btn" onclick="moveConfigTeam('${r.id}',1)" ${idx>=configDraft.teams.length-1?'disabled':''}>下移</button> <button class="btn" onclick="removeConfigRow('teams','${r.id}')">删除</button></td></tr>`}).join('')}</tbody></table>`:'<div class="config-empty">当前搜索无科组数据</div>';
   }else{
     const label=configTab==='departments'?'部门':'业务线';
     $('configTable').innerHTML=rows.length?`<table class="table config-table"><thead><tr><th style="width:64px">序号</th><th style="width:28%">${label}名称</th><th>已选关联科组</th><th style="width:180px">操作</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td>${(configPage-1)*per+i+1}</td><td><input type="text" value="${esc(r.name)}" oninput="setConfigName('${configTab}','${r.id}',this.value)" placeholder="输入${label}名称"></td><td>${relationSummary(r)}</td><td><button class="btn" onclick="openRelationEditor('${configTab}','${r.id}')">搜索 / 编辑关联</button> <button class="btn" onclick="removeConfigRow('${configTab}','${r.id}')">删除</button></td></tr>`).join('')}</tbody></table>`:`<div class="config-empty">当前搜索无${label}数据</div>`;
@@ -1844,6 +1857,7 @@ function saveAllConfig(){
     if(new Set(names).size!==names.length){alert(`${labels[kind]}名称不能重复`);return}
   }
   if(!configDraft.teams.length){alert('至少保留一个科组');return}
+  syncOrgTeamOrder(configDraft);
   const oldNames=Object.fromEntries((configData?.teams||[]).map(t=>[t.id,t.name]));
   const newNames=Object.fromEntries(configDraft.teams.map(t=>[t.id,t.name.trim()]));
   data.forEach(x=>{
