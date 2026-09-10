@@ -291,7 +291,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 <div class="layout">
   <aside class="side">
     <div class="brand"><span>TM</span>测试成熟度中心</div>
-    <div class="side-version">当前版本 <b>V2.0.26d2 临时demo</b></div>
+    <div class="side-version">当前版本 <b>V2.0.26d3 临时demo</b></div>
     <div id="userBox" style="margin:0 10px 14px;padding:8px 10px;border:1px solid #315574;border-radius:8px;background:#1d3a56;color:#cfe0f2;font-size:12px;display:none">
       <div id="userLine">—</div>
       <div style="display:flex;gap:8px;margin-top:6px"><button id="loginBtn" onclick="showLoginGate()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">登录</button><button id="userMgrBtn" onclick="openUserMgr()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">角色密码管理</button><button id="logoutBtn" onclick="doLogout()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#3b556e;color:#dbe7f4;font:inherit;font-size:11.5px;cursor:pointer">退出</button></div>
@@ -316,7 +316,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <div class="crumb">测试业务 / 能力成熟度评估</div>
         <div class="title-row">
           <h1>测试能力成熟度看板</h1>
-          <span class="version-badge">V2.0.26d2 临时demo</span>
+          <span class="version-badge">V2.0.26d3 临时demo</span>
           <div class="filter-summary" id="filterSummary"></div>
         </div>
         <div class="muted">统一目标集 2026-V1.0 · 领域内固定能力分母；科组先关联领域，再按领域独立计分并平均。数据截至 <span id="asOfText">—</span></div>
@@ -687,7 +687,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
   <main style="max-width:1280px;margin:18px auto">
     <section class="card">
       <div class="version-summary">
-        <div class="item"><span>当前版本</span><b>V2.0.26d2 临时demo</b></div>
+        <div class="item"><span>当前版本</span><b>V2.0.26d3 临时demo</b></div>
         <div class="item"><span>发布日期</span><b>2026-09-08</b></div>
         <div class="item"><span>版本类型</span><b>V2.0 正式版本</b></div>
       </div>
@@ -695,7 +695,8 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <table class="version-table">
           <thead><tr><th>版本号</th><th>发布日期</th><th>变更摘要</th></tr></thead>
           <tbody>
-            <tr><td>V2.0.26d2 临时demo <span class="version-current">当前</span></td><td>2026-09-10</td><td>未挂科组的能力按科组关联领域显示。筛选软件时，关联软件的科组能看到 2 条软件领域场景化测试；Owner×部门交叉不再把这些行筛空。空科组仍不串到别组。5000 不动。</td></tr>
+            <tr><td>V2.0.26d3 临时demo <span class="version-current">当前</span></td><td>2026-09-10</td><td>科组筛选按 ID 绑定，选整机产品组不再画出软件测试组。科组关联领域跟能力数据对齐。5000 不动。</td></tr>
+            <tr><td>V2.0.26d2 临时demo</td><td>2026-09-10</td><td>未挂科组的能力按科组关联领域显示。筛选软件时，关联软件的科组能看到 2 条软件领域场景化测试；Owner×部门交叉不再把这些行筛空。空科组仍不串到别组。5000 不动。</td></tr>
             <tr><td>V2.0.26d1 临时demo</td><td>2026-09-10</td><td>独立端口 5001，不动 5000。筛选按科组 ID，空科组显示空；无 ID 项可筛出。归位：机器人平台软件测试组→工业机器人软件测试组、电柜及整机性能测试组→电柜测试及系统架构能力组、工艺及解决方案测试组→工业机器人整机产品测试组。删除四关节/六关节测试组数据。未关联科组保留。</td></tr>
             <tr><td>V2.0.26</td><td>2026-09-09</td><td>科组、部门、业务按 ID 关联（页面只显示名称）；服务启动和保存时把 ID 写进库，不按名称存归属。已映射：大型传动→大型传动测试组、人形机器人测试组→人形机器人产品测试组、视觉测试组→视觉解决方案及产品测试组。业务数据自 V2.0.25 完整迁移。</td></tr><tr><td>V2.0.25</td><td>2026-09-09</td><td>总表「交付」列按该能力项自己的「是否已交付」显示，与编辑弹窗同一字段。业务数据自 V2.0.24 完整迁移。</td></tr><tr><td>V2.0.24</td><td>2026-09-09</td><td>达成情况页顶部按钮下滚仍可点；选中行颜色加深；管理员/能力 Owner 双击能力信息打开编辑选中项（原按钮路径保留）；编辑选中项保存时同步整组能力行；静默刷新不再用更旧的库把刚保存的格子画回去。业务数据自 V2.0.23 完整迁移。</td></tr><tr><td>V2.0.23</td><td>2026-09-08</td><td>修复修改记录页反复刷新；记录增加来源列（页面修改 / 导入 Excel）。业务数据自 V2.0.22 完整迁移。</td></tr><tr><td>V2.0.22</td><td>2026-09-08</td><td>修改记录表去掉访问 IP 列；默认列宽按文字完整显示（不换行、不够则横向滚动）；表头可拖调节列宽并记住。业务数据自 V2.0.21 完整迁移。</td></tr><tr><td>V2.0.21</td><td>2026-09-08</td><td>保存按单元格合并（只提交本机本次改过的格）；修改记录改为独立页面并记录改数据请求 IP；每 5 分钟及页面切换时静默拉库（未保存格不覆盖）；停留 2 小时提示 Ctrl+F5。业务数据自 V2.0.20 完整迁移。</td></tr><tr><td>V2.0.20</td><td>2026-09-07</td><td>能力成熟度达成情况页增加新建行/删除行（管理员与能力 Owner）：可新增能力主项、删除选中能力及其全部科组达成记录。业务数据自 V2.0.19 完整迁移。</td></tr><tr><td>V2.0.19</td><td>2026-09-04</td><td>组织能力概览「各领域评估维度得分」增加 2/3/4 级能力达成情况三列（已达成/总数），并调整弹窗表格排版。业务数据自 V2.0.18 完整迁移。</td></tr><tr><td>V2.0.18</td><td>2026-09-04</td><td>统一得分口径：科组=各涉及领域得分平均；部门/业务线/多科组范围=各科组得分等权平均。首页顶部、概览、趋势、雷达、对比与此一致。修复概览按领域筛选把领域名拆成单字；启动横幅随版本号同步。业务数据自 V2.0.17 完整迁移。</td></tr><tr><td>V2.0.17</td><td>2026-09-04</td><td>达成情况页移除风险筛选下拉框与「清空全部筛选」按钮；修复本月未达成编辑页进入与展开筛选的卡顿（单次构建+缓存查找）；首页选择的科组/部门/业务线与年度成熟度趋势图联动。业务数据自 V2.0.16 完整迁移。</td></tr>
             <tr><td>V2.0.16</td><td>2026-09-04</td><td>筛选升级：能力成熟度达成情况页与本月未达成项编辑页的筛选条件与首页一模一样（领域/评估维度/能力 Owner/业务线/三级部门/科组/等级/目标），并支持整体展开/收起；本月未达成项编辑页新增预计达成时间编辑，与达成情况页同一字段、同一保存链路与权限，数据双向联通。V2.0.15 业务数据完整迁移。</td></tr>
@@ -931,6 +932,16 @@ function makeDefaultConfig(){
 }
 function ensureConfig(){if(!configData)configData=makeDefaultConfig();configData.teams.forEach(t=>{if(!Array.isArray(t.domains))t.domains=unique(data.filter(x=>x.team===t.name).map(x=>capabilityDomainCategory(x.domain))).filter(x=>CAPABILITY_DOMAINS.includes(x))})}
 function teamIdByName(name,source=configData){return source?.teams?.find(t=>t.name===name)?.id||null}
+function resolveTeamId(want,source=configData){
+  const v=String(want||'').trim();
+  if(!v||v==='all')return null;
+  const teams=source?.teams||[];
+  const byId=teams.find(t=>String(t.id)===v);
+  if(byId)return String(byId.id);
+  const byName=teams.find(t=>t.name===v);
+  return byName?String(byName.id):null;
+}
+function selectedTeamName(source=configData){return teamNameById(resolveTeamId(filters.team,source),source)||''}
 const TEAM_NAME_ALIASES={'大型传动':'大型传动测试组','人形机器人测试组':'人形机器人产品测试组','视觉测试组':'视觉解决方案及产品测试组','机器人平台软件测试组':'工业机器人软件测试组','电柜及整机性能测试组':'电柜测试及系统架构能力组','工艺及解决方案测试组':'工业机器人整机产品测试组'};
 function teamNameById(id,source=configData){return source?.teams?.find(t=>String(t.id)===String(id))?.name||''}
 function rowTeamId(row,source=configData){
@@ -943,8 +954,8 @@ function rowTeamId(row,source=configData){
 function rowTeamName(row,source=configData){return teamNameById(rowTeamId(row,source),source)||String(row?.team||'').trim()}
 function rowMatchesTeam(row,teamName,source=configData){
   const want=String(teamName||'').trim();
-  if(!want)return false;
-  const wantId=teamIdByName(want,source);
+  if(!want||want==='all')return false;
+  const wantId=resolveTeamId(want,source);
   const haveId=rowTeamId(row,source);
   if(wantId&&haveId)return String(wantId)===String(haveId);
   return rowTeamName(row,source)===want||String(row?.team||'').trim()===want;
@@ -973,6 +984,10 @@ function bindCapabilityTeamIds(persistable=false){
     x.org=org;x.businessIds=bizIds;
     if(persistable&&changed){markRowFields(x,['teamId','team','deptId','dept','org','businessIds']);changedAny=true}
   });
+  (configData.teams||[]).forEach(t=>{
+    const domains=unique(data.filter(x=>rowMatchesTeam(x,t.id)).map(x=>capabilityDomainCategory(x.domain))).filter(Boolean);
+    if(domains.length)t.domains=domains;
+  });
   if(persistable&&changedAny)dirtyMeta.replaceData=true;
 }
 function relationNamesFor(x,kind,source=configData){
@@ -989,6 +1004,13 @@ function chipGroup(el,items,key,allLabel){
     items.map(v=>`<button class="chip ${cur===v?'on':''}" data-v="${esc(v)}">${esc(v)}</button>`).join('');
   el.querySelectorAll('.chip').forEach(btn=>btn.onclick=()=>{filters[key]=btn.dataset.v;if(key==='dept'||key==='business')filters.team='all';if(key==='dimension')filters.sub='all';buildFilters();render();if($('rawView')&&$('rawView').classList.contains('show'))renderRaw()});
 }
+function chipTeamGroup(el,teamRows){
+  if(!el)return;
+  const cur=filters.team,curId=resolveTeamId(cur);
+  el.innerHTML=`<button class="chip ${cur==='all'?'on':''}" data-v="all">全部科组</button>`+
+    teamRows.map(t=>`<button class="chip ${curId&&String(curId)===String(t.id)?'on':''}" data-v="${esc(t.id)}">${esc(t.name)}</button>`).join('');
+  el.querySelectorAll('.chip').forEach(btn=>btn.onclick=()=>{filters.team=btn.dataset.v;buildFilters();render();if($('rawView')&&$('rawView').classList.contains('show'))renderRaw()});
+}
 function fillFilterChips(P){
   const pool=data;
   chipGroup($(P+'Domain'),unique(pool.map(x=>x.domain)),'domain','全部领域');
@@ -997,8 +1019,8 @@ function fillFilterChips(P){
   chipGroup($(P+'Owner'),unique(pool.map(x=>x.owner)),'owner','全部 Owner');
   chipGroup($(P+'Business'),(configData?.businesses||[]).map(x=>x.name),'business','全部业务线');
   chipGroup($(P+'Dept'),(configData?.departments||[]).map(x=>x.name),'dept','全部部门');
-  const teams=allTeamNames().filter(t=>teamAllowedByRelation(t,'departments',filters.dept)&&teamAllowedByRelation(t,'businesses',filters.business));
-  chipGroup($(P+'Team'),teams,'team','全部科组');
+  const teamRows=(configData?.teams||[]).filter(t=>teamAllowedByRelation(t.name,'departments',filters.dept)&&teamAllowedByRelation(t.name,'businesses',filters.business));
+  chipTeamGroup($(P+'Team'),teamRows);
   chipGroup($(P+'Level'),['2级','3级','4级','5级'],'level','全部等级');
   chipGroup($(P+'Stage'),['试点','全面落地'],'stage','全部目标');
 }
@@ -1048,7 +1070,7 @@ function scoringScopeTeamNames(){
   const intersect=allowed=>{ids=new Set([...ids].filter(id=>allowed.has(id)))};
   if(filters.business!=='all')intersect(new Set((configData?.businesses||[]).filter(item=>item.name===filters.business).flatMap(item=>item.teamIds||[])));
   if(filters.dept!=='all')intersect(new Set((configData?.departments||[]).filter(item=>item.name===filters.dept).flatMap(item=>item.teamIds||[])));
-  if(filters.team!=='all'){const id=teamIdByName(filters.team);intersect(new Set(id?[id]:[]))}
+  if(filters.team!=='all'){const id=resolveTeamId(filters.team);intersect(new Set(id?[id]:[]))}
   return [...ids].map(id=>configData?.teams?.find(team=>team.id===id)?.name).filter(Boolean);
 }
 function maturityScoreForTeams(teamNames,targetItems=scoringTargetItems(),domainLimit=null,achievementTest=achieved){
@@ -1102,7 +1124,7 @@ let metricScoreMemo=new Map();
 // Organization totals use the established dashboard formula; dimension metrics remain the drill-down grain.
 function metricOverallScore(scope,entityId,domainLimit=null){const key=`${scope}|${entityId}|${domainLimit||''}`;if(metricScoreMemo.has(key))return metricScoreMemo.get(key);const entity=metricEntities(scope).find(item=>String(item.id)===String(entityId)),names=entity?metricEntityTeams(scope,entity):[],value=averageTeamScores(names,scoringTargetItems(),domainLimit).score;metricScoreMemo.set(key,value);return value}
 function metricSelectedScope(){return filters.team!=='all'?'team':filters.dept!=='all'?'department':filters.business!=='all'?'business':null}
-function metricSelectedName(scope){return scope==='team'?filters.team:scope==='department'?filters.dept:filters.business}
+function metricSelectedName(scope){return scope==='team'?selectedTeamName():scope==='department'?filters.dept:filters.business}
 function metricOverviewEntities(scope){const active=metricActiveTeamIds();return metricEntities(scope).filter(entity=>metricEntityTeamIds(scope,entity.id).some(id=>active.has(id)))}
 function metricOverviewRows(scope){const active=metricActiveTeamIds(),teamRows=metricScopeRows('team').filter(row=>active.has(row.entityId));if(scope==='team')return teamRows;return metricEntities(scope).flatMap(entity=>{const ids=new Set(metricEntityTeamIds(scope,entity.id).filter(id=>active.has(id))),pairs=unique(teamRows.filter(row=>ids.has(row.entityId)).map(row=>`${row.domain}\u0000${row.dimension}`));return pairs.map(pair=>{const[domain,dimension]=pair.split('\u0000'),samples=teamRows.filter(row=>ids.has(row.entityId)&&row.domain===domain&&row.dimension===dimension);return{scope,entityId:entity.id,entity:entity.name,domain,dimension,score:metricAverage(samples),teamCount:samples.length}})})}
 function metricOverviewScore(scope,entityId,domainLimit=null){const active=metricActiveTeamIds(),entity=metricEntities(scope).find(item=>String(item.id)===String(entityId)),names=entity?metricEntityTeams(scope,entity).filter(name=>{const id=teamIdByName(name);return id&&active.has(id)}):[];return names.length?averageTeamScores(names,scoringTargetItems(),domainLimit).score:null}
@@ -1138,12 +1160,12 @@ function renderMetricDetail(scope,name,rows){
   $('metricResultTable').classList.add('detail');$('metricResultTitle').textContent=`${label} ${name} · 能力优势与短板`;$('metricResultHint').textContent='与目标 3.0、同部门内对比及全中心对比比较';$('metricResultHead').innerHTML='<tr><th>领域 / 评估维度</th><th class="num">成熟度得分</th><th class="num">同部门内对比</th><th class="num">全中心对比</th><th>判断</th></tr>';
   $('metricResultBody').innerHTML=detail.length?detail.map(row=>`<tr><td class="metric-name"><b>${esc(row.domain)} · ${esc(row.dimension)}</b><span>${row.teamCount||1} 个关联科组参与计算</span></td><td class="num">${metricScoreButton(row)}</td><td class="num">${metricBenchmarkValue(row.department,row.score-row.department)}</td><td class="num">${metricBenchmarkValue(row.center,row.score-row.center)}</td><td><span class="metric-badge ${row.status}">${text[row.status]}</span></td></tr>`).join(''):'<tr><td colspan="5" class="metric-empty">当前组织没有可计算的领域评估维度</td></tr>';
 }
-function metricActiveTeamIds(){let ids=new Set((configData?.teams||[]).map(team=>team.id)),intersect=allowed=>{ids=new Set([...ids].filter(id=>allowed.has(id)))};if(filters.business!=='all')intersect(new Set((configData?.businesses||[]).filter(item=>item.name===filters.business).flatMap(item=>item.teamIds||[])));if(filters.dept!=='all')intersect(new Set((configData?.departments||[]).filter(item=>item.name===filters.dept).flatMap(item=>item.teamIds||[])));if(filters.team!=='all'){const id=teamIdByName(filters.team);intersect(new Set(id?[id]:[]))}return ids}
+function metricActiveTeamIds(){let ids=new Set((configData?.teams||[]).map(team=>team.id)),intersect=allowed=>{ids=new Set([...ids].filter(id=>allowed.has(id)))};if(filters.business!=='all')intersect(new Set((configData?.businesses||[]).filter(item=>item.name===filters.business).flatMap(item=>item.teamIds||[])));if(filters.dept!=='all')intersect(new Set((configData?.departments||[]).filter(item=>item.name===filters.dept).flatMap(item=>item.teamIds||[])));if(filters.team!=='all'){const id=resolveTeamId(filters.team);intersect(new Set(id?[id]:[]))}return ids}
 function metricAggregateForIds(ids,domain){const rows=metricScopeRows('team').filter(row=>ids.has(row.entityId)&&row.domain===domain),scores=[...ids].map(id=>metricOverallScore('team',id,[domain])).filter(Number.isFinite);return{rows,score:scores.length?scores.reduce((sum,value)=>sum+value,0)/scores.length:null}}
 function metricTeamLeader(domain,ids){return(configData?.teams||[]).filter(team=>ids.has(team.id)).map(team=>{const result=metricAggregateForIds(new Set([team.id]),domain),bench=metricBenchmarkForRows('team',team.id,result.rows);return{id:team.id,name:team.name,score:result.score,count:result.rows.length,...bench}}).filter(item=>item.score!==null).sort((a,b)=>b.score-a.score)[0]}
 function metricDepartmentLeader(domain,activeIds){let candidates=configData?.departments||[];if(filters.dept!=='all')candidates=candidates.filter(item=>item.name===filters.dept);else if(filters.business!=='all'||filters.team!=='all')candidates=candidates.filter(item=>(item.teamIds||[]).some(id=>activeIds.has(id)));return candidates.map(dept=>{const ids=new Set((dept.teamIds||[]).filter(id=>filters.business==='all'||activeIds.has(id))),result=metricAggregateForIds(ids,domain),center=metricAverage(result.rows.map(row=>({...row,score:metricCenterAverage(row.domain,row.dimension)})));return{id:dept.id,name:dept.name,score:result.score,count:result.rows.length,center}}).filter(item=>item.score!==null).sort((a,b)=>b.score-a.score)[0]}
 function renderMetricMatrix(){
-  const ids=metricActiveTeamIds(),domains=unique(metricScopeRows('team').filter(row=>ids.has(row.entityId)).map(row=>row.domain)),statusText={advantage:'能力优势',shortfall:'能力短板',mixed:'单项偏离'},scope=filters.team!=='all'?filters.team:filters.dept!=='all'?filters.dept:filters.business!=='all'?filters.business:'全中心';$('metricMatrixScope').textContent=scope;$('metricMatrixSubtitle').textContent=`${scope} · ${filters.dimension==='all'?'全部评估维度':filters.dimension}，仅展示当前范围已关联领域`;
+  const ids=metricActiveTeamIds(),domains=unique(metricScopeRows('team').filter(row=>ids.has(row.entityId)).map(row=>row.domain)),statusText={advantage:'能力优势',shortfall:'能力短板',mixed:'单项偏离'},scope=filters.team!=='all'?selectedTeamName():filters.dept!=='all'?filters.dept:filters.business!=='all'?filters.business:'全中心';$('metricMatrixScope').textContent=scope;$('metricMatrixSubtitle').textContent=`${scope} · ${filters.dimension==='all'?'全部评估维度':filters.dimension}，仅展示当前范围已关联领域`;
   $('metricMatrixBody').innerHTML=`<table class="metric-matrix"><thead><tr><th>领域</th><th>${filters.team==='all'?'最高科组':'当前科组'}</th><th class="num">科组得分</th><th class="num">同部门内对比</th><th>科组判断</th><th>${filters.dept==='all'&&filters.team==='all'?'最高部门':'对应部门'}</th><th class="num">部门得分</th><th class="num">全中心对比</th><th>部门判断</th></tr></thead><tbody>${domains.map(domain=>{const team=metricTeamLeader(domain,ids),department=metricDepartmentLeader(domain,ids),teamStatus=team?metricStatus(team.score,team.department,team.center):null,departmentStatus=department?metricStatus(department.score,department.score,department.center):null;return`<tr><td class="metric-domain">${esc(domain)}</td><td class="metric-name"><b>${esc(team?.name||'-')}</b><span>${team?`${team.count} 个指标`:''}</span></td><td class="num">${team?metricScoreButton({scope:'team',entityId:team.id,domain,score:team.score}):'-'}</td><td class="num">${team?metricBenchmarkValue(team.department):'-'}</td><td>${team?`<span class="metric-badge ${teamStatus}">${statusText[teamStatus]}</span>`:'-'}</td><td class="metric-name"><b>${esc(department?.name||'-')}</b><span>${department?`${department.count} 个指标`:''}</span></td><td class="num">${department?metricScoreButton({scope:'department',entityId:department.id,domain,score:department.score}):'-'}</td><td class="num">${department?metricBenchmarkValue(department.center):'-'}</td><td>${department?`<span class="metric-badge ${departmentStatus}">${statusText[departmentStatus]}</span>`:'-'}</td></tr>`}).join('')}</tbody></table>`;
 }
 function renderMetricTeamDrill(scope,entityId){const active=metricActiveTeamIds(),allowed=new Set(metricEntityTeamIds(scope,entityId).filter(id=>active.has(id))),domainLimit=metricDetailDomain==='all'?null:metricDetailDomain,rows=metricScopeRows('team').filter(row=>allowed.has(row.entityId)&&(filters.domain==='all'||row.domain===filters.domain)&&(metricDetailDomain==='all'||row.domain===metricDetailDomain)),ranking=metricEntities('team').filter(entity=>allowed.has(entity.id)).map(entity=>{const samples=rows.filter(row=>String(row.entityId)===String(entity.id)),score=metricOverviewScore('team',entity.id,domainLimit),bench=metricOverallBenchmarks('team',entity.id,domainLimit);return{id:entity.id,name:entity.name,score,count:samples.length,department:bench.department,center:bench.center}}).filter(item=>item.score!==null).sort((a,b)=>b.score-a.score),text={advantage:'能力优势',shortfall:'能力短板',mixed:'单项偏离'};$('metricMatrixSubtitle').textContent=`${scope==='department'?'部门':scope==='business'?'业务线':'科组'}关联科组 · ${metricDetailDomain==='all'?'全部六大领域':metricDetailDomain}`;$('metricMatrixBody').innerHTML=`<table class="metric-result-table"><thead><tr><th>排名 / 科组</th><th class="num">指标数</th><th>成熟度得分</th><th class="num">同部门内对比</th><th class="num">全中心对比</th><th>判断</th></tr></thead><tbody>${ranking.map((item,index)=>{const state=metricStatus(item.score,item.department,item.center);return`<tr><td class="metric-name"><b>${index+1}. ${esc(item.name)}</b><span>点击得分查看各领域评估</span></td><td class="num">${item.count}</td><td><button class="metric-score-btn metric-org-score" data-drill-team="${esc(item.id)}">${item.score.toFixed(2)}</button></td><td class="num">${metricBenchmarkValue(item.department,item.score-item.department)}</td><td class="num">${metricBenchmarkValue(item.center,item.score-item.center)}</td><td><span class="metric-badge ${state}">${text[state]}</span></td></tr>`}).join('')}</tbody></table>`}
@@ -1523,7 +1545,7 @@ function renderTrendLegacyBars(){const select=$('trendEntity'),canvas=$('maturit
 function renderTrendLegacyBarsWide(){const select=$('trendEntity'),canvas=$('maturityTrend');if(!select||!canvas)return;document.querySelectorAll('[data-trend]').forEach(b=>b.classList.toggle('on',b.dataset.trend===trendMode));const entities=metricEntities(trendMode);if(!trendEntity||!entities.some(x=>x.name===trendEntity))trendEntity=entities[0]?.name||'';select.innerHTML=entities.map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join('');select.value=trendEntity;const entity=entities.find(x=>x.name===trendEntity),teams=entity?metricEntityTeams(trendMode,entity):[],target=scoringTargetItems(),actual=averageTeamScores(teams,target).score,forecast=Array.from({length:12},(_,i)=>averageTeamScores(teams,target,null,item=>achieved(item)||(!achieved(item)&&Number(item.plannedMonth)>=1&&Number(item.plannedMonth)<=i+1)).score),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height,pad={l:66,r:18,t:34,b:40},plotW=W-pad.l-pad.r,plotH=H-pad.t-pad.b,xAt=i=>pad.l+plotW*i/11,yAt=v=>pad.t+plotH*(1-Math.min(4,Math.max(0,v??0))/4);ctx.clearRect(0,0,W,H);ctx.font='12px sans-serif';ctx.strokeStyle='#d9e2ec';for(let i=0;i<=4;i++){const y=yAt(i);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();ctx.fillStyle='#65788c';ctx.fillText(String(i),30,y+4)}const month=new Date().getMonth()+1;forecast.forEach((v,i)=>{const x=xAt(i),barW=Math.max(10,Math.min(22,plotW/30)),isActual=i<month,val=isActual?actual:v;ctx.fillStyle=isActual?'#5b8fc4':'#d8ad4a';ctx.fillRect(x-barW/2,yAt(val),barW,pad.t+plotH-yAt(val));ctx.fillStyle=isActual?'#2f6fad':'#a87512';ctx.fillText(isActual?'实际':'预测',x-12,Math.max(14,yAt(val)-6));ctx.fillStyle='#65788c';ctx.fillText(`${i+1}月`,x-11,H-14)});ctx.strokeStyle='#2f6fad';ctx.lineWidth=2;ctx.beginPath();forecast.forEach((v,i)=>{const val=i<month?actual:v;i?ctx.lineTo(xAt(i),yAt(val)):ctx.moveTo(xAt(i),yAt(val))});ctx.stroke();ctx.fillStyle='#2f6fad';ctx.fillText(`${trendEntity||'当前范围'} · 当前 ${actual===null?'—':actual.toFixed(2)}`,pad.l,18);ctx.fillStyle='#a87512';ctx.fillText(`当前月 ${month} 月：前段实际，后段预测`,pad.l+230,18)}
 
 function renderTrend(){const canvas=$('maturityTrend');if(!canvas)return;
-  if(filters.team!=='all'){trendMode='team';trendEntity=filters.team}
+  if(filters.team!=='all'){trendMode='team';trendEntity=selectedTeamName()}
   else if(filters.dept!=='all'){trendMode='department';trendEntity=filters.dept}
   else if(filters.business!=='all'){trendMode='business';trendEntity=filters.business}
   const select=$('trendEntity'),entities=metricEntities(trendMode);if(!trendEntity||!entities.some(x=>x.name===trendEntity))trendEntity=entities[0]?.name||'';select.innerHTML=entities.map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join('');select.value=trendEntity;document.querySelectorAll('[data-trend]').forEach(b=>b.classList.toggle('on',b.dataset.trend===trendMode));const entity=entities.find(x=>x.name===trendEntity),teams=entity?metricEntityTeams(trendMode,entity):[],target=scoringTargetItems(),actual=averageTeamScores(teams,target).score,forecast=Array.from({length:12},(_,i)=>averageTeamScores(teams,target,null,item=>achieved(item)||(!achieved(item)&&Number(item.plannedMonth)>=1&&Number(item.plannedMonth)<=i+1)).score),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height,pad={l:66,r:18,t:34,b:40},plotW=W-pad.l-pad.r,plotH=H-pad.t-pad.b,xAt=i=>pad.l+plotW*i/11,yAt=v=>pad.t+plotH*(1-Math.min(4,Math.max(0,v??0))/4),month=new Date().getMonth()+1;ctx.clearRect(0,0,W,H);ctx.font='12px sans-serif';ctx.strokeStyle='#d9e2ec';for(let i=0;i<=4;i++){const y=yAt(i);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();ctx.fillStyle='#65788c';ctx.fillText(String(i),30,y+4)}forecast.forEach((v,i)=>{const x=xAt(i),barW=Math.max(10,Math.min(22,plotW/30)),isActual=i<month,val=isActual?actual:v;ctx.fillStyle=isActual?'#5b8fc4':'#d8ad4a';ctx.fillRect(x-barW/2,yAt(val),barW,pad.t+plotH-yAt(val));ctx.fillStyle=isActual?'#2f6fad':'#a87512';ctx.fillText(`${isActual?'实际':'预测'} ${val===null?'—':val.toFixed(2)}`,x-26,Math.max(14,yAt(val)-6));ctx.fillStyle='#65788c';ctx.fillText(`${i+1}月`,x-11,H-14)});ctx.strokeStyle='#2f6fad';ctx.lineWidth=2;ctx.beginPath();forecast.forEach((v,i)=>{const val=i<month?actual:v;i?ctx.lineTo(xAt(i),yAt(val)):ctx.moveTo(xAt(i),yAt(val))});ctx.stroke();ctx.fillStyle='#2f6fad';ctx.fillText(`${trendEntity||'当前范围'} · 当前 ${actual===null?'—':actual.toFixed(2)}`,pad.l,18);ctx.fillStyle='#a87512';ctx.fillText(`当前月 ${month} 月：前段实际，后段预测`,pad.l+230,18)}
@@ -1540,7 +1562,7 @@ function render(){
     filters.owner==='all'?null:`Owner ${filters.owner}`,
     filters.business==='all'?'全部业务线':filters.business,
     filters.dept==='all'?'全部部门':filters.dept,
-    filters.team==='all'?null:filters.team
+    filters.team==='all'?null:selectedTeamName()
   ].filter(Boolean).join(' · ');
   $('sampleText').textContent=`能力项：${capabilityTotal} 项 · 科组达成记录：${total} 条 · 风险记录 ${riskN} 条`;
   $('delivered').textContent=pct(deliveryMetric.done,deliveryMetric.total)+'%';
@@ -1603,7 +1625,7 @@ function filterLabel(){
   if(filters.owner!=='all')parts.push('能力 Owner:'+filters.owner);
   if(filters.business!=='all')parts.push('业务线:'+filters.business);
   if(filters.dept!=='all')parts.push('部门:'+filters.dept);
-  if(filters.team!=='all')parts.push('科组:'+filters.team);
+  if(filters.team!=='all')parts.push('科组:'+(selectedTeamName()||filters.team));
   if(filters.level!=='all')parts.push('等级:'+filters.level);
   if(filters.stage!=='all')parts.push('目标:'+filters.stage);
   return parts;
@@ -1628,7 +1650,7 @@ function normalizeHomepageFilters(){
   if(filters.domain!=='all'&&!unique(data.map(item=>item.domain)).includes(filters.domain))filters.domain='all';
   if(filters.dimension!=='all'&&!unique(data.map(item=>item.dimension)).includes(filters.dimension))filters.dimension='all';
   if(filters.owner!=='all'&&!unique(data.map(item=>item.owner)).includes(filters.owner))filters.owner='all';
-  if(filters.team!=='all'&&!allTeamNames().includes(filters.team))filters.team='all';
+  if(filters.team!=='all'&&!resolveTeamId(filters.team))filters.team='all';
   if(filters.dept!=='all'&&!configData.departments.some(item=>item.name===filters.dept))filters.dept='all';
   if(filters.business!=='all'&&!configData.businesses.some(item=>item.name===filters.business))filters.business='all';
 }
@@ -1839,7 +1861,7 @@ function saveAllConfig(){
   configDraft.retiredBusinessIds=unique([...(configData?.retiredBusinessIds||[]),...(configDraft.retiredBusinessIds||[])]);
   configData=cloneConfig(configDraft);
   bindCapabilityTeamIds(true);
-  if(filters.team!=='all'&&!allTeamNames().includes(filters.team))filters.team='all';
+  if(filters.team!=='all'&&!resolveTeamId(filters.team))filters.team='all';
   if(filters.dept!=='all'&&!configData.departments.some(x=>x.name===filters.dept))filters.dept='all';
   if(filters.business!=='all'&&!configData.businesses.some(x=>x.name===filters.business))filters.business='all';
   changeLogs.unshift({time:new Date().toISOString().replace('T',' ').slice(0,19),action:'保存组织关系配置',changes:[`科组 ${configData.teams.length}、部门 ${configData.departments.length}、业务线 ${configData.businesses.length}`],target:'后台配置'});
@@ -1944,7 +1966,7 @@ function buildDepartmentTeamLayout(teamNames){
   (configData?.departments||[]).forEach(dept=>{const teams=(dept.teamIds||[]).map(id=>configData.teams.find(t=>t.id===id)?.name).filter(name=>name&&allowed.has(name)&&!used.has(name));if(teams.length){teams.forEach(x=>used.add(x));segments.push({name:dept.name,teams})}});
   const rest=[...allowed].filter(x=>!used.has(x));if(rest.length)segments.push({name:'未归属部门',teams:rest});const teamDept=Object.fromEntries(segments.flatMap(s=>s.teams.map(t=>[t,s.name])));return{segments,teams:segments.flatMap(x=>x.teams),teamDept};
 }
-function rawTeamLayout(){const names=filters.team!=='all'?[filters.team]:allTeamNames().filter(t=>teamAllowedByRelation(t,'departments',filters.dept)&&teamAllowedByRelation(t,'businesses',filters.business));return buildDepartmentTeamLayout(names)}
+function rawTeamLayout(){const names=filters.team!=='all'?[selectedTeamName()].filter(Boolean):allTeamNames().filter(t=>teamAllowedByRelation(t,'departments',filters.dept)&&teamAllowedByRelation(t,'businesses',filters.business));return buildDepartmentTeamLayout(names)}
 function rawTeamDomains(team){return configData?.teams?.find(x=>x.name===team)?.domains||[]}
 function rawGroupAppliesToTeam(group,team){
   if(group.items.some(item=>rowMatchesTeam(item,team)))return true;
@@ -2053,7 +2075,7 @@ function renderRaw(){
   });
   $('rawRows').innerHTML=html.length?html.join(''):`<tr><td colspan="${totalCols}" class="muted" style="text-align:center">无匹配数据</td></tr>`;
   $('rawPageText').textContent=`第 ${rawPage}/${pages} 页 · ${groups.length} 项能力主项`;
-  $('rawPrev').disabled=rawPage<=1;$('rawNext').disabled=rawPage>=pages;const selectedTeam=filters.team!=='all'?filters.team:'',scopeTeams=selectedTeam?[selectedTeam]:layout.teams;$('rawRateScope').innerHTML=`<b>关联领域达成率</b>：${scopeTeams.length?scopeTeams.slice(0,6).map(team=>{const r=rawTeamRangeRate(team,groups);return`${esc(team)} ${r.total?`${r.rate}%（${r.done}/${r.total}，${esc(r.domains.join('、'))}）`:'未关联领域，不参与'}`}).join('；'):'无科组'}${scopeTeams.length>6?`；其余 ${scopeTeams.length-6} 个科组见列标题`:''}<br><span class="muted">该范围指标用于科组适用领域分析；主评分按 2026 年各领域 2/3/4 级目标独立计分，再对已关联且有目标数据的领域取平均。</span>`;updateRawScrollWidth();
+  $('rawPrev').disabled=rawPage<=1;$('rawNext').disabled=rawPage>=pages;const selectedTeam=filters.team!=='all'?selectedTeamName():'',scopeTeams=selectedTeam?[selectedTeam]:layout.teams;$('rawRateScope').innerHTML=`<b>关联领域达成率</b>：${scopeTeams.length?scopeTeams.slice(0,6).map(team=>{const r=rawTeamRangeRate(team,groups);return`${esc(team)} ${r.total?`${r.rate}%（${r.done}/${r.total}，${esc(r.domains.join('、'))}）`:'未关联领域，不参与'}`}).join('；'):'无科组'}${scopeTeams.length>6?`；其余 ${scopeTeams.length-6} 个科组见列标题`:''}<br><span class="muted">该范围指标用于科组适用领域分析；主评分按 2026 年各领域 2/3/4 级目标独立计分，再对已关联且有目标数据的领域取平均。</span>`;updateRawScrollWidth();
 }
 function setRiskOverride(i,v){
   const before={...data[i],risk:riskOf(data[i])};
