@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>测试能力成熟度 · 运作模式</title>
+<style>
+:root{
+  --navy:#173b63;--teal:#287a8d;--ink:#222;--muted:#5c6b78;--line:#c9d4de;
+  --paper:#f7f4ec;--card:#fff;--on:#eef5f6;--gold:#8a5a00;--goldbg:#fff8e8;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#cfd4da;color:var(--ink);font:13px/1.55 "Microsoft YaHei","PingFang SC",sans-serif}
+.wrap{max-width:1080px;margin:12px auto 28px;background:var(--paper);box-shadow:0 2px 14px rgba(23,59,99,.16)}
+.mast{border-top:3.5px solid var(--navy);padding:14px 22px 12px;border-bottom:1px solid var(--navy)}
+.mast .en{font:10px/1.2 Arial,sans-serif;letter-spacing:.14em;color:var(--teal);text-transform:uppercase}
+.mast h1{margin:4px 0 0;font:700 22px/1.25 "SimHei","Microsoft YaHei",sans-serif;color:var(--navy);letter-spacing:.04em}
+.mast .meta{margin-top:6px;font-size:12px;color:var(--muted)}
+.note{margin:12px 22px 0;border-left:3px solid var(--teal);background:#eef5f6;padding:8px 10px;font-size:12.5px}
+.flow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:14px 22px 0}
+.flow button{
+  appearance:none;border:1px solid var(--line);background:#fff;padding:8px 6px;cursor:pointer;
+  font:700 12px/1.25 "Microsoft YaHei",sans-serif;color:var(--navy);text-align:center;position:relative;
+}
+.flow button .n{display:block;color:var(--teal);font-size:11px;font-weight:700;margin-bottom:2px}
+.flow button.on{border-color:var(--teal);background:var(--on);box-shadow:inset 0 0 0 1px var(--teal)}
+.flow button:not(:last-child)::after{content:"→";position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:var(--teal);font-weight:700;z-index:1}
+body{overflow-x:hidden}
+.main{display:grid;grid-template-columns:200px 1fr;gap:0;padding:14px 22px 22px;align-items:start}
+.side{border:1px solid var(--line);background:#fff}
+.side button{
+  display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);
+  background:#fff;padding:10px 12px;cursor:pointer;font:12.5px/1.35 "Microsoft YaHei",sans-serif;color:var(--navy);
+}
+.side button:last-child{border-bottom:0}
+.side button.on{background:var(--navy);color:#fff}
+.side button .k{display:block;font-size:10.5px;opacity:.72;margin-bottom:2px}
+.panel{border:1px solid var(--line);background:#fff;padding:16px 18px;min-height:420px}
+.panel h2{margin:0 0 8px;font:700 16px/1.3 "SimHei","Microsoft YaHei",sans-serif;color:var(--navy)}
+.panel .sub{color:var(--muted);font-size:12px;margin:0 0 12px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 12px}
+.role{border:1px solid var(--line);padding:8px 10px;background:#fbfcfd}
+.role b{display:block;color:var(--navy);margin-bottom:3px}
+.role span{color:var(--muted);font-size:12.5px}
+table{width:100%;border-collapse:collapse;background:#fff;margin:8px 0 10px;font-size:12.5px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#eef3f6;color:var(--navy);white-space:nowrap}
+ol,ul{margin:6px 0 10px;padding-left:1.3em}
+li{margin:0 0 4px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.box{border:1px solid var(--line);padding:10px 12px;background:#fbfcfd}
+.box h3{margin:0 0 6px;font:700 13px/1.3 "Microsoft YaHei",sans-serif;color:var(--teal)}
+.gold{border:1px dashed #c9a227;background:var(--goldbg);color:var(--gold);padding:8px 10px;font-size:12.5px;margin:10px 0 0}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 12px}
+.step{border:1px solid var(--line);background:#fff;padding:8px 8px;text-align:center}
+.step .lv{font:700 12px/1.2 "Microsoft YaHei",sans-serif;color:var(--navy)}
+.step .tx{font-size:11.5px;color:var(--muted);margin-top:3px}
+.cmp{display:grid;grid-template-columns:88px 1fr;gap:8px;align-items:center;margin:6px 0;font-size:12.5px}
+.cmp .lab{color:var(--navy)}
+.cmp .bar{height:12px;background:#e4e9ee;position:relative}
+.cmp .bar i{display:block;height:100%;background:var(--teal)}
+.cmp .bar.dept i{background:var(--navy);opacity:.7}
+.cmp .bar.center i{background:#9aa8b5}
+.cmp .bar em{position:absolute;right:6px;top:-1px;font-style:normal;font-size:11px;color:var(--muted)}
+.hidden{display:none}
+footer{border-top:1px solid var(--navy);margin:0 22px;padding:8px 0 16px;font-size:11px;color:var(--muted)}
+@media(max-width:860px){
+  .flow{grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .flow button:not(:last-child)::after{content:""}
+  .main,.roles,.split,.steps{grid-template-columns:1fr}
+  .wrap{margin:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div class="en">Operating model · standalone demo</div>
+    <h1>测试能力成熟度 · 运作模式</h1>
+    <div class="meta">第二块单独 demo　·　不并入第一块月报　·　本页不填具体得分和清单</div>
+  </header>
+
+  <p class="note">点上方步骤或左侧目录切换。文字按已锁的 7 条，没有的数不编。</p>
+
+  <nav class="flow" id="flow"></nav>
+
+  <div class="main">
+    <nav class="side" id="side"></nav>
+    <article class="panel" id="panel"></article>
+  </div>
+
+  <footer>双击本文件即可打开，无需服务。落地时请放独立目录，不要覆盖已有月报。</footer>
+</div>
+
+<script>
+const ITEMS = [
+  {
+    id: "design",
+    no: "1",
+    k: "谁设计",
+    t: "各领域能力 Owner 统一出能力",
+    html: `
+      <h2>1. 谁设计</h2>
+      <p class="sub">各领域能力 Owner 统一出能力，按评估维度分到各科组；各组目标一致。</p>
+      <div class="roles">
+        <div class="role"><b>各领域能力 Owner</b><span>统一设计能力项，不按科组各出一套。</span></div>
+        <div class="role"><b>评估维度</b><span>能力按评估维度分到各科组，同一能力在各组目标一致。</span></div>
+      </div>
+      <table>
+        <thead><tr><th>角色</th><th>做什么</th><th>不做什么</th></tr></thead>
+        <tbody>
+          <tr><td>领域能力 Owner</td><td>出能力、定目标、按维度分配</td><td>不替业务组填达成</td></tr>
+          <tr><td>各科组</td><td>承接同一套目标</td><td>不自建另一套能力目录</td></tr>
+        </tbody>
+      </table>
+      <p>结果：全中心看同一份能力，科组之间可以比，不是各写各的。</p>`
+  },
+  {
+    id: "fill",
+    no: "2",
+    k: "谁填达成",
+    t: "科组长或 TSE 填达成",
+    html: `
+      <h2>2. 谁填达成</h2>
+      <p class="sub">各业务组科组长或 TSE 填写本科组达成。</p>
+      <div class="roles">
+        <div class="role"><b>科组长</b><span>对本组达成负责，直接在达成格填写。</span></div>
+        <div class="role"><b>TSE</b><span>科组长指定时，由 TSE 代填本科组达成。</span></div>
+      </div>
+      <ul>
+        <li>填的是本科组、已关联领域下的达成，不是替别的组填。</li>
+        <li>Owner 出题，业务组答题：设计与填报分开。</li>
+      </ul>`
+  },
+  {
+    id: "track",
+    no: "3",
+    k: "怎么跟踪",
+    t: "自评 → 抽查 → 交材料 → 验收",
+    html: `
+      <h2>3. 怎么跟踪</h2>
+      <p class="sub">业务组自评；专项组按自评分让 Owner 抽查；业务组交材料；专项组组织验收。实时看达成，不是季度集中看一次。</p>
+      <div class="steps">
+        <div class="step"><div class="lv">1 自评</div><div class="tx">业务组先评本科组</div></div>
+        <div class="step"><div class="lv">2 抽查</div><div class="tx">专项组按自评分请 Owner 抽查</div></div>
+        <div class="step"><div class="lv">3 交材料</div><div class="tx">业务组提交验收材料</div></div>
+        <div class="step"><div class="lv">4 验收</div><div class="tx">专项组组织验收</div></div>
+      </div>
+      <table>
+        <thead><tr><th>谁</th><th>跟踪动作</th></tr></thead>
+        <tbody>
+          <tr><td>业务组</td><td>自评，并按抽查要求交材料</td></tr>
+          <tr><td>专项组</td><td>按自评分安排 Owner 抽查，组织验收</td></tr>
+          <tr><td>能力 Owner</td><td>按专项组安排抽查</td></tr>
+        </tbody>
+      </table>
+      <p>对照演进：达成随时可看，跟踪跟着走，不再等季度集中看一次。</p>`
+  },
+  {
+    id: "accept",
+    no: "4",
+    k: "怎么验收",
+    t: "数字化用平台数据；非数字化交材料",
+    html: `
+      <h2>4. 怎么验收</h2>
+      <p class="sub">数字化的用效能平台已有数据，达成即验收；非数字化的，自评后人工收集材料。</p>
+      <div class="split">
+        <div class="box">
+          <h3>数字化验收</h3>
+          <ul>
+            <li>专项组用效能平台上已有数据验收</li>
+            <li>达成即验收，不再另开一套线下对账</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>非数字化验收</h3>
+          <ul>
+            <li>业务组先自评</li>
+            <li>再人工收集验收材料</li>
+            <li>专项组据此组织验收</li>
+          </ul>
+        </div>
+      </div>`
+  },
+  {
+    id: "score",
+    no: "5",
+    k: "得分怎么用",
+    t: "标未达成、排提升计划、可对比",
+    html: `
+      <h2>5. 得分怎么用</h2>
+      <p class="sub">按预计达成时间标未达成，按趋势和预期得分排本年度提升计划；可对比部门平均、中心平均。</p>
+      <ol>
+        <li>未达成项按预计达成时间做标记，便于排期，不是只看当前分。</li>
+        <li>结合趋势和预期得分，排本年度能力提升计划。</li>
+        <li>本科组得分可对照部门平均、中心平均，用于诊断和引导，不在本页编造具体分。</li>
+      </ol>
+      <table>
+        <thead><tr><th>对比档</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td>本科组得分</td><td>看本组当前水平</td></tr>
+          <tr><td>部门平均</td><td>看本组相对部门</td></tr>
+          <tr><td>中心平均</td><td>看本组相对中心</td></tr>
+        </tbody>
+      </table>
+      <div class="gold">本页不填这三档的具体分，避免编造数字。真实得分在第一块月报。</div>`
+  },
+  {
+    id: "monthly",
+    no: "6",
+    k: "月报接着怎么用",
+    t: "能力侧督促 Owner；业务侧调计划",
+    html: `
+      <h2>6. 月报接着怎么用</h2>
+      <p class="sub">能力侧列未交付项督促 Owner；业务侧用部门/中心平均和本科组得分调计划。</p>
+      <div class="split">
+        <div class="box">
+          <h3>能力侧</h3>
+          <ul>
+            <li>用未交付能力项清单督促 Owner 及时交付，或调整交付标准</li>
+            <li>结合各部门/科组达成，审视能力落地效果和验收标准</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>业务侧</h3>
+          <ul>
+            <li>看部门平均、中心平均，以及本科组得分</li>
+            <li>据此调整后续能力建设计划</li>
+          </ul>
+        </div>
+      </div>
+      <div class="gold">未交付清单和具体得分在第一块月报里看。本页只说明怎么用，不列清单、不填数字。</div>`
+  },
+  {
+    id: "coach",
+    no: "7",
+    k: "落地辅导",
+    t: "探索用 AI 辅助生成业务建议",
+    html: `
+      <h2>7. 落地辅导</h2>
+      <p class="sub">先探索用 AI 工具辅助生成业务建议。</p>
+      <ul>
+        <li>辅导还在探索，不替代 Owner 抽查和专项组验收。</li>
+        <li>方向：用 AI 工具辅助生成业务建议，帮助科组看清下一步，而不是自动改达成。</li>
+      </ul>
+      <div class="gold">本条按已确认口径：先写「探索」，不写成已经上线的辅导流程。</div>`
+  }
+];
+
+let cur = 0;
+const flow = document.getElementById("flow");
+const side = document.getElementById("side");
+const panel = document.getElementById("panel");
+
+function renderNav(){
+  flow.innerHTML = ITEMS.map((it,i)=>`<button type="button" data-i="${i}" class="${i===cur?"on":""}"><span class="n">${it.no}</span>${it.k}</button>`).join("");
+  side.innerHTML = ITEMS.map((it,i)=>`<button type="button" data-i="${i}" class="${i===cur?"on":""}"><span class="k">${it.no}. ${it.k}</span>${it.t}</button>`).join("");
+}
+function show(i){
+  cur = i;
+  panel.innerHTML = ITEMS[i].html;
+  renderNav();
+}
+document.addEventListener("click", e=>{
+  const b = e.target.closest("button[data-i]");
+  if(!b) return;
+  show(Number(b.dataset.i));
+});
+show(0);
+</script>
+</body>
+</html>
