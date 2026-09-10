@@ -58,6 +58,7 @@ body{margin:0;background:linear-gradient(180deg,#e8f0f7 0%,var(--bg) 180px);colo
 .filter-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
 .filter-row .lab{min-width:72px;color:var(--muted);font-size:12px;font-weight:600}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
+.team-filter-select{min-width:280px;max-width:100%;height:32px;padding:0 8px;border:1px solid #c9d7e8;border-radius:8px;background:#fff;font:inherit;font-size:13px}
 .chip{appearance:none;border:1px solid #d5e1ef;background:var(--chip);color:#314860;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer}
 .chip:hover{border-color:#9eb7d4}
 .chip.on{background:#e8f1ff;border-color:#7aa7ef;color:#1a4f9c;font-weight:700}
@@ -291,7 +292,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
 <div class="layout">
   <aside class="side">
     <div class="brand"><span>TM</span>测试成熟度中心</div>
-    <div class="side-version">当前版本 <b>V2.0.26d3 临时demo</b></div>
+    <div class="side-version">当前版本 <b>V2.0.26d4 临时demo</b></div>
     <div id="userBox" style="margin:0 10px 14px;padding:8px 10px;border:1px solid #315574;border-radius:8px;background:#1d3a56;color:#cfe0f2;font-size:12px;display:none">
       <div id="userLine">—</div>
       <div style="display:flex;gap:8px;margin-top:6px"><button id="loginBtn" onclick="showLoginGate()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">登录</button><button id="userMgrBtn" onclick="openUserMgr()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#2f6fd6;color:#fff;font:inherit;font-size:11.5px;cursor:pointer">角色密码管理</button><button id="logoutBtn" onclick="doLogout()" style="display:none;flex:1;border:0;border-radius:5px;padding:4px;background:#3b556e;color:#dbe7f4;font:inherit;font-size:11.5px;cursor:pointer">退出</button></div>
@@ -316,7 +317,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <div class="crumb">测试业务 / 能力成熟度评估</div>
         <div class="title-row">
           <h1>测试能力成熟度看板</h1>
-          <span class="version-badge">V2.0.26d3 临时demo</span>
+          <span class="version-badge">V2.0.26d4 临时demo</span>
           <div class="filter-summary" id="filterSummary"></div>
         </div>
         <div class="muted">统一目标集 2026-V1.0 · 领域内固定能力分母；科组先关联领域，再按领域独立计分并平均。数据截至 <span id="asOfText">—</span></div>
@@ -687,7 +688,7 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
   <main style="max-width:1280px;margin:18px auto">
     <section class="card">
       <div class="version-summary">
-        <div class="item"><span>当前版本</span><b>V2.0.26d3 临时demo</b></div>
+        <div class="item"><span>当前版本</span><b>V2.0.26d4 临时demo</b></div>
         <div class="item"><span>发布日期</span><b>2026-09-08</b></div>
         <div class="item"><span>版本类型</span><b>V2.0 正式版本</b></div>
       </div>
@@ -695,7 +696,8 @@ tr.raw-filter-row th.dim-group-cell{background:#e8eff8}
         <table class="version-table">
           <thead><tr><th>版本号</th><th>发布日期</th><th>变更摘要</th></tr></thead>
           <tbody>
-            <tr><td>V2.0.26d3 临时demo <span class="version-current">当前</span></td><td>2026-09-10</td><td>科组筛选按 ID 绑定，选整机产品组不再画出软件测试组。科组关联领域跟能力数据对齐。5000 不动。</td></tr>
+            <tr><td>V2.0.26d4 临时demo <span class="version-current">当前</span></td><td>2026-09-10</td><td>科组改为按下拉选择（value=科组 ID），避免整机/软件/电柜相邻芯片点偏。5000 不动。</td></tr>
+            <tr><td>V2.0.26d3 临时demo</td><td>2026-09-10</td><td>科组筛选按 ID 绑定，选整机产品组不再画出软件测试组。科组关联领域跟能力数据对齐。5000 不动。</td></tr>
             <tr><td>V2.0.26d2 临时demo</td><td>2026-09-10</td><td>未挂科组的能力按科组关联领域显示。筛选软件时，关联软件的科组能看到 2 条软件领域场景化测试；Owner×部门交叉不再把这些行筛空。空科组仍不串到别组。5000 不动。</td></tr>
             <tr><td>V2.0.26d1 临时demo</td><td>2026-09-10</td><td>独立端口 5001，不动 5000。筛选按科组 ID，空科组显示空；无 ID 项可筛出。归位：机器人平台软件测试组→工业机器人软件测试组、电柜及整机性能测试组→电柜测试及系统架构能力组、工艺及解决方案测试组→工业机器人整机产品测试组。删除四关节/六关节测试组数据。未关联科组保留。</td></tr>
             <tr><td>V2.0.26</td><td>2026-09-09</td><td>科组、部门、业务按 ID 关联（页面只显示名称）；服务启动和保存时把 ID 写进库，不按名称存归属。已映射：大型传动→大型传动测试组、人形机器人测试组→人形机器人产品测试组、视觉测试组→视觉解决方案及产品测试组。业务数据自 V2.0.25 完整迁移。</td></tr><tr><td>V2.0.25</td><td>2026-09-09</td><td>总表「交付」列按该能力项自己的「是否已交付」显示，与编辑弹窗同一字段。业务数据自 V2.0.24 完整迁移。</td></tr><tr><td>V2.0.24</td><td>2026-09-09</td><td>达成情况页顶部按钮下滚仍可点；选中行颜色加深；管理员/能力 Owner 双击能力信息打开编辑选中项（原按钮路径保留）；编辑选中项保存时同步整组能力行；静默刷新不再用更旧的库把刚保存的格子画回去。业务数据自 V2.0.23 完整迁移。</td></tr><tr><td>V2.0.23</td><td>2026-09-08</td><td>修复修改记录页反复刷新；记录增加来源列（页面修改 / 导入 Excel）。业务数据自 V2.0.22 完整迁移。</td></tr><tr><td>V2.0.22</td><td>2026-09-08</td><td>修改记录表去掉访问 IP 列；默认列宽按文字完整显示（不换行、不够则横向滚动）；表头可拖调节列宽并记住。业务数据自 V2.0.21 完整迁移。</td></tr><tr><td>V2.0.21</td><td>2026-09-08</td><td>保存按单元格合并（只提交本机本次改过的格）；修改记录改为独立页面并记录改数据请求 IP；每 5 分钟及页面切换时静默拉库（未保存格不覆盖）；停留 2 小时提示 Ctrl+F5。业务数据自 V2.0.20 完整迁移。</td></tr><tr><td>V2.0.20</td><td>2026-09-07</td><td>能力成熟度达成情况页增加新建行/删除行（管理员与能力 Owner）：可新增能力主项、删除选中能力及其全部科组达成记录。业务数据自 V2.0.19 完整迁移。</td></tr><tr><td>V2.0.19</td><td>2026-09-04</td><td>组织能力概览「各领域评估维度得分」增加 2/3/4 级能力达成情况三列（已达成/总数），并调整弹窗表格排版。业务数据自 V2.0.18 完整迁移。</td></tr><tr><td>V2.0.18</td><td>2026-09-04</td><td>统一得分口径：科组=各涉及领域得分平均；部门/业务线/多科组范围=各科组得分等权平均。首页顶部、概览、趋势、雷达、对比与此一致。修复概览按领域筛选把领域名拆成单字；启动横幅随版本号同步。业务数据自 V2.0.17 完整迁移。</td></tr><tr><td>V2.0.17</td><td>2026-09-04</td><td>达成情况页移除风险筛选下拉框与「清空全部筛选」按钮；修复本月未达成编辑页进入与展开筛选的卡顿（单次构建+缓存查找）；首页选择的科组/部门/业务线与年度成熟度趋势图联动。业务数据自 V2.0.16 完整迁移。</td></tr>
@@ -1006,10 +1008,11 @@ function chipGroup(el,items,key,allLabel){
 }
 function chipTeamGroup(el,teamRows){
   if(!el)return;
-  const cur=filters.team,curId=resolveTeamId(cur);
-  el.innerHTML=`<button class="chip ${cur==='all'?'on':''}" data-v="all">全部科组</button>`+
-    teamRows.map(t=>`<button class="chip ${curId&&String(curId)===String(t.id)?'on':''}" data-v="${esc(t.id)}">${esc(t.name)}</button>`).join('');
-  el.querySelectorAll('.chip').forEach(btn=>btn.onclick=()=>{filters.team=btn.dataset.v;buildFilters();render();if($('rawView')&&$('rawView').classList.contains('show'))renderRaw()});
+  const curId=resolveTeamId(filters.team)||'all';
+  const opts=[{id:'all',name:'全部科组'},...teamRows];
+  el.innerHTML=`<select class="team-filter-select" aria-label="科组">${opts.map(t=>`<option value="${esc(t.id)}" ${String(t.id)===String(curId)?'selected':''}>${esc(t.name)}</option>`).join('')}</select>`;
+  const sel=el.querySelector('select');
+  if(sel)sel.onchange=()=>{filters.team=sel.value;buildFilters();render();if($('rawView')&&$('rawView').classList.contains('show'))renderRaw()};
 }
 function fillFilterChips(P){
   const pool=data;
