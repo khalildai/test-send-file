@@ -983,14 +983,37 @@ function overlayLocalPatches(remoteState){
   if(dirtyMeta.replaceData)payload.data=JSON.parse(JSON.stringify(data));
   else{
     let rows=payload.data.filter(r=>!dirtyDeletes.has(rowSyncKey(r)));
+    const byId=new Map(rows.filter(r=>r.id).map(r=>[String(r.id),r]));
     const byKey=new Map(rows.map(r=>[rowSyncKey(r),r]));
     for(const[k,fields]of dirtyFieldMap.entries()){
       const local=data.find(x=>rowSyncKey(x)===k);if(!local)continue;
       let target=byKey.get(k);
-      if(!target){const copy=JSON.parse(JSON.stringify(local));rows.push(copy);byKey.set(k,copy);continue}
+      if(!target){
+        const id=String(local.id||'');
+        target=id?byId.get(id):null;
+        if(target){
+          const oldK=rowSyncKey(target);
+          byKey.delete(oldK);
+          for(const f of fields)target[f]=local[f];
+          byKey.set(rowSyncKey(target),target);
+          continue;
+        }
+        const copy=JSON.parse(JSON.stringify(local));rows.push(copy);byKey.set(k,copy);if(copy.id)byId.set(String(copy.id),copy);continue;
+      }
       for(const f of fields)target[f]=local[f];
     }
-    for(const[k,row]of dirtyInserts.entries()){if(dirtyDeletes.has(k)||byKey.has(k))continue;const copy=JSON.parse(JSON.stringify(row));rows.push(copy);byKey.set(k,copy)}
+    for(const[k,row]of dirtyInserts.entries()){
+      if(dirtyDeletes.has(k)||byKey.has(k))continue;
+      const id=String(row.id||'');
+      if(id&&byId.has(id)){
+        const target=byId.get(id);
+        byKey.delete(rowSyncKey(target));
+        Object.assign(target,JSON.parse(JSON.stringify(row)));
+        byKey.set(rowSyncKey(target),target);
+        continue;
+      }
+      const copy=JSON.parse(JSON.stringify(row));rows.push(copy);byKey.set(k,copy);if(copy.id)byId.set(String(copy.id),copy);
+    }
     payload.data=rows;
   }
   if(dirtyMeta.config)payload.configData=configData;
